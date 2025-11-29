@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Chrome, Smartphone, ExternalLink, ArrowLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { isValidAddress } from 'xrpl';
 import { useWallet } from '../contexts/WalletContext';
 import { isInstalled as isGemWalletInstalled, getAddress as getGemWalletAddress } from '@gemwallet/api';
 
@@ -52,7 +53,7 @@ const ConnectModal: React.FC<ConnectModalProps> = ({ show, setShow }) => {
             logo: '/xamanLogo.jpeg',
             type: 'mobile',
             available: true,
-            installUrl: 'https://xumm.app/',
+            installUrl: 'https://xaman.app/',
         },
     ]);
 
@@ -116,11 +117,19 @@ const ConnectModal: React.FC<ConnectModalProps> = ({ show, setShow }) => {
     };
 
     const handleManualConnect = async () => {
-        if (!manualAddress || !manualAddress.startsWith('r') || manualAddress.length < 25) {
-            alert('Please enter a valid XRPL address (starts with "r")');
+        const trimmedAddress = manualAddress.trim();
+
+        if (!trimmedAddress) {
+            alert('Please enter an XRPL address');
             return;
         }
-        localStorage.setItem('xrpl_address', manualAddress);
+
+        if (!isValidAddress(trimmedAddress)) {
+            alert('Invalid XRPL address format.\n\nValid addresses:\n- Start with "r"\n- 25-35 characters\n- Use Base58 encoding (case-sensitive)\n- No 0, O, I, or l characters');
+            return;
+        }
+
+        localStorage.setItem('xrpl_address', trimmedAddress);
         await connect();
         setShowXamanView(false);
         setManualAddress('');
@@ -209,7 +218,6 @@ const ConnectModal: React.FC<ConnectModalProps> = ({ show, setShow }) => {
                             <div className="p-6 space-y-6">
                                 {showXamanView ? (
                                     <div className="space-y-5">
-                                        {/* Back button */}
                                         <button
                                             onClick={() => {
                                                 setShowXamanView(false);
@@ -221,7 +229,6 @@ const ConnectModal: React.FC<ConnectModalProps> = ({ show, setShow }) => {
                                             <span className="text-sm">Back to wallets</span>
                                         </button>
 
-                                        {/* Xaman Header */}
                                         <div className="text-center space-y-3">
                                             <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-slate-800 overflow-hidden">
                                                 <img
@@ -238,7 +245,6 @@ const ConnectModal: React.FC<ConnectModalProps> = ({ show, setShow }) => {
                                             </div>
                                         </div>
 
-                                        {/* Steps */}
                                         <div className="bg-slate-800/50 rounded-xl p-5 space-y-4 border border-slate-700/50">
                                             <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">How to connect</p>
                                             <div className="space-y-3">
@@ -257,7 +263,6 @@ const ConnectModal: React.FC<ConnectModalProps> = ({ show, setShow }) => {
                                             </div>
                                         </div>
 
-                                        {/* Address input */}
                                         <div className="space-y-4">
                                             <div className="relative">
                                                 <input
@@ -285,10 +290,9 @@ const ConnectModal: React.FC<ConnectModalProps> = ({ show, setShow }) => {
                                             </button>
                                         </div>
 
-                                        {/* Get Xaman link */}
                                         <div className="text-center pt-2">
                                             <a
-                                                href="https://xumm.app"
+                                                href="https://xaman.app"
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-blue-400 transition-colors"

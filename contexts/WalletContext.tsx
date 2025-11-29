@@ -1,18 +1,29 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { Client, Wallet as XRPLWallet } from 'xrpl';
+import { Client, Wallet as XRPLWallet, isValidAddress } from 'xrpl';
+
+interface AccountInfo {
+    balance: string;
+    exists: boolean;
+    reserve: string;
+}
 
 interface WalletContextType {
     wallet: XRPLWallet | null;
     address: string | null;
     isConnected: boolean;
+    isVerified: boolean;
+    accountInfo: AccountInfo | null;
     connect: () => Promise<void>;
     disconnect: () => void;
+    verifyAddress: (addr: string) => Promise<boolean>;
     client: Client | null;
     isLoading: boolean;
     openModal: () => void;
     closeModal: () => void;
     showModal: boolean;
     setShowModal: (show: boolean) => void;
+    showDisconnectModal: boolean;
+    setShowDisconnectModal: (show: boolean) => void;
 }
 
 const WalletContext = createContext<WalletContextType | undefined>(undefined);
@@ -35,6 +46,9 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     const [client, setClient] = useState<Client | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [showDisconnectModal, setShowDisconnectModal] = useState(false);
+    const [isVerified, setIsVerified] = useState(false);
+    const [accountInfo, setAccountInfo] = useState<AccountInfo | null>(null);
 
     useEffect(() => {
         const network = (import.meta as any).env?.VITE_XRPL_NETWORK || 'mainnet';
@@ -61,25 +75,40 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
         const savedWallet = localStorage.getItem('xrpl_wallet');
 
         if (savedAddress) {
-            setAddress(savedAddress);
-            if (savedWallet) {
-                try {
-                    const xrplWallet = XRPLWallet.fromSeed(savedWallet);
-                    setWallet(xrplWallet);
-                } catch (e) {
-                    console.error('Error restoring wallet:', e);
-                    localStorage.removeItem('xrpl_address');
-                    localStorage.removeItem('xrpl_wallet');
+            if (isValidAddress(savedAddress)) {
+                setAddress(savedAddress);
+                if (savedWallet) {
+                    try {
+                        const xrplWallet = XRPLWallet.fromSeed(savedWallet);
+                        setWallet(xrplWallet);
+                    } catch (e) {
+                        console.error('Error restoring wallet:', e);
+                        localStorage.removeItem('xrpl_address');
+                        localStorage.removeItem('xrpl_wallet');
+                    }
                 }
+            } else {
+                localStorage.removeItem('xrpl_address');
+                localStorage.removeItem('xrpl_wallet');
             }
         }
     }, []);
 
     useEffect(() => {
+        if (client && client.isConnected() && address) {
+            verifyAddress(address);
+        }
+    }, [client, address]);
+
+    useEffect(() => {
         const handleStorageChange = () => {
             const savedAddress = localStorage.getItem('xrpl_address');
             if (savedAddress && savedAddress !== address) {
-                setAddress(savedAddress);
+                if (isValidAddress(savedAddress)) {
+                    setAddress(savedAddress);
+                } else {
+                    localStorage.removeItem('xrpl_address');
+                }
             }
         };
 
@@ -99,29 +128,35 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
             const savedAddress = localStorage.getItem('xrpl_address');
 
             if (savedAddress) {
-                setAddress(savedAddress);
-                setIsLoading(false);
-                return;
+                if (isValidAddress(savedAddress)) {
+                    setAddress(savedAddress);
+                    setIsLoading(false);
+                    return;
+                } else {
+                    localStorage.removeItem('xrpl_address');
+                }
             }
 
-            if (win.xumm) {
+            if (win.xaman) {
                 try {
-                    const xumm = win.xumm;
+                    const xaman = win.xaman;
                     let payload = null;
                     try {
-                        payload = await xumm.payload?.();
+                        payload = await xaman.payload?.();
                     } catch (e) {
-                        payload = await xumm.request();
+                        payload = await xaman.request();
                     }
 
                     if (payload && payload.address) {
-                        setAddress(payload.address);
-                        localStorage.setItem('xrpl_address', payload.address);
-                        setIsLoading(false);
-                        return;
+                        if (isValidAddress(payload.address)) {
+                            setAddress(payload.address);
+                            localStorage.setItem('xrpl_address', payload.address);
+                            setIsLoading(false);
+                            return;
+                        } else {
+                        }
                     }
                 } catch (e) {
-                    console.log('Xaman connection error:', e);
                 }
             }
 
@@ -134,13 +169,15 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
                     }
                     const account = await gemWallet.getAccount();
                     if (account && account.address) {
-                        setAddress(account.address);
-                        localStorage.setItem('xrpl_address', account.address);
-                        setIsLoading(false);
-                        return;
+                        if (isValidAddress(account.address)) {
+                            setAddress(account.address);
+                            localStorage.setItem('xrpl_address', account.address);
+                            setIsLoading(false);
+                            return;
+                        } else {
+                        }
                     }
                 } catch (e) {
-                    console.log('Gem Wallet connection error:', e);
                 }
             }
 
@@ -148,13 +185,16 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
                 try {
                     const response = await win.crossmark.signInAndWait();
                     if (response?.response?.data?.address) {
-                        setAddress(response.response.data.address);
-                        localStorage.setItem('xrpl_address', response.response.data.address);
-                        setIsLoading(false);
-                        return;
+                        const addr = response.response.data.address;
+                        if (isValidAddress(addr)) {
+                            setAddress(addr);
+                            localStorage.setItem('xrpl_address', addr);
+                            setIsLoading(false);
+                            return;
+                        } else {
+                        }
                     }
                 } catch (e) {
-                    console.log('Crossmark connection error:', e);
                 }
             }
 
@@ -167,11 +207,59 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
         }
     };
 
+    const verifyAddress = async (addr: string): Promise<boolean> => {
+        if (!client || !client.isConnected()) {
+            return false;
+        }
+
+        if (!isValidAddress(addr)) {
+            setAccountInfo(null);
+            setIsVerified(false);
+            return false;
+        }
+
+        try {
+            const response = await client.request({
+                command: 'account_info',
+                account: addr,
+                ledger_index: 'validated'
+            });
+
+            if (response.result?.account_data) {
+                const balance = response.result.account_data.Balance;
+                const balanceXRP = (parseInt(balance) / 1_000_000).toFixed(2);
+                setAccountInfo({
+                    balance: balanceXRP,
+                    exists: true,
+                    reserve: '10'
+                });
+                setIsVerified(true);
+                return true;
+            }
+            return false;
+        } catch (error: any) {
+            if (error?.data?.error === 'actNotFound') {
+                setAccountInfo({
+                    balance: '0',
+                    exists: false,
+                    reserve: '10'
+                });
+                setIsVerified(false);
+            } else {
+                console.error('Error verifying address:', error);
+            }
+            return false;
+        }
+    };
+
     const disconnect = () => {
         setWallet(null);
         setAddress(null);
+        setIsVerified(false);
+        setAccountInfo(null);
         localStorage.removeItem('xrpl_address');
         localStorage.removeItem('xrpl_wallet');
+        setShowDisconnectModal(false);
     };
 
     const openModal = () => {
@@ -186,14 +274,19 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
         wallet,
         address,
         isConnected: !!address,
+        isVerified,
+        accountInfo,
         connect,
         disconnect,
+        verifyAddress,
         client,
         isLoading,
         openModal,
         closeModal,
         showModal,
         setShowModal,
+        showDisconnectModal,
+        setShowDisconnectModal,
     };
 
     return (

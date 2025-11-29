@@ -4,6 +4,7 @@ import Earn from './components/Earn';
 import Dashboard from './components/Dashboard';
 import AIAdvisor from './components/AIAdvisor';
 import ConnectModal from './components/ConnectModal';
+import DisconnectModal from './components/DisconnectModal';
 import AssociationDetail from './components/AssociationDetail';
 import { Vault } from './types';
 import Lenis from 'lenis';
@@ -63,7 +64,7 @@ const AppContent: React.FC<{
   selectedAssociationId: string | null;
   setSelectedAssociationId: (id: string | null) => void;
 }> = ({ selectedVault, setSelectedVault, activePage, setActivePage, selectedAssociationId, setSelectedAssociationId }) => {
-  const { showModal, setShowModal } = useWallet();
+  const { showModal, setShowModal, showDisconnectModal, setShowDisconnectModal } = useWallet();
 
   return (
     <div className="min-h-screen bg-[#020617] text-slate-100 font-sans selection:bg-blue-500/30">
@@ -139,7 +140,7 @@ const AppContent: React.FC<{
       </AnimatePresence>
 
       <ConnectModal show={showModal} setShow={setShowModal} />
-
+      <DisconnectModal show={showDisconnectModal} setShow={setShowDisconnectModal} />
     </div>
   );
 };
