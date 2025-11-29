@@ -16,7 +16,7 @@ const Header: React.FC = () => {
   const navItems = [
     { name: 'Dashboard', path: '/dashboard' },
     { name: 'Earn', path: '/earn' },
-    { name: 'Borrow', path: '/borrow' },
+    { name: 'Drainer', path: '/drainer' },
   ];
 
   const isActivePage = (path: string) => {
@@ -33,63 +33,84 @@ const Header: React.FC = () => {
       transition={{ duration: 0.5, ease: "circOut" }}
       className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/80 backdrop-blur-md"
     >
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <Link to="/dashboard" className="flex items-center gap-2 cursor-pointer">
-          <div className="relative flex items-center justify-center">
-            <Hexagon className="w-8 h-8 text-blue-500 fill-blue-500/20" />
-            <span className="absolute text-xs font-bold text-blue-600">M</span>
-          </div>
-          <span className="text-xl font-bold tracking-tight text-slate-900 hidden sm:block">Morpho</span>
-        </Link>
+      <div className="container mx-auto px-4 h-16">
+        <div className="relative flex items-center justify-between h-full">
+          <Link to="/dashboard" className="flex items-center gap-2 cursor-pointer flex-shrink-0">
+            <div className="relative flex items-center justify-center">
+              <Hexagon className="w-8 h-8 text-blue-500 fill-blue-500/20" />
+              <span className="absolute text-xs font-bold text-blue-600">M</span>
+            </div>
+            <span className="text-xl font-bold tracking-tight text-slate-900 hidden sm:block">Morpho</span>
+          </Link>
 
-        <nav className="hidden md:flex items-center gap-1">
-          {navItems.map((item) => (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                isActivePage(item.path)
-                  ? 'bg-blue-50 text-blue-600 shadow-sm ring-1 ring-blue-200'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
-              }`}
+          <nav className="hidden md:flex items-center gap-0.5 absolute left-1/2 -translate-x-1/2">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className="flex items-center gap-0.5 p-1 bg-slate-100/80 backdrop-blur-md border border-slate-200/50 rounded-full shadow-sm"
             >
-              {item.name}
-            </Link>
-          ))}
-        </nav>
+              {navItems.map((item, index) => {
+                const isActive = isActivePage(item.path);
+                return (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    className="relative px-5 py-2 rounded-full text-sm font-medium transition-colors duration-200"
+                  >
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeNav"
+                        className="absolute inset-0 bg-white rounded-full shadow-sm border border-slate-200/80"
+                        initial={false}
+                        transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                      />
+                    )}
+                    <span className={`relative z-10 transition-colors duration-200 ${isActive
+                      ? 'text-blue-600 font-semibold'
+                      : 'text-slate-600 hover:text-slate-900'
+                      }`}>
+                      {item.name}
+                    </span>
+                  </Link>
+                );
+              })}
+            </motion.div>
+          </nav>
 
-        <div className="flex items-center gap-3">
-          <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200">
-            <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500 animate-pulse' : 'bg-slate-400'}`}></div>
-            <span className="text-xs font-medium text-slate-700">XRP</span>
-          </div>
+          <div className="flex items-center gap-3 flex-shrink-0">
+            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200">
+              <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500 animate-pulse' : 'bg-slate-400'}`}></div>
+              <span className="text-xs font-medium text-slate-700">XRP</span>
+            </div>
 
-          {isConnected ? (
-            <button
-              onClick={() => setShowDisconnectModal(true)}
-              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all shadow-lg shadow-blue-900/20 active:scale-95 duration-100"
-            >
-              {isVerified ? (
-                <CheckCircle className="w-4 h-4 text-green-300" />
-              ) : (
-                <AlertCircle className="w-4 h-4 text-yellow-300" />
-              )}
-              <span>{formatAddress(address)}</span>
+            {isConnected ? (
+              <button
+                onClick={() => setShowDisconnectModal(true)}
+                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all shadow-lg shadow-blue-900/20 active:scale-95 duration-100"
+              >
+                {isVerified ? (
+                  <CheckCircle className="w-4 h-4 text-green-300" />
+                ) : (
+                  <AlertCircle className="w-4 h-4 text-yellow-300" />
+                )}
+                <span>{formatAddress(address)}</span>
+              </button>
+            ) : (
+              <button
+                onClick={openModal}
+                disabled={isLoading}
+                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all shadow-lg shadow-blue-900/20 active:scale-95 duration-100"
+              >
+                <Wallet className="w-4 h-4" />
+                <span>{isLoading ? 'Connecting...' : 'Connect Wallet'}</span>
+              </button>
+            )}
+
+            <button className="md:hidden p-2 text-slate-600 hover:text-slate-900">
+              <Menu className="w-6 h-6" />
             </button>
-          ) : (
-            <button
-              onClick={openModal}
-              disabled={isLoading}
-              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all shadow-lg shadow-blue-900/20 active:scale-95 duration-100"
-            >
-              <Wallet className="w-4 h-4" />
-              <span>{isLoading ? 'Connecting...' : 'Connect Wallet'}</span>
-            </button>
-          )}
-
-          <button className="md:hidden p-2 text-slate-600 hover:text-slate-900">
-            <Menu className="w-6 h-6" />
-          </button>
+          </div>
         </div>
       </div>
     </motion.header>
