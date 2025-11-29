@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, ExternalLink, MapPin, Globe, TrendingUp, ArrowUpRight, Shield, Clock, Coins, ChevronRight } from 'lucide-react';
+import { ArrowLeft, ExternalLink, MapPin, Globe, TrendingUp, ArrowUpRight, Clock, Coins, ChevronRight } from 'lucide-react';
 import { Vault } from '../types';
 import { ASSOCIATIONS, getVaultsByAssociation, formatCurrency } from '../constants';
 
 interface AssociationDetailProps {
     associationId: string;
     onBack: () => void;
-    onSelectVaultForAI: (vault: Vault) => void;
 }
 
 const getFocusImage = (focusText: string, index: number): string => {
@@ -59,7 +58,6 @@ const getFocusImage = (focusText: string, index: number): string => {
 const AssociationDetail: React.FC<AssociationDetailProps> = ({
     associationId,
     onBack,
-    onSelectVaultForAI,
 }) => {
     const [selectedFocus, setSelectedFocus] = useState<{ title: string, image: string, description: string, index: number } | null>(null);
     const [selectedVault, setSelectedVault] = useState<Vault | null>(null);
@@ -273,13 +271,6 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
                                     >
                                         Invest XRP
                                     </motion.button>
-                                    <button
-                                        onClick={() => onSelectVaultForAI(selectedVault)}
-                                        className="p-2.5 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors"
-                                        title="Analyze with AI"
-                                    >
-                                        <Shield size={20} className="text-slate-600" />
-                                    </button>
                                     <button
                                         onClick={() => setSelectedVault(null)}
                                         className="p-2.5 text-slate-400 hover:text-slate-600 transition-colors"

@@ -4,15 +4,13 @@ import { Search, SlidersHorizontal, ArrowUpRight, TrendingUp } from 'lucide-reac
 import gsap from 'gsap';
 import VaultTable from './VaultTable';
 import { VAULTS, ASSOCIATIONS } from '../constants';
-import { Vault } from '../types';
 import { fadeInUp, fadeInLeft, fadeInRight } from '../animations';
 
 interface EarnProps {
-  onSelectVaultForAI: (vault: Vault) => void;
   onSelectAssociation: (id: string) => void;
 }
 
-const Earn: React.FC<EarnProps> = ({ onSelectVaultForAI, onSelectAssociation }) => {
+const Earn: React.FC<EarnProps> = ({ onSelectAssociation }) => {
   const depositRef = useRef<HTMLSpanElement>(null);
   const apyRef = useRef<HTMLSpanElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
@@ -165,13 +163,9 @@ const Earn: React.FC<EarnProps> = ({ onSelectVaultForAI, onSelectAssociation }) 
           className="relative flex-1 group"
           whileFocus={{ scale: 1.01 }}
         >
-          <motion.div
-            className="absolute left-3.5 top-1/2 -translate-y-1/2"
-            animate={searchFocused ? { scale: 1.2, x: 2 } : { scale: 1, x: 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            <Search className={`w-5 h-5 transition-colors duration-300 ${searchFocused ? 'text-blue-500' : 'text-slate-600'}`} />
-          </motion.div>
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none z-10">
+            <Search className={`w-5 h-5 transition-colors duration-300 ${searchFocused ? 'text-blue-500' : 'text-slate-400'}`} />
+          </div>
 
           <input
             type="text"
@@ -180,7 +174,7 @@ const Earn: React.FC<EarnProps> = ({ onSelectVaultForAI, onSelectAssociation }) 
             onFocus={() => setSearchFocused(true)}
             onBlur={() => setSearchFocused(false)}
             placeholder="Search by association, category, or impact area..."
-            className="w-full bg-white border border-slate-200 text-slate-900 pl-11 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all placeholder:text-slate-600 hover:bg-slate-50"
+            className="w-full bg-white border border-slate-200 text-slate-900 pl-12 pr-10 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all placeholder:text-slate-400 hover:bg-slate-50"
           />
 
           {searchValue && (
@@ -188,7 +182,7 @@ const Earn: React.FC<EarnProps> = ({ onSelectVaultForAI, onSelectAssociation }) 
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-600 hover:text-slate-900"
+              className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 transition-colors rounded-full hover:bg-slate-100"
               onClick={() => setSearchValue('')}
             >
               ✕
@@ -221,8 +215,8 @@ const Earn: React.FC<EarnProps> = ({ onSelectVaultForAI, onSelectAssociation }) 
         />
         <div className="bg-white backdrop-blur-xl rounded-3xl border border-slate-200 overflow-hidden">
           <VaultTable
-            onSelectVaultForAI={onSelectVaultForAI}
             onSelectAssociation={onSelectAssociation}
+            searchQuery={searchValue}
           />
         </div>
       </motion.div>

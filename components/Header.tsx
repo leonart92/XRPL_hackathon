@@ -17,7 +17,6 @@ const Header: React.FC = () => {
     { name: 'Dashboard', path: '/dashboard' },
     { name: 'Earn', path: '/earn' },
     { name: 'Borrow', path: '/borrow' },
-    { name: 'Portfolio', path: '/portfolio' },
   ];
 
   const isActivePage = (path: string) => {

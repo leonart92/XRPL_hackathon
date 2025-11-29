@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useParams, useNavigate, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Earn from './components/Earn';
 import Dashboard from './components/Dashboard';
-import AIAdvisor from './components/AIAdvisor';
 import ConnectModal from './components/ConnectModal';
 import DisconnectModal from './components/DisconnectModal';
 import AssociationDetail from './components/AssociationDetail';
-import { Vault } from './types';
 import Lenis from 'lenis';
 import { AnimatePresence, motion } from 'framer-motion';
 import { WalletProvider, useWallet } from './contexts/WalletContext';
@@ -49,7 +47,6 @@ const App: React.FC = () => {
 };
 
 const AppContent: React.FC = () => {
-  const [selectedVault, setSelectedVault] = useState<Vault | null>(null);
   const { showModal, setShowModal, showDisconnectModal, setShowDisconnectModal } = useWallet();
   const location = useLocation();
 
@@ -82,7 +79,7 @@ const AppContent: React.FC = () => {
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.3 }}
               >
-                <EarnWrapper onSelectVaultForAI={setSelectedVault} />
+                <EarnWrapper />
               </motion.div>
             } />
 
@@ -94,7 +91,7 @@ const AppContent: React.FC = () => {
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.3 }}
               >
-                <AssociationDetailWrapper onSelectVaultForAI={setSelectedVault} />
+                <AssociationDetailWrapper />
               </motion.div>
             } />
 
@@ -114,33 +111,23 @@ const AppContent: React.FC = () => {
         </AnimatePresence>
       </main>
 
-      <AnimatePresence>
-        {selectedVault && (
-          <AIAdvisor
-            vault={selectedVault}
-            onClose={() => setSelectedVault(null)}
-          />
-        )}
-      </AnimatePresence>
-
       <ConnectModal show={showModal} setShow={setShowModal} />
       <DisconnectModal show={showDisconnectModal} setShow={setShowDisconnectModal} />
     </div>
   );
 };
 
-const EarnWrapper: React.FC<{ onSelectVaultForAI: (vault: Vault) => void }> = ({ onSelectVaultForAI }) => {
+const EarnWrapper: React.FC = () => {
   const navigate = useNavigate();
 
   return (
     <Earn
-      onSelectVaultForAI={onSelectVaultForAI}
       onSelectAssociation={(id) => navigate(`/earn/${id}`)}
     />
   );
 };
 
-const AssociationDetailWrapper: React.FC<{ onSelectVaultForAI: (vault: Vault) => void }> = ({ onSelectVaultForAI }) => {
+const AssociationDetailWrapper: React.FC = () => {
   const { associationId } = useParams<{ associationId: string }>();
   const navigate = useNavigate();
 
@@ -153,7 +140,6 @@ const AssociationDetailWrapper: React.FC<{ onSelectVaultForAI: (vault: Vault) =>
     <AssociationDetail
       associationId={associationId}
       onBack={() => navigate('/earn')}
-      onSelectVaultForAI={onSelectVaultForAI}
     />
   );
 };

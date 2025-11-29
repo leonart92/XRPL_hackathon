@@ -116,27 +116,6 @@ const Dashboard: React.FC = () => {
             Track your portfolio performance and positions.
           </motion.p>
         </motion.div>
-
-        <motion.div
-          variants={fadeInRight}
-          initial="initial"
-          animate="animate"
-          className="relative"
-        >
-          <div className="relative flex flex-col bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl border border-blue-200 backdrop-blur-sm overflow-hidden">
-            <span className="text-sm font-medium text-slate-600 uppercase tracking-wider mb-2 flex items-center gap-2 relative z-10">
-              <TrendingUp className="w-4 h-4" />
-              Net Worth
-            </span>
-            <span ref={netWorthRef} className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight relative z-10">
-              $0.00
-            </span>
-            <div className="text-sm text-green-600 flex items-center gap-1 mt-2 relative z-10">
-              <TrendingUp size={14} /> +2.4% (24h)
-            </div>
-
-          </div>
-        </motion.div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -184,15 +163,21 @@ const Dashboard: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="relative bg-gradient-to-br from-purple-50 to-purple-100/50 p-6 rounded-2xl border border-purple-200 backdrop-blur-sm overflow-hidden group"
+          className="relative bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl border border-blue-200 backdrop-blur-sm overflow-hidden group"
         >
           <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-            <Wallet size={48} className="text-purple-600" />
+            <TrendingUp size={48} className="text-blue-500" />
           </div>
-          <div className="text-purple-700 text-sm font-medium uppercase tracking-wider mb-2 relative z-10">Borrow Capacity</div>
-          <div className="text-3xl font-bold text-purple-600 tracking-tight relative z-10">$45,000</div>
-          <p className="text-xs text-slate-600 mt-2 relative z-10">Available to borrow against collateral</p>
-
+          <div className="text-slate-600 text-sm font-medium uppercase tracking-wider mb-2 flex items-center gap-2 relative z-10">
+            <TrendingUp className="w-4 h-4" />
+            Net Worth
+          </div>
+          <span ref={netWorthRef} className="text-3xl font-bold text-slate-900 tracking-tight relative z-10 block">
+            $0.00
+          </span>
+          <div className="text-sm text-green-600 flex items-center gap-1 mt-2 relative z-10">
+            <TrendingUp size={14} /> +2.4% (24h)
+          </div>
         </motion.div>
       </div>
 
