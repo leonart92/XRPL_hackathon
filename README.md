@@ -1,1 +1,1 @@
-# XRPL_hackathonj
+# XRPL_hackathon
