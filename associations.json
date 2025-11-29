@@ -13,6 +13,12 @@
         "Préservation des habitats naturels",
         "Lutte contre le changement climatique"
       ],
+      "focusDetails": {
+        "Conservation de la biodiversité": "La biodiversité est essentielle à la vie sur Terre. WWF travaille à protéger la diversité des espèces, des écosystèmes et des gènes à travers le monde. Nous identifions les zones prioritaires, développons des programmes de conservation et collaborons avec les communautés locales pour préserver la richesse naturelle de notre planète pour les générations futures.",
+        "Protection des espèces menacées": "De nombreuses espèces iconiques comme les tigres, les éléphants, les pandas et les rhinocéros sont en danger critique d'extinction. WWF mène des actions de terrain pour protéger ces espèces, lutte contre le braconnage et le trafic illégal d'animaux sauvages, et travaille avec les gouvernements pour renforcer les lois de protection.",
+        "Préservation des habitats naturels": "Les habitats naturels comme les forêts, les océans, les zones humides et les prairies sont essentiels à la survie de la faune sauvage. WWF œuvre pour la création et la gestion d'aires protégées, restaure les écosystèmes dégradés et promeut des pratiques d'utilisation durable des terres qui permettent à la nature et aux humains de coexister.",
+        "Lutte contre le changement climatique": "Le changement climatique est la plus grande menace pour la nature et l'humanité. WWF milite pour la réduction des émissions de gaz à effet de serre, promeut les énergies renouvelables, et aide les communautés à s'adapter aux impacts du changement climatique tout en protégeant les écosystèmes qui stockent naturellement le carbone."
+      },
       "location": {
         "headquarters": "Gland, Suisse",
         "scope": "International"

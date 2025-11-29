@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { ArrowLeft, ExternalLink, MapPin, Globe, TrendingUp, Info, ArrowUpRight, Sparkles } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowLeft, ExternalLink, MapPin, Globe, TrendingUp, ArrowUpRight } from 'lucide-react';
 import { Vault } from '../types';
-import { formatCurrency, ASSOCIATIONS, MOCK_VAULTS } from '../constants';
-import VaultChart from './VaultChart';
+import { ASSOCIATIONS, MOCK_VAULTS } from '../constants';
 
 interface AssociationDetailProps {
     associationId: string;
@@ -11,12 +10,96 @@ interface AssociationDetailProps {
     onSelectVaultForAI: (vault: Vault) => void;
 }
 
+const getFocusImage = (focusText: string, index: number): string => {
+    const text = focusText.toLowerCase();
+
+    if (text.includes('conservation') && text.includes('biodiversité')) {
+        return 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80';
+    }
+    if (text.includes('espèces menacées') || text.includes('protection des espèces')) {
+        return 'https://images.unsplash.com/photo-1549366021-9f761d450615?w=800&q=80';
+    }
+    if (text.includes('biodiversité')) {
+        return 'https://images.unsplash.com/photo-1564760055775-d63b17a55c44?w=800&q=80';
+    }
+
+    if (text.includes('habitat') && text.includes('naturel')) {
+        return 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&q=80';
+    }
+    if (text.includes('préservation') && text.includes('habitat')) {
+        return 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80';
+    }
+    if (text.includes('espace naturel')) {
+        return 'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=800&q=80';
+    }
+
+    if (text.includes('océan') || text.includes('ocean')) {
+        return 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80';
+    }
+    if (text.includes('littoral') || text.includes('côte')) {
+        return 'https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=800&q=80';
+    }
+    if (text.includes('vague') || text.includes('surf')) {
+        return 'https://images.unsplash.com/photo-1502933691298-84fc14542831?w=800&q=80';
+    }
+
+    if (text.includes('forêt') || text.includes('forest')) {
+        return 'https://images.unsplash.com/photo-1448375240586-882707db888b?w=800&q=80';
+    }
+    if (text.includes('préservation') && text.includes('forêt')) {
+        return 'https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=800&q=80';
+    }
+
+    if (text.includes('changement climatique') || text.includes('climat')) {
+        return 'https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=800&q=80';
+    }
+    if (text.includes('plastique')) {
+        return 'https://images.unsplash.com/photo-1621451537084-482c73073a0f?w=800&q=80';
+    }
+    if (text.includes('pollution')) {
+        return 'https://images.unsplash.com/photo-1530587191325-3db32d826c18?w=800&q=80';
+    }
+    if (text.includes('déchet')) {
+        return 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=800&q=80';
+    }
+
+    if (text.includes('énergie') || text.includes('renouvelable')) {
+        return 'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&q=80';
+    }
+    if (text.includes('agriculture') || text.includes('agricole')) {
+        return 'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=800&q=80';
+    }
+
+    if (text.includes('qualité') && text.includes('eau')) {
+        return 'https://images.unsplash.com/photo-1550093497-221331fbd264?w=800&q=80';
+    }
+    if (text.includes('eau')) {
+        return 'https://images.unsplash.com/photo-1501696461415-6bd6660c6742?w=800&q=80';
+    }
+
+    if (text.includes('air') || text.includes('atmosphère')) {
+        return 'https://images.unsplash.com/photo-1534088568595-a066f410bcda?w=800&q=80';
+    }
+    if (text.includes('transition') && text.includes('énergétique')) {
+        return 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800&q=80';
+    }
+
+    const defaultImages = [
+        'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=800&q=80',
+        'https://images.unsplash.com/photo-1476362555312-ab9e108a0b7e?w=800&q=80',
+        'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80',
+        'https://images.unsplash.com/photo-1511497584788-876760111969?w=800&q=80',
+    ];
+    return defaultImages[index % defaultImages.length];
+};
+
 const AssociationDetail: React.FC<AssociationDetailProps> = ({
     associationId,
     onBack,
     onSelectVaultForAI,
 }) => {
     const [investAmount, setInvestAmount] = useState('');
+    const [selectedFocus, setSelectedFocus] = useState<{ title: string, image: string, description: string, index: number } | null>(null);
 
     const association = ASSOCIATIONS.find(a => a.id === associationId);
     const vault = MOCK_VAULTS.find(v => v.id === associationId);
@@ -41,7 +124,6 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
 
     return (
         <div className="min-h-screen bg-[#020617]">
-            {/* Back Button */}
             <div className="mb-6">
                 <button
                     onClick={onBack}
@@ -55,9 +137,7 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
             </div>
 
             <div className="flex flex-col lg:flex-row gap-8">
-                {/* Left Section - Association Details */}
                 <div className="flex-1 space-y-8">
-                    {/* Header */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -164,86 +244,81 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
                     >
                         <h2 className="text-xl font-bold text-white flex items-center gap-2">
                             <TrendingUp size={20} className="text-blue-400" />
-                            Focus Areas
+                            Causes & Actions
                         </h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {association.focus.map((item, index) => (
                                 <motion.div
                                     key={index}
-                                    initial={{ opacity: 0, x: -20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: 0.4 + index * 0.05 }}
-                                    className="bg-slate-900/30 border border-slate-800/50 rounded-lg p-4 flex items-start gap-3 hover:bg-slate-900/60 transition-colors"
+                                    layoutId={`focus-card-${item}`}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.4 + index * 0.1 }}
+                                    onClick={() => setSelectedFocus({
+                                        title: item,
+                                        image: getFocusImage(item, index),
+                                        description: (association as any).focusDetails?.[item] || "Description détaillée à venir pour cette cause.",
+                                        index: index
+                                    })}
+                                    className="relative group overflow-hidden rounded-xl h-48 cursor-pointer"
                                 >
+                                    {/* Image de fond */}
                                     <div
-                                        className="w-2 h-2 rounded-full mt-2 shrink-0 shadow-[0_0_8px]"
+                                        className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
                                         style={{
-                                            backgroundColor: association.branding.color,
-                                            boxShadow: `0 0 8px ${association.branding.color}`
+                                            backgroundImage: `url(${getFocusImage(item, index)})`,
                                         }}
                                     />
-                                    <span className="text-slate-200 font-medium">{item}</span>
+
+                                    {/* Overlay gradient */}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20 group-hover:from-black/95 transition-all duration-300" />
+
+                                    {/* Contenu */}
+                                    <div className="absolute inset-0 p-6 flex flex-col justify-end">
+                                        <div className="transform transition-transform duration-300 group-hover:translate-y-[-4px]">
+                                            <h3 className="text-white font-bold text-lg leading-tight mb-2">
+                                                {item}
+                                            </h3>
+                                            <div
+                                                className="h-1 w-12 rounded-full transition-all duration-300 group-hover:w-20"
+                                                style={{
+                                                    backgroundColor: association.branding.color,
+                                                    boxShadow: `0 0 12px ${association.branding.color}`
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Border effect on hover */}
+                                    <div
+                                        className="absolute inset-0 border-2 border-transparent group-hover:border-white/20 rounded-xl transition-all duration-300"
+                                    />
                                 </motion.div>
                             ))}
                         </div>
                     </motion.div>
 
-                    {/* Metrics & Chart */}
+                    {/* APY Metric */}
                     {association.metrics && (
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.5 }}
-                            className="space-y-6"
+                            className="space-y-4"
                         >
-                            <h2 className="text-xl font-bold text-white">Performance Metrics</h2>
-
-                            {/* Stats Grid */}
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                <div className="bg-gradient-to-br from-blue-950 to-slate-900 border border-blue-500/30 rounded-xl p-5 relative overflow-hidden group">
-                                    <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                    <div className="text-xs text-blue-300/80 font-medium uppercase tracking-wider mb-1">Net APY</div>
-                                    <div className="text-3xl font-bold text-blue-400 flex items-center gap-1">
-                                        {association.metrics.netApy}%
-                                        <ArrowUpRight size={20} className="text-green-500" />
+                            <h2 className="text-xl font-bold text-white">Expected Returns</h2>
+                            <div className="bg-gradient-to-br from-blue-950 to-slate-900 border border-blue-500/30 rounded-xl p-6 relative overflow-hidden group">
+                                <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                <div className="text-sm text-blue-300/80 font-medium uppercase tracking-wider mb-2">Net APY</div>
+                                <div className="text-4xl md:text-5xl font-bold text-blue-400 flex items-center gap-2">
+                                    {association.metrics.netApy}%
+                                    <ArrowUpRight size={24} className="text-green-500" />
+                                </div>
+                                {association.metrics.rewardsApy && (
+                                    <div className="mt-3 text-sm text-green-400">
+                                        + {association.metrics.rewardsApy}% Rewards APY
                                     </div>
-                                </div>
-
-                                <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-5">
-                                    <div className="text-xs text-slate-400 font-medium uppercase tracking-wider mb-1">Total Supply</div>
-                                    <div className="text-2xl font-bold text-white">{formatCurrency(association.metrics.totalSupply)}</div>
-                                </div>
-
-                                <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-5">
-                                    <div className="text-xs text-slate-400 font-medium uppercase tracking-wider mb-1">Liquidity</div>
-                                    <div className="text-2xl font-bold text-white">{formatCurrency(association.metrics.liquidity)}</div>
-                                </div>
-
-                                <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-5">
-                                    <div className="text-xs text-slate-400 font-medium uppercase tracking-wider mb-1">Utilization</div>
-                                    <div className="text-2xl font-bold text-white">{association.metrics.utilization}%</div>
-                                </div>
-                            </div>
-
-                            {/* Chart */}
-                            <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-6">
-                                <div className="flex items-center justify-between mb-6">
-                                    <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider">
-                                        Historical APY (30D)
-                                    </h3>
-                                    <motion.button
-                                        whileHover={{ scale: 1.05 }}
-                                        whileTap={{ scale: 0.95 }}
-                                        onClick={() => onSelectVaultForAI(vault)}
-                                        className="flex items-center gap-2 px-4 py-2 bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 text-xs font-bold rounded-lg border border-purple-500/20 transition-colors shadow-[0_0_15px_-5px_rgba(168,85,247,0.4)]"
-                                    >
-                                        <Sparkles className="w-4 h-4" />
-                                        ASK AI ADVISOR
-                                    </motion.button>
-                                </div>
-                                <div className="bg-slate-950 rounded-xl p-4 border border-slate-800/50 h-[300px]">
-                                    <VaultChart data={vault.history} color={association.branding.color} />
-                                </div>
+                                )}
                             </div>
                         </motion.div>
                     )}
@@ -278,56 +353,14 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
                             {/* Investment Amount */}
                             <div className="space-y-3">
                                 <label className="text-sm font-semibold text-slate-300">Amount to Invest</label>
-                                <div className="relative">
-                                    <input
-                                        type="number"
-                                        value={investAmount}
-                                        onChange={(e) => setInvestAmount(e.target.value)}
-                                        placeholder="0.00"
-                                        className="w-full bg-slate-950 border border-slate-800 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all font-mono"
-                                    />
-                                    <button className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-blue-400 hover:text-blue-300 transition-colors bg-blue-500/10 px-2 py-1 rounded">
-                                        MAX
-                                    </button>
-                                </div>
-                                <div className="flex gap-2">
-                                    {['25%', '50%', '75%', '100%'].map((percent) => (
-                                        <button
-                                            key={percent}
-                                            className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold py-2 rounded-lg transition-colors border border-slate-700 hover:border-slate-600"
-                                        >
-                                            {percent}
-                                        </button>
-                                    ))}
-                                </div>
+                                <input
+                                    type="number"
+                                    value={investAmount}
+                                    onChange={(e) => setInvestAmount(e.target.value)}
+                                    placeholder="0.00"
+                                    className="w-full bg-slate-950 border border-slate-800 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all font-mono"
+                                />
                             </div>
-
-                            {/* Expected Returns */}
-                            {association.metrics && investAmount && parseFloat(investAmount) > 0 && (
-                                <motion.div
-                                    initial={{ opacity: 0, height: 0 }}
-                                    animate={{ opacity: 1, height: 'auto' }}
-                                    className="bg-gradient-to-br from-blue-900/20 to-blue-800/10 border border-blue-700/30 rounded-xl p-4 space-y-3"
-                                >
-                                    <div className="flex justify-between text-sm">
-                                        <span className="text-slate-400">Expected APY</span>
-                                        <span className="text-blue-400 font-bold">{association.metrics.netApy}%</span>
-                                    </div>
-                                    {association.metrics.rewardsApy && (
-                                        <div className="flex justify-between text-sm">
-                                            <span className="text-slate-400">Rewards APY</span>
-                                            <span className="text-green-400 font-bold">+{association.metrics.rewardsApy}%</span>
-                                        </div>
-                                    )}
-                                    <div className="h-px bg-slate-700/50 my-2" />
-                                    <div className="flex justify-between text-sm">
-                                        <span className="text-slate-300 font-semibold">Yearly Earnings</span>
-                                        <span className="text-white font-bold text-lg">
-                                            ${((parseFloat(investAmount) * association.metrics.netApy) / 100).toFixed(2)}
-                                        </span>
-                                    </div>
-                                </motion.div>
-                            )}
 
                             {/* Action Buttons */}
                             <div className="space-y-3 pt-2">
@@ -348,19 +381,10 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
                             </div>
 
                             {/* Risk Warning */}
-                            <div className="bg-slate-800/30 border border-slate-800 rounded-xl p-4 flex items-start gap-3">
-                                <Info className="w-5 h-5 text-slate-500 mt-0.5 shrink-0" />
-                                <div className="space-y-2">
-                                    <p className="text-xs text-slate-400 leading-relaxed">
-                                        Supplying to {association.name} incurs smart contract risk.
-                                    </p>
-                                    <button
-                                        onClick={() => onSelectVaultForAI(vault)}
-                                        className="text-xs text-blue-400 hover:text-blue-300 font-semibold transition-colors flex items-center gap-1"
-                                    >
-                                        Analyze risk with AI <ArrowUpRight size={12} />
-                                    </button>
-                                </div>
+                            <div className="bg-slate-800/30 border border-slate-800 rounded-xl p-4">
+                                <p className="text-xs text-slate-400 leading-relaxed text-center">
+                                    Supplying to {association.name} incurs smart contract risk. Please ensure you understand the risks before investing.
+                                </p>
                             </div>
 
                             {/* Additional Info */}
@@ -371,6 +395,91 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
                     </div>
                 </motion.div>
             </div>
+
+            {/* Modal pour les détails de focus */}
+            <AnimatePresence mode="wait">
+                {selectedFocus && (
+                    <motion.div
+                        initial={{ backgroundColor: "rgba(0,0,0,0)", backdropFilter: "blur(0px)" }}
+                        animate={{ backgroundColor: "rgba(0,0,0,0.8)", backdropFilter: "blur(4px)", transition: { duration: 0.8, ease: [0.43, 0.13, 0.23, 0.96] } }}
+                        exit={{ backgroundColor: "rgba(0,0,0,0)", backdropFilter: "blur(0px)", transition: { duration: 0.2, ease: [0.43, 0.13, 0.23, 0.96] } }}
+                        onClick={() => setSelectedFocus(null)}
+                        className="fixed inset-0 z-50 flex items-center justify-center p-4"
+                    >
+                        <motion.div
+                            layoutId={`focus-card-${selectedFocus.title}`}
+                            transition={{
+                                layout: { duration: 0.8, ease: [0.43, 0.13, 0.23, 0.96] },
+                                opacity: { duration: 0.2, ease: [0.43, 0.13, 0.23, 0.96] }
+                            }}
+                            onClick={(e) => e.stopPropagation()}
+                            className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden max-w-6xl w-full h-[90vh] relative"
+                        >
+                            <div className="absolute inset-0 z-0">
+                                <div
+                                    className="absolute inset-0 bg-cover bg-center"
+                                    style={{ backgroundImage: `url(${selectedFocus.image})` }}
+                                />
+                                <div className="absolute inset-0 bg-black/80" />
+                            </div>
+
+                            <motion.div
+                                initial={{ opacity: 0, y: 40 }}
+                                animate={{ opacity: 1, y: 0, transition: { delay: 0.2, duration: 0.5 } }}
+                                exit={{ opacity: 0, y: 0, transition: { duration: 0.5, ease: [0.43, 0.13, 0.23, 0.96] } }}
+                                className="absolute inset-0 z-10 flex flex-col justify-center p-12 overflow-y-auto"
+                            >
+                                <div className="space-y-8 max-w-5xl mx-auto">
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0, transition: { delay: 0.3, duration: 0.5, ease: [0.16, 1, 0.3, 1] } }}
+                                    >
+                                        <motion.div
+                                            initial={{ width: 0 }}
+                                            animate={{ width: 96, transition: { delay: 0.4, duration: 0.5, ease: [0.16, 1, 0.3, 1] } }}
+                                            className="h-1.5 rounded-full mb-6"
+                                            style={{
+                                                backgroundColor: association.branding.color,
+                                                boxShadow: `0 0 12px ${association.branding.color}`
+                                            }}
+                                        />
+                                        <h2 className="text-4xl md:text-6xl font-bold text-white mb-4">
+                                            {selectedFocus.title}
+                                        </h2>
+                                        <p className="text-slate-400 text-lg">
+                                            {association.name}
+                                        </p>
+                                    </motion.div>
+
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0, transition: { delay: 0.5, duration: 0.5, ease: [0.16, 1, 0.3, 1] } }}
+                                        className=""
+                                    >
+                                        <p className="text-slate-200 text-xl md:text-2xl leading-relaxed">
+                                            {selectedFocus.description}
+                                        </p>
+                                    </motion.div>
+                                    <motion.div
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1, transition: { delay: 0.6, duration: 0.4, ease: [0.16, 1, 0.3, 1] } }}
+                                        className="flex justify-end"
+                                    >
+                                        <motion.button
+                                            whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
+                                            whileTap={{ scale: 0.95 }}
+                                            onClick={() => setSelectedFocus(null)}
+                                            className="px-8 py-4 bg-slate-800 hover:bg-slate-700 text-white font-bold text-lg rounded-xl transition-colors border border-slate-700"
+                                        >
+                                            Fermer
+                                        </motion.button>
+                                    </motion.div>
+                                </div>
+                            </motion.div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };
