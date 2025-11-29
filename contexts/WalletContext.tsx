@@ -121,7 +121,7 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
                         return;
                     }
                 } catch (e) {
-                    console.log('Xumm connection error:', e);
+                    console.log('Xaman connection error:', e);
                 }
             }
 
