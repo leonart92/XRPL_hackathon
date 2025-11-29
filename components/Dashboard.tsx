@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { AreaChart, Area, ResponsiveContainer, XAxis, Tooltip } from 'recharts';
 import { ArrowUpRight, ShieldCheck, Activity, TrendingUp } from 'lucide-react';
 import gsap from 'gsap';
+import { useNavigate } from 'react-router-dom';
 import { formatCurrency } from '../constants';
 import { fadeInUp, fadeInLeft } from '../animations';
 import { useVaultsContext } from '../contexts/VaultsContext';
@@ -19,6 +20,7 @@ const Dashboard: React.FC = () => {
   const apyRef = useRef<HTMLSpanElement>(null);
   const healthFactorRef = useRef<HTMLSpanElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
+  const navigate = useNavigate();
 
   const { vaults, associations } = useVaultsContext();
   const { address } = useWallet();
@@ -113,7 +115,7 @@ const Dashboard: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              Dashboard
+              Your Impact
             </motion.span>
           </h1>
 
@@ -123,7 +125,7 @@ const Dashboard: React.FC = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            Track your portfolio performance and positions.
+            Track the real-world impact of your environmental investments.
           </motion.p>
         </motion.div>
       </div>
@@ -138,12 +140,12 @@ const Dashboard: React.FC = () => {
           <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
             <Activity size={48} className="text-blue-500" />
           </div>
-          <div className="text-blue-700 text-sm font-medium uppercase tracking-wider mb-2 relative z-10">Net APY</div>
+          <div className="text-blue-700 text-sm font-medium uppercase tracking-wider mb-2 relative z-10">Annual Return</div>
           <div className="flex items-center gap-2 relative z-10">
             <span ref={apyRef} className="text-3xl font-bold text-blue-600 tracking-tight">0.00%</span>
             <ArrowUpRight className="w-5 h-5 text-green-600" />
           </div>
-          <p className="text-xs text-slate-600 mt-2 relative z-10">Weighted average across all positions</p>
+          <p className="text-xs text-slate-600 mt-2 relative z-10">Average return across your investments</p>
 
         </motion.div>
 
@@ -156,16 +158,9 @@ const Dashboard: React.FC = () => {
           <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
             <ShieldCheck size={48} className="text-green-600" />
           </div>
-          <div className="text-green-700 text-sm font-medium uppercase tracking-wider mb-2 relative z-10">Health Factor</div>
+          <div className="text-green-700 text-sm font-medium uppercase tracking-wider mb-2 relative z-10">Projects Supported</div>
           <span ref={healthFactorRef} className="text-3xl font-bold text-green-600 tracking-tight relative z-10 block">0.00</span>
-          <div className="w-full h-1.5 bg-green-200 rounded-full mt-3 overflow-hidden relative z-10">
-            <motion.div
-              className="h-full bg-green-500 rounded-full shadow-[0_0_10px_rgba(34,197,94,0.5)]"
-              initial={{ width: 0 }}
-              animate={{ width: '70%' }}
-              transition={{ duration: 1.5, delay: 0.9 }}
-            />
-          </div>
+          <p className="text-xs text-slate-600 mt-3 relative z-10">Environmental organizations you're helping</p>
 
         </motion.div>
 
@@ -180,13 +175,13 @@ const Dashboard: React.FC = () => {
           </div>
           <div className="text-slate-600 text-sm font-medium uppercase tracking-wider mb-2 flex items-center gap-2 relative z-10">
             <TrendingUp className="w-4 h-4" />
-            Net Worth
+            Total Impact Invested
           </div>
           <span ref={netWorthRef} className="text-3xl font-bold text-slate-900 tracking-tight relative z-10 block">
             $0.00
           </span>
           <div className="text-sm text-green-600 flex items-center gap-1 mt-2 relative z-10">
-            <TrendingUp size={14} /> +2.4% (24h)
+            <TrendingUp size={14} /> Growing daily
           </div>
         </motion.div>
       </div>
@@ -197,7 +192,7 @@ const Dashboard: React.FC = () => {
         animate="animate"
         transition={{ delay: 0.5 }}
       >
-        <h3 className="text-lg font-semibold text-slate-900 mb-4">Active Positions</h3>
+        <h3 className="text-lg font-semibold text-slate-900 mb-4">Your Impact Portfolio</h3>
         <div className="relative bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-lg">
           <motion.div
             className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-green-500/10 opacity-0 hover:opacity-100 transition-opacity duration-500 pointer-events-none"
@@ -205,11 +200,11 @@ const Dashboard: React.FC = () => {
           />
 
           <div className="grid grid-cols-12 gap-4 px-6 py-3 text-xs font-semibold text-slate-600 uppercase tracking-wider border-b border-slate-200 bg-slate-50 relative z-10">
-            <div className="col-span-4">Asset</div>
-            <div className="col-span-3 text-right">Your Balance</div>
-            <div className="col-span-2 text-right">TVL</div>
-            <div className="col-span-2 text-right">APY</div>
-            <div className="col-span-1 text-right">Type</div>
+            <div className="col-span-4">Project</div>
+            <div className="col-span-3 text-right">Your Investment</div>
+            <div className="col-span-2 text-right">Total Funding</div>
+            <div className="col-span-2 text-right">Return</div>
+            <div className="col-span-1 text-right">Impact</div>
           </div>
 
           {balancesLoading ? (
@@ -218,8 +213,8 @@ const Dashboard: React.FC = () => {
             </div>
           ) : balances.length === 0 ? (
             <div className="px-6 py-8 text-center text-slate-500 relative z-10">
-              <p className="text-sm">No active positions yet</p>
-              <p className="text-xs mt-1">Deposit into a vault to get started</p>
+              <p className="text-sm">You haven't invested in any projects yet</p>
+              <p className="text-xs mt-1">Browse environmental projects and start making an impact</p>
             </div>
           ) : (
             balances.map((userBalance, i) => {
@@ -232,10 +227,11 @@ const Dashboard: React.FC = () => {
               return (
                 <motion.div
                   key={vault.id}
-                  className="grid grid-cols-12 gap-4 px-6 py-4 items-center border-b border-slate-200 hover:bg-slate-50 transition-colors relative z-10"
+                  className="grid grid-cols-12 gap-4 px-6 py-4 items-center border-b border-slate-200 hover:bg-slate-50 transition-colors relative z-10 cursor-pointer"
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.6 + i * 0.1 }}
+                  onClick={() => navigate(`/vault/${vault.vaultAddress}`)}
                 >
                   <div className="col-span-4 flex items-center gap-3">
                     <img

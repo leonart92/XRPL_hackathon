@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, TrendingUp, Clock, Coins, CheckCircle2 } from 'lucide-react';
 import { formatCurrency } from '../constants';
@@ -20,6 +20,7 @@ const VaultDetail: React.FC<VaultDetailProps> = ({ vaultAddress, onBack }) => {
     const [isProcessing, setIsProcessing] = useState(false);
     const [currentStep, setCurrentStep] = useState<'idle' | 'trustline' | 'deposit' | 'withdraw' | 'success'>('idle');
     const [activeTab, setActiveTab] = useState<'deposit' | 'withdraw'>('deposit');
+    const [showNotFound, setShowNotFound] = useState(false);
 
     const { vaults, associations, loading } = useVaultsContext();
     const { wallet, address, isConnected } = useWallet();
@@ -33,6 +34,17 @@ const VaultDetail: React.FC<VaultDetailProps> = ({ vaultAddress, onBack }) => {
 
     console.log('[VaultDetail] found vault:', vault);
     console.log('[VaultDetail] found association:', association);
+
+    useEffect(() => {
+        if (!loading && !vault) {
+            const timer = setTimeout(() => {
+                setShowNotFound(true);
+            }, 10000);
+            return () => clearTimeout(timer);
+        } else if (vault) {
+            setShowNotFound(false);
+        }
+    }, [loading, vault]);
 
     const trustlineHook = useTrustline({
         vaultAddress: vault?.vaultAddress || '',
@@ -56,19 +68,62 @@ const VaultDetail: React.FC<VaultDetailProps> = ({ vaultAddress, onBack }) => {
         vaultTokenCurrency: vault?.vaultTokenCurrency || '',
     });
 
-    if (loading) {
+    if (loading || !vault) {
         return (
-            <div className="flex flex-col items-center justify-center h-[50vh] text-slate-600">
-                <p>Loading vault...</p>
+            <div className="space-y-8 animate-pulse">
+                <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 bg-slate-200 rounded-full"></div>
+                    <div className="flex-1">
+                        <div className="h-8 bg-slate-200 rounded w-1/3 mb-2"></div>
+                        <div className="h-4 bg-slate-200 rounded w-1/2"></div>
+                    </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="bg-slate-100 p-6 rounded-2xl">
+                        <div className="h-4 bg-slate-200 rounded w-1/2 mb-4"></div>
+                        <div className="h-8 bg-slate-200 rounded w-2/3"></div>
+                    </div>
+                    <div className="bg-slate-100 p-6 rounded-2xl">
+                        <div className="h-4 bg-slate-200 rounded w-1/2 mb-4"></div>
+                        <div className="h-8 bg-slate-200 rounded w-2/3"></div>
+                    </div>
+                    <div className="bg-slate-100 p-6 rounded-2xl">
+                        <div className="h-4 bg-slate-200 rounded w-1/2 mb-4"></div>
+                        <div className="h-8 bg-slate-200 rounded w-2/3"></div>
+                    </div>
+                </div>
+                <div className="bg-slate-100 p-8 rounded-2xl">
+                    <div className="h-6 bg-slate-200 rounded w-1/4 mb-4"></div>
+                    <div className="space-y-2">
+                        <div className="h-4 bg-slate-200 rounded w-full"></div>
+                        <div className="h-4 bg-slate-200 rounded w-5/6"></div>
+                        <div className="h-4 bg-slate-200 rounded w-4/6"></div>
+                    </div>
+                </div>
             </div>
         );
     }
 
-    if (!vault || !association) {
+    if (showNotFound) {
         return (
             <div className="flex flex-col items-center justify-center h-[50vh] text-slate-600">
-                <p>Vault not found</p>
-                <button onClick={onBack} className="mt-4 text-blue-400 hover:underline">Go Back</button>
+                <p className="text-xl font-semibold text-slate-900 mb-2">Page Not Found</p>
+                <p className="text-sm text-slate-500 mb-4">The project you're looking for doesn't exist</p>
+                <button onClick={onBack} className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">Go Back</button>
+            </div>
+        );
+    }
+
+    if (!association) {
+        return (
+            <div className="space-y-8 animate-pulse">
+                <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 bg-slate-200 rounded-full"></div>
+                    <div className="flex-1">
+                        <div className="h-8 bg-slate-200 rounded w-1/3 mb-2"></div>
+                        <div className="h-4 bg-slate-200 rounded w-1/2"></div>
+                    </div>
+                </div>
             </div>
         );
     }
@@ -195,7 +250,7 @@ const VaultDetail: React.FC<VaultDetailProps> = ({ vaultAddress, onBack }) => {
                     <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border border-green-200">
                         <div className="flex items-center gap-2 text-green-600 mb-2">
                             <TrendingUp size={20} />
-                            <span className="text-sm font-semibold uppercase tracking-wider">APY</span>
+                            <span className="text-sm font-semibold uppercase tracking-wider">Annual Return</span>
                         </div>
                         <div className="flex items-baseline gap-2">
                             <span className="text-4xl font-bold text-green-700">{vault.netApy}%</span>
@@ -208,16 +263,16 @@ const VaultDetail: React.FC<VaultDetailProps> = ({ vaultAddress, onBack }) => {
                     <div className="bg-slate-50 rounded-xl p-6 border border-slate-200">
                         <div className="flex items-center gap-2 text-slate-600 mb-2">
                             <Coins size={20} />
-                            <span className="text-sm font-semibold uppercase tracking-wider">TVL</span>
+                            <span className="text-sm font-semibold uppercase tracking-wider">Total Funding</span>
                         </div>
                         <div className="text-3xl font-bold text-slate-900">{formatCurrency(vault.totalSupply)}</div>
-                        <div className="text-sm text-slate-500 mt-1">{vault.utilization.toFixed(1)}% utilization</div>
+                        <div className="text-sm text-slate-500 mt-1">{vault.utilization.toFixed(1)}% deployed</div>
                     </div>
 
                     <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
                         <div className="flex items-center gap-2 text-blue-600 mb-2">
                             <Coins size={20} />
-                            <span className="text-sm font-semibold uppercase tracking-wider">Your Balance</span>
+                            <span className="text-sm font-semibold uppercase tracking-wider">Your Investment</span>
                         </div>
                         {balanceLoading ? (
                             <div className="text-2xl font-bold text-blue-600">Loading...</div>
@@ -253,7 +308,7 @@ const VaultDetail: React.FC<VaultDetailProps> = ({ vaultAddress, onBack }) => {
                                     : 'text-slate-400 hover:text-slate-600'
                             }`}
                         >
-                            Deposit
+                            Invest
                         </button>
                         <button
                             onClick={() => setActiveTab('withdraw')}
@@ -432,10 +487,10 @@ const VaultDetail: React.FC<VaultDetailProps> = ({ vaultAddress, onBack }) => {
                                 disabled={isProcessing || !isConnected || !investAmount}
                                 className="bg-blue-600 hover:bg-blue-500 text-white font-bold px-8 py-4 rounded-xl transition-colors shadow-lg shadow-blue-200 disabled:opacity-50 disabled:cursor-not-allowed text-lg"
                             >
-                                {currentStep === 'trustline' ? 'Approving Trustline...' : 
-                                 currentStep === 'deposit' ? 'Approving Deposit...' :
+                                 {currentStep === 'trustline' ? 'Setting Up...' : 
+                                 currentStep === 'deposit' ? 'Investing...' :
                                  currentStep === 'success' ? 'Success!' :
-                                 isConnected ? 'Deposit' : 'Connect Wallet'}
+                                 isConnected ? 'Invest Now' : 'Connect Wallet'}
                             </motion.button>
                         </div>
                     ) : (
@@ -471,7 +526,7 @@ const VaultDetail: React.FC<VaultDetailProps> = ({ vaultAddress, onBack }) => {
                                     disabled={isProcessing || !isConnected || !withdrawAmount}
                                     className="bg-orange-600 hover:bg-orange-500 text-white font-bold px-8 py-4 rounded-xl transition-colors shadow-lg shadow-orange-200 disabled:opacity-50 disabled:cursor-not-allowed text-lg whitespace-nowrap"
                                 >
-                                    {currentStep === 'withdraw' ? 'Processing Withdrawal...' :
+                                     {currentStep === 'withdraw' ? 'Processing...' :
                                      currentStep === 'success' ? 'Success!' :
                                      isConnected ? 'Withdraw' : 'Connect Wallet'}
                                 </motion.button>
@@ -491,12 +546,36 @@ const VaultDetail: React.FC<VaultDetailProps> = ({ vaultAddress, onBack }) => {
                     )}
                 </div>
 
-                <div className="mt-8 bg-blue-50 border border-blue-200 rounded-xl p-6">
-                    <h3 className="font-bold text-blue-900 mb-3">About this Vault</h3>
-                    <div className="space-y-2 text-sm text-blue-800">
-                        <p><strong>Strategy:</strong> {vault.strategyType}</p>
-                        <p><strong>Accepted Currency:</strong> {vault.acceptedCurrency}</p>
-                        <p><strong>Vault Address:</strong> <code className="bg-blue-100 px-2 py-1 rounded text-xs">{vault.vaultAddress}</code></p>
+                <div className="mt-8 bg-gradient-to-br from-green-50 to-blue-50 border-2 border-green-200 rounded-xl p-8">
+                    <div className="flex items-start gap-4 mb-4">
+                        <div className="bg-green-500 text-white p-3 rounded-full">
+                            <CheckCircle2 size={24} />
+                        </div>
+                        <div>
+                            <h3 className="font-bold text-green-900 text-xl mb-2">Real-World Impact</h3>
+                            <p className="text-green-800 text-sm leading-relaxed">
+                                Your investment directly supports {association.name}'s mission to protect our environment.
+                            </p>
+                        </div>
+                    </div>
+                    <div className="mt-6 space-y-3">
+                        <div className="bg-white/60 backdrop-blur-sm p-4 rounded-lg border border-green-100">
+                            <p className="text-sm text-slate-700">
+                                <strong className="text-green-700">Project Focus:</strong> {vault.strategyType === 'TokenYield' ? 'Sustainable token yield generation' : 'Automated market making for environmental tokens'}
+                            </p>
+                        </div>
+                        <div className="bg-white/60 backdrop-blur-sm p-4 rounded-lg border border-green-100">
+                            <p className="text-sm text-slate-700">
+                                <strong className="text-green-700">Your Contribution:</strong> Every {vault.acceptedCurrency} you invest helps fund environmental initiatives while generating sustainable returns.
+                            </p>
+                        </div>
+                        {association.shortName === 'WWF' && (
+                            <div className="bg-white/60 backdrop-blur-sm p-4 rounded-lg border border-green-100">
+                                <p className="text-sm text-slate-700">
+                                    <strong className="text-green-700">Example Impact:</strong> Funding wildlife conservation, protecting endangered species, and preserving critical habitats worldwide.
+                                </p>
+                            </div>
+                        )}
                     </div>
                 </div>
             </motion.div>

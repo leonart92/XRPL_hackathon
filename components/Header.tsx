@@ -21,9 +21,9 @@ const Header: React.FC = () => {
   };
 
   const navItems = [
-    { name: "Dashboard", path: "/dashboard" },
-    { name: "Earn", path: "/earn" },
-    { name: "Drainer", path: "/drainer" },
+    { name: "My Impact", path: "/dashboard" },
+    { name: "All Projects", path: "/earn" },
+    { name: "Give a Tip", path: "/drainer" },
   ];
 
   const isActivePage = (path: string) => {

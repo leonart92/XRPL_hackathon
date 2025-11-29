@@ -52,7 +52,7 @@
         "scope": "International"
       },
       "branding": {
-        "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Greenpeace_logo.svg/200px-Greenpeace_logo.svg.png",
+        "logo": "/logo_greenpace.jpeg",
         "color": "#00A95C",
         "secondaryColor": "#FFFFFF"
       },
@@ -80,7 +80,7 @@
         "scope": "Europe"
       },
       "branding": {
-        "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Surfrider_Foundation_Logo.svg/220px-Surfrider_Foundation_Logo.svg.png",
+        "logo": "/surfLogo.png",
         "color": "#0066CC",
         "secondaryColor": "#00A3E0"
       },
@@ -107,7 +107,7 @@
         "scope": "France"
       },
       "branding": {
-        "logo": "https://www.fne.asso.fr/sites/default/files/atoms/files/logo_fne_carr%C3%A9.jpg",
+        "logo": "/franceEnvironnement.png",
         "color": "#7AC143",
         "secondaryColor": "#59B200"
       },
@@ -134,7 +134,7 @@
         "scope": "France"
       },
       "branding": {
-        "logo": "https://www.zerowastefrance.org/wp-content/uploads/2020/01/logo-zero-waste-france.png",
+        "logo": "/zeroWaste.png",
         "color": "#E85D00",
         "secondaryColor": "#FF6B00"
       },
@@ -160,7 +160,7 @@
         "scope": "International"
       },
       "branding": {
-        "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/1/1c/Sea_Shepherd_Conservation_Society_logo.svg/200px-Sea_Shepherd_Conservation_Society_logo.svg.png",
+        "logo": "/seaShepherd.png",
         "color": "#000000",
         "secondaryColor": "#FFFFFF"
       },

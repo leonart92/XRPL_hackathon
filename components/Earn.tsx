@@ -109,7 +109,7 @@ const Earn: React.FC<EarnProps> = ({ onSelectAssociation }) => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              Invest in
+              Fund Real
             </motion.span>
             <br />
             <motion.span
@@ -118,7 +118,7 @@ const Earn: React.FC<EarnProps> = ({ onSelectAssociation }) => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              Environmental Impact
+              Environmental Change
             </motion.span>
           </h1>
 
@@ -128,8 +128,8 @@ const Earn: React.FC<EarnProps> = ({ onSelectAssociation }) => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            Choose an association and invest your XRP in their vaults.
-            Earn returns while supporting environmental causes.
+            Support verified environmental organizations with your XRP. 
+            See the impact of your investments in real-time.
           </motion.p>
         </motion.div>
 
@@ -141,7 +141,7 @@ const Earn: React.FC<EarnProps> = ({ onSelectAssociation }) => {
           <div className="relative flex flex-col bg-blue-50 p-4 rounded-2xl border border-blue-100 backdrop-blur-sm overflow-hidden">
             <span className="text-sm font-medium text-slate-600 uppercase tracking-wider mb-2 flex items-center gap-2 relative z-10">
               <TrendingUp className="w-4 h-4" />
-              Total Value Locked
+              Total Impact Funding
             </span>
             <span ref={depositRef} className="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight relative z-10">
               $0.00B
@@ -152,7 +152,7 @@ const Earn: React.FC<EarnProps> = ({ onSelectAssociation }) => {
 
           <div className="relative flex flex-col bg-green-50 p-4 rounded-2xl border border-green-100 backdrop-blur-sm overflow-hidden">
             <span className="text-sm font-medium text-green-700 uppercase tracking-wider mb-2 relative z-10">
-              Avg. APY
+              Avg. Return
             </span>
             <div className="flex items-center gap-2 relative z-10">
               <span ref={apyRef} className="text-2xl md:text-3xl font-bold text-green-600 tracking-tight">
@@ -182,7 +182,7 @@ const Earn: React.FC<EarnProps> = ({ onSelectAssociation }) => {
             onChange={(e) => setSearchValue(e.target.value)}
             onFocus={() => setSearchFocused(true)}
             onBlur={() => setSearchFocused(false)}
-            placeholder="Search by association, category, or impact area..."
+            placeholder="Search projects by organization, cause, or impact area..."
             className="w-full bg-white border border-slate-200 text-slate-900 pl-12 pr-10 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all placeholder:text-slate-400 hover:bg-slate-50"
           />
 
