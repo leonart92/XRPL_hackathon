@@ -195,53 +195,6 @@ const Dashboard: React.FC = () => {
         variants={fadeInUp}
         initial="initial"
         animate="animate"
-        transition={{ delay: 0.4 }}
-        className="relative bg-white border border-slate-200 rounded-2xl p-6 overflow-hidden shadow-lg"
-      >
-        <motion.div
-          className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-green-500/10 opacity-0 hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-          style={{ padding: '1px' }}
-        />
-
-        <div className="flex justify-between items-center mb-6 relative z-10">
-          <h3 className="text-lg font-semibold text-slate-900">Portfolio Performance</h3>
-          <div className="flex gap-2">
-            {['1W', '1M', '1Y', 'ALL'].map(t => (
-              <motion.button
-                key={t}
-                className={`text-xs font-bold px-3 py-1 rounded-lg ${t === '1M' ? 'bg-blue-100 text-blue-600' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'}`}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                {t}
-              </motion.button>
-            ))}
-          </div>
-        </div>
-        <div className="h-[250px] w-full relative z-10">
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={MOCK_PORTFOLIO_HISTORY}>
-              <defs>
-                <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <XAxis dataKey="date" hide />
-              <Tooltip
-                contentStyle={{ backgroundColor: '#ffffff', borderColor: '#e2e8f0', color: '#0f172a' }}
-                formatter={(value: number) => [`$${value.toLocaleString()}`, 'Value']}
-              />
-              <Area type="monotone" dataKey="value" stroke="#3b82f6" fillOpacity={1} fill="url(#colorValue)" strokeWidth={2} />
-            </AreaChart>
-          </ResponsiveContainer>
-        </div>
-      </motion.div>
-
-      <motion.div
-        variants={fadeInUp}
-        initial="initial"
-        animate="animate"
         transition={{ delay: 0.5 }}
       >
         <h3 className="text-lg font-semibold text-slate-900 mb-4">Active Positions</h3>

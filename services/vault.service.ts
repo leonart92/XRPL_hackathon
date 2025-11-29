@@ -52,73 +52,117 @@ class VaultService {
     if (transaction.TransactionType !== "Payment") {
       return;
     }
+    
+    if (transaction.Destination !== this.config.address) {
+      return;
+    }
 
     const amount = transaction.DeliverMax || transaction.Amount;
 
-    if (typeof amount !== "object") {
-      return;
+    if (typeof amount === "object") {
+      if (
+        amount.currency === this.config.vaultTokenCurrency &&
+        amount.issuer === this.config.address
+      ) {
+        console.log(`\n🔄 Detected vault token return (withdrawal request)`);
+        await this.handleWithdrawal(transaction.Account, amount.value);
+        return;
+      }
+
+      if (
+        amount.currency === this.config.acceptedCurrency &&
+        amount.issuer === this.config.acceptedCurrencyIssuer
+      ) {
+        const depositor = transaction.Account;
+        const depositAmount = amount.value;
+        
+        console.log(`\n💰 Detected deposit:`);
+        console.log(`   From: ${depositor}`);
+        console.log(`   Amount: ${depositAmount} ${this.config.acceptedCurrency}`);
+
+        await this.issueVaultTokens(depositor, depositAmount);
+        await this.config.strategy.deploy(depositAmount);
+
+        const currentDeposit = this.userDeposits.get(depositor) || {
+          totalDeposited: "0",
+          vTokensIssued: "0",
+        };
+
+        this.userDeposits.set(depositor, {
+          totalDeposited: (
+            parseFloat(currentDeposit.totalDeposited) + parseFloat(depositAmount)
+          ).toString(),
+          vTokensIssued: (
+            parseFloat(currentDeposit.vTokensIssued) + parseFloat(depositAmount)
+          ).toString(),
+        });
+      }
+    } else if (typeof amount === "string" && this.config.acceptedCurrency === "XRP") {
+      const xrpAmount = (parseInt(amount) / 1_000_000).toString();
+      const depositor = transaction.Account;
+      
+      console.log(`\n💰 Detected XRP deposit:`);
+      console.log(`   From: ${depositor}`);
+      console.log(`   Amount: ${xrpAmount} XRP`);
+
+      await this.issueVaultTokens(depositor, xrpAmount);
+      await this.config.strategy.deploy(xrpAmount);
+
+      const currentDeposit = this.userDeposits.get(depositor) || {
+        totalDeposited: "0",
+        vTokensIssued: "0",
+      };
+
+      this.userDeposits.set(depositor, {
+        totalDeposited: (
+          parseFloat(currentDeposit.totalDeposited) + parseFloat(xrpAmount)
+        ).toString(),
+        vTokensIssued: (
+          parseFloat(currentDeposit.vTokensIssued) + parseFloat(xrpAmount)
+        ).toString(),
+      });
     }
-
-    if (
-      amount.currency === this.config.vaultTokenCurrency &&
-      amount.issuer === this.config.address
-    ) {
-      await this.handleWithdrawal(transaction.Account, amount.value);
-      return;
-    }
-
-    if (
-      amount.currency !== this.config.acceptedCurrency ||
-      amount.issuer !== this.config.acceptedCurrencyIssuer
-    ) {
-      return;
-    }
-
-    const depositor = transaction.Account;
-    const depositAmount = amount.value;
-
-    await this.issueVaultTokens(depositor, depositAmount);
-
-    await this.config.strategy.deploy(depositAmount);
-
-    const currentDeposit = this.userDeposits.get(depositor) || {
-      totalDeposited: "0",
-      vTokensIssued: "0",
-    };
-
-    this.userDeposits.set(depositor, {
-      totalDeposited: (
-        parseFloat(currentDeposit.totalDeposited) + parseFloat(depositAmount)
-      ).toString(),
-      vTokensIssued: (
-        parseFloat(currentDeposit.vTokensIssued) + parseFloat(depositAmount)
-      ).toString(),
-    });
   }
 
   private async handleWithdrawal(user: string, vTokenAmount: string) {
+    console.log(`\n💰 Processing withdrawal request:`);
+    console.log(`   User: ${user}`);
+    console.log(`   vToken Amount: ${vTokenAmount} ${this.config.vaultTokenCurrency}`);
+    
     await this.config.strategy.withdraw(vTokenAmount);
 
     const client = xrplService.getClient();
+    
+    let returnAmount: any;
+    
+    if (this.config.acceptedCurrency === "XRP") {
+      returnAmount = (parseFloat(vTokenAmount) * 1_000_000).toString();
+      console.log(`   Returning: ${vTokenAmount} XRP (${returnAmount} drops)`);
+    } else {
+      returnAmount = {
+        currency: this.config.acceptedCurrency,
+        issuer: this.config.acceptedCurrencyIssuer,
+        value: vTokenAmount,
+      };
+      console.log(`   Returning: ${vTokenAmount} ${this.config.acceptedCurrency}`);
+    }
+    
     const returnTx = await client.autofill({
       TransactionType: "Payment" as const,
       Account: this.config.address,
       Destination: user,
-      Amount: {
-        currency: this.config.acceptedCurrency,
-        issuer: this.config.acceptedCurrencyIssuer,
-        value: vTokenAmount,
-      },
-      SendMax: {
-        currency: this.config.acceptedCurrency,
-        issuer: this.config.acceptedCurrencyIssuer,
-        value: vTokenAmount,
-      },
-      Flags: 0x00020000, // tfPartialPayment
+      Amount: returnAmount,
     });
 
     const signed = this.config.wallet.sign(returnTx);
     const result = await client.submitAndWait(signed.tx_blob);
+    
+    if ((result.result as any).meta.TransactionResult === "tesSUCCESS") {
+      console.log(`   ✅ Withdrawal successful!`);
+      console.log(`   TX: ${(result.result as any).hash}`);
+    } else {
+      console.log(`   ❌ Withdrawal failed: ${(result.result as any).meta.TransactionResult}`);
+    }
 
     const currentDeposit = this.userDeposits.get(user);
     if (currentDeposit) {

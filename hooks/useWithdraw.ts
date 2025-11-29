@@ -1,6 +1,6 @@
 import { useState } from "react";
-import type { Wallet } from "xrpl";
 import { xrplService } from "../services/xrpl.service";
+import { sendPayment, isInstalled } from "@gemwallet/api";
 
 interface UseWithdrawOptions {
   vaultAddress: string;
@@ -9,7 +9,7 @@ interface UseWithdrawOptions {
 }
 
 interface UseWithdrawReturn {
-  withdraw: (userWallet: Wallet, vTokenAmount: string) => Promise<void>;
+  withdraw: (userAddress: string, vTokenAmount: string) => Promise<void>;
   loading: boolean;
   error: Error | null;
   txHash: string | null;
@@ -24,7 +24,7 @@ export function useWithdraw({
   const [error, setError] = useState<Error | null>(null);
   const [txHash, setTxHash] = useState<string | null>(null);
 
-  const withdraw = async (userWallet: Wallet, vTokenAmount: string) => {
+  const withdraw = async (userAddress: string, vTokenAmount: string) => {
     try {
       setLoading(true);
       setError(null);
@@ -36,27 +36,62 @@ export function useWithdraw({
 
       const client = xrplService.getClient();
 
+      const amountObject = {
+        currency: vaultTokenCurrency,
+        issuer: vaultAddress,
+        value: vTokenAmount,
+      };
+
       const withdrawTx = await client.autofill({
         TransactionType: "Payment" as const,
-        Account: userWallet.address,
+        Account: userAddress,
         Destination: vaultAddress,
-        Amount: {
-          currency: vaultTokenCurrency,
-          issuer: vaultAddress,
-          value: vTokenAmount,
-        },
+        Amount: amountObject,
       });
 
-      const signed = userWallet.sign(withdrawTx);
-      const result = await client.submitAndWait(signed.tx_blob);
+      const win = window as any;
+      let result: any;
 
-      if (result.result.meta && typeof result.result.meta === "object") {
+      const gemWalletInstalled = await isInstalled();
+      
+      if (gemWalletInstalled.result.isInstalled) {
+        const gemResponse = await sendPayment({
+          amount: amountObject,
+          destination: vaultAddress
+        });
+        
+        if (gemResponse?.result?.hash) {
+          result = { result: { hash: gemResponse.result.hash, meta: { TransactionResult: "tesSUCCESS" } } };
+        } else {
+          throw new Error("Transaction failed or was rejected");
+        }
+      } else if (win.xaman) {
+        const payload = await win.xaman.payload.createAndSubscribe(withdrawTx);
+        if (payload?.response?.txid) {
+          result = { result: { hash: payload.response.txid, meta: { TransactionResult: "tesSUCCESS" } } };
+        } else {
+          throw new Error("Transaction was rejected or failed");
+        }
+      } else if (win.crossmark) {
+        const response = await win.crossmark.signAndSubmit(withdrawTx);
+        if (response?.response?.data?.resp?.result?.hash) {
+          result = { result: { hash: response.response.data.resp.result.hash, meta: response.response.data.resp.result.meta } };
+        } else {
+          throw new Error("Transaction was rejected or failed");
+        }
+      } else {
+        throw new Error("No supported wallet found. Please install GemWallet, Xaman, or Crossmark.");
+      }
+
+      if (result?.result?.meta && typeof result.result.meta === "object") {
         const meta = result.result.meta as any;
         if (meta.TransactionResult === "tesSUCCESS") {
           setTxHash(result.result.hash);
         } else {
           throw new Error(`Transaction failed: ${meta.TransactionResult}`);
         }
+      } else if (result?.result?.hash) {
+        setTxHash(result.result.hash);
       }
     } catch (err) {
       setError(err as Error);

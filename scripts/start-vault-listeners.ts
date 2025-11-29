@@ -3,7 +3,6 @@ import { xrplService } from "../services/xrpl.service";
 import { RegistryService } from "../services/registry.service";
 import { VaultService } from "../services/vault.service";
 import { AMMStrategy } from "../services/strategies/amm.strategy";
-import { tokenYieldStrategy } from "../services/strategies/tokenYield.strategy";
 
 const REGISTRY_ADDRESS = process.env.REGISTRY_ADDRESS!;
 const REGISTRY_SEED = process.env.REGISTRY_SEED!;
@@ -47,22 +46,28 @@ async function startVaultListeners() {
     }
 
     let strategy;
-    if (vaultMetadata.strategyType === "AMM") {
+    if (vaultMetadata.strategyType === "AMM" && false) {
       strategy = new AMMStrategy({
         vaultAddress: vaultMetadata.vaultAddress,
         vaultWallet,
-        currency1: vaultMetadata.acceptedCurrency,
-        currency2: "XRP",
-        issuer1: vaultMetadata.acceptedCurrencyIssuer,
+        ammAccount: "",
+        asset: { currency: "XRP" },
+        asset2: { currency: "XRP" },
+        baseCurrency: vaultMetadata.acceptedCurrency,
+        baseCurrencyIssuer: vaultMetadata.acceptedCurrencyIssuer,
       });
     } else {
-      strategy = new TokenYieldStrategy({
-        vaultAddress: vaultMetadata.vaultAddress,
-        vaultWallet,
-        stakingToken: vaultMetadata.acceptedCurrency,
-        stakingIssuer: vaultMetadata.acceptedCurrencyIssuer,
-        rewardRate: "0.05",
-      });
+      strategy = {
+        deploy: async (amount: string) => {
+          console.log(`   📊 Strategy: Holding ${amount} ${vaultMetadata.acceptedCurrency} in vault (no deployment)`);
+        },
+        withdraw: async (amount: string) => {
+          console.log(`   📊 Strategy: Preparing ${amount} ${vaultMetadata.acceptedCurrency} for withdrawal`);
+          return amount;
+        },
+        getYield: async () => "0",
+        getTotalValue: async () => "0",
+      };
     }
 
     const vaultService = new VaultService({
