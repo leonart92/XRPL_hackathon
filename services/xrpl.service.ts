@@ -132,8 +132,10 @@ class XRPLService {
     });
 
     client.on("transaction", (tx: any) => {
-      if (tx.transaction && tx.transaction.Destination === account) {
-        callback(tx);
+      const transaction = tx.tx_json || tx.transaction;
+      
+      if (transaction && transaction.Destination === account && tx.validated) {
+        callback({ transaction, meta: tx.meta });
       }
     });
   }

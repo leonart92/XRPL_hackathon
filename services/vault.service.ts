@@ -1,6 +1,6 @@
 import type { Amount, Wallet } from "xrpl";
-import { xrplService } from "./xrpl.service";
 import type { YieldStrategy } from "./strategies/yield-strategy.interface";
+import { xrplService } from "./xrpl.service";
 
 interface VaultConfig {
   address: string;
@@ -53,11 +53,11 @@ class VaultService {
       return;
     }
 
-    if (typeof transaction.Amount !== "object") {
+    const amount = transaction.DeliverMax || transaction.Amount;
+
+    if (typeof amount !== "object") {
       return;
     }
-
-    const amount = transaction.Amount;
 
     if (
       amount.currency !== this.config.acceptedCurrency ||
@@ -160,7 +160,7 @@ class VaultService {
 
   async prepareUserWithdrawal(userAddress: string, vTokenAmount: string) {
     const userDeposit = this.userDeposits.get(userAddress);
-    
+
     if (!userDeposit) {
       throw new Error("No deposit found for user");
     }
@@ -172,12 +172,16 @@ class VaultService {
       throw new Error("Insufficient vToken balance");
     }
 
-    const capitalToWithdraw = (requestedWithdrawal / vTokensHeld) * parseFloat(userDeposit.totalDeposited);
+    const capitalToWithdraw =
+      (requestedWithdrawal / vTokensHeld) *
+      parseFloat(userDeposit.totalDeposited);
 
     await this.config.strategy.withdraw(capitalToWithdraw.toString());
 
     this.userDeposits.set(userAddress, {
-      totalDeposited: (parseFloat(userDeposit.totalDeposited) - capitalToWithdraw).toString(),
+      totalDeposited: (
+        parseFloat(userDeposit.totalDeposited) - capitalToWithdraw
+      ).toString(),
       vTokensIssued: (vTokensHeld - requestedWithdrawal).toString(),
     });
 

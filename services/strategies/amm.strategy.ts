@@ -24,16 +24,19 @@ class AMMStrategy implements YieldStrategy {
   async deploy(amount: string): Promise<void> {
     const client = xrplService.getClient();
 
+    const ammInfo = await this.getAMMInfo();
+    
     const depositTx = {
       TransactionType: "AMMDeposit" as const,
       Account: this.config.vaultAddress,
       Asset: this.config.asset,
       Asset2: this.config.asset2,
-      Amount: {
-        currency: this.config.baseCurrency,
-        issuer: this.config.baseCurrencyIssuer,
-        value: amount,
+      LPTokenOut: {
+        currency: ammInfo.lpToken.currency,
+        issuer: ammInfo.lpToken.issuer,
+        value: "1",
       },
+      Flags: 0x00100000,
     };
 
     const prepared = await client.autofill(depositTx);
