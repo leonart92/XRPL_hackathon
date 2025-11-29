@@ -99,6 +99,44 @@ class XRPLService {
       },
     };
   }
+
+  async prepareIssueToken(params: {
+    issuerAccount: string;
+    destination: string;
+    currency: string;
+    amount: string;
+  }) {
+    const client = this.getClient();
+
+    const transaction = {
+      TransactionType: "Payment" as const,
+      Account: params.issuerAccount,
+      Destination: params.destination,
+      Amount: {
+        currency: params.currency,
+        issuer: params.issuerAccount,
+        value: params.amount,
+      },
+    };
+
+    const prepared = await client.autofill(transaction);
+    return prepared;
+  }
+
+  async subscribeToAccount(account: string, callback: (tx: any) => void) {
+    const client = this.getClient();
+
+    await client.request({
+      command: "subscribe",
+      accounts: [account],
+    });
+
+    client.on("transaction", (tx: any) => {
+      if (tx.transaction && tx.transaction.Destination === account) {
+        callback(tx);
+      }
+    });
+  }
 }
 
 export const xrplService = new XRPLService();
