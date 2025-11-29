@@ -45,7 +45,7 @@ const ConnectModal: React.FC<ConnectModalProps> = ({ show, setShow }) => {
             logo: '/gemWalletLogo.png',
             type: 'extension',
             available: false,
-            installUrl: 'https://gemwallet.app',
+            installUrl: 'https://chromewebstore.google.com/detail/gemwallet/egebedonbdapoieedfcfkofloclfghab',
         },
         {
             id: 'crossmark',
@@ -54,7 +54,7 @@ const ConnectModal: React.FC<ConnectModalProps> = ({ show, setShow }) => {
             logo: '/crossmarkLogo.png',
             type: 'extension',
             available: false,
-            installUrl: 'https://crossmark.io',
+            installUrl: 'https://chromewebstore.google.com/detail/crossmark-wallet/canipghmckojpianfgiklhbgpfmhjkjg',
         },
     ]);
 
