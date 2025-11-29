@@ -110,13 +110,13 @@ async function deployVault(config: DeployConfig) {
 }
 
 const exampleConfig: DeployConfig = {
-  vaultName: "Green peace impact fund",
+  vaultName: "Green peace impact fund foo",
   vaultDescription: "Provide water to communities in need.",
   vaultTokenCurrency: "WWF",
-  acceptedCurrency: "USD",
+  acceptedCurrency: "XRP",
   acceptedCurrencyIssuer: process.env.DEFAULT_CURRENCY_ISSUER || "",
-  strategyType: "TOKEN_YIELD",
-  ngoAddress: "rGreenPeaceClimateActionOceanXRP",
+  strategyType: "AMM",
+  ngoAddress: "rL2U4tNXQGwivPaGFLnwZcEWndR7B4K6E7",
   createAmmPool: false,
 };
 

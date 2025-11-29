@@ -39,7 +39,7 @@
       "shortName": "Greenpeace",
       "category": "Climate Action",
       "description": "Organisation de protection de l'environnement présente dans plus de 55 pays. Greenpeace mène des campagnes pour protéger le climat, les forêts et les océans.",
-      "walletAddress": "rGreenPeaceClimateActionOceanXRP",
+      "walletAddress": "rL2U4tNXQGwivPaGFLnwZcEWndR7B4K6E7",
       "focus": [
         "Lutte contre le changement climatique",
         "Protection des océans",
@@ -176,9 +176,7 @@
       "associationId": "wwf",
       "name": "WWF Impact Fund",
       "description": "Fonds d'investissement à impact direct pour la conservation de la biodiversité. Vos XRP financent des projets de terrain.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 8.45,
       "rewardsApy": 1.2,
       "totalSupply": 450000000,
@@ -193,9 +191,7 @@
       "associationId": "wwf",
       "name": "Species Protection Vault",
       "description": "Vault dédié à la protection des espèces menacées. Rendements liés aux succès des programmes de conservation.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 6.2,
       "totalSupply": 120000000,
       "totalBorrow": 90000000,
@@ -209,9 +205,7 @@
       "associationId": "greenpeace",
       "name": "Climate Action Vault",
       "description": "Investissez dans la lutte contre le changement climatique. Fonds utilisés pour les campagnes et actions directes.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 5.8,
       "totalSupply": 320000000,
       "totalBorrow": 180000000,
@@ -225,9 +219,7 @@
       "associationId": "greenpeace",
       "name": "Ocean Defense Fund",
       "description": "Protection des océans et lutte contre la surpêche. Financement des navires et expéditions maritimes.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 7.2,
       "rewardsApy": 0.8,
       "totalSupply": 180000000,
@@ -242,9 +234,7 @@
       "associationId": "surfrider",
       "name": "Beach Cleanup Vault",
       "description": "Financement des opérations de nettoyage des plages et du littoral en Europe.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 4.5,
       "totalSupply": 80000000,
       "totalBorrow": 32000000,
@@ -258,9 +248,7 @@
       "associationId": "surfrider",
       "name": "Plastic Free Ocean",
       "description": "Lutte contre la pollution plastique dans les océans. Projets de sensibilisation et actions de terrain.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 5.2,
       "rewardsApy": 0.5,
       "totalSupply": 95000000,
@@ -275,9 +263,7 @@
       "associationId": "fne",
       "name": "Biodiversity France",
       "description": "Protection de la biodiversité en France. Soutien aux 6000 associations locales du réseau FNE.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 7.1,
       "totalSupply": 120000000,
       "totalBorrow": 100000000,
@@ -291,9 +277,7 @@
       "associationId": "zerowaste",
       "name": "Circular Economy Fund",
       "description": "Financement de projets d'économie circulaire et de réduction des déchets.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 9.8,
       "rewardsApy": 2.5,
       "totalSupply": 60000000,
@@ -308,9 +292,7 @@
       "associationId": "zerowaste",
       "name": "Zero Waste Education",
       "description": "Programmes éducatifs et sensibilisation au zéro déchet.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 4.2,
       "totalSupply": 25000000,
       "totalBorrow": 12000000,
@@ -324,9 +306,7 @@
       "associationId": "sea-shepherd",
       "name": "Ocean Patrol Fund",
       "description": "Financement des patrouilles maritimes contre la pêche illégale.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 6.8,
       "rewardsApy": 1.0,
       "totalSupply": 200000000,
@@ -341,9 +321,7 @@
       "associationId": "sea-shepherd",
       "name": "Marine Sanctuary",
       "description": "Création et protection de sanctuaires marins pour les espèces menacées.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 5.5,
       "totalSupply": 85000000,
       "totalBorrow": 45000000,

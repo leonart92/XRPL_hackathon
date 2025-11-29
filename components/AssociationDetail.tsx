@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, ExternalLink, MapPin, Globe, TrendingUp, Clock, Coins, ChevronRight } from 'lucide-react';
 import { Vault } from '../types';
 import { formatCurrency } from '../constants';
 import { useVaultsContext } from '../contexts/VaultsContext';
-import { useWallet } from '../contexts/WalletContext';
-import { useDeposit } from '../hooks/useDeposit';
-import { useTrustline } from '../hooks/useTrustline';
 
 interface AssociationDetailProps {
     associationId: string;
@@ -64,26 +62,12 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
     onBack,
 }) => {
     const [selectedFocus, setSelectedFocus] = useState<{ title: string, image: string, description: string, index: number } | null>(null);
-    const [selectedVault, setSelectedVault] = useState<Vault | null>(null);
-    const [investAmount, setInvestAmount] = useState('');
-    const [isProcessing, setIsProcessing] = useState(false);
+    const navigate = useNavigate();
 
     const { vaults, associations } = useVaultsContext();
-    const { wallet } = useWallet();
 
     const association = associations.find(a => a.id === associationId);
     const associationVaults = vaults.filter(v => v.associationId === associationId);
-
-    const trustlineHook = selectedVault ? useTrustline({
-        vaultAddress: selectedVault.vaultAddress,
-        vaultTokenCurrency: selectedVault.vaultTokenCurrency,
-    }) : null;
-
-    const depositHook = selectedVault ? useDeposit({
-        vaultAddress: selectedVault.vaultAddress,
-        acceptedCurrency: selectedVault.acceptedCurrency,
-        acceptedCurrencyIssuer: selectedVault.acceptedCurrencyIssuer,
-    }) : null;
 
     if (!association) {
         return (
@@ -93,30 +77,6 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
             </div>
         );
     }
-
-    const handleInvest = async () => {
-        if (!selectedVault || !investAmount || !wallet || !trustlineHook || !depositHook) {
-            if (!wallet) {
-                alert('Please connect your wallet first');
-            }
-            return;
-        }
-
-        setIsProcessing(true);
-        try {
-            await trustlineHook.setupTrustline(wallet);
-            await depositHook.deposit(wallet, investAmount);
-
-            setInvestAmount('');
-            setSelectedVault(null);
-            alert('Investment successful!');
-        } catch (error) {
-            console.error('Investment failed:', error);
-            alert(`Investment failed: ${(error as Error).message}`);
-        } finally {
-            setIsProcessing(false);
-        }
-    };
 
     const getRiskColor = (risk: string) => {
         switch (risk) {
@@ -218,19 +178,15 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.3 + index * 0.1 }}
-                            onClick={() => setSelectedVault(vault)}
-                            className={`relative bg-white rounded-xl border-2 p-5 cursor-pointer transition-all hover:shadow-lg ${selectedVault?.id === vault.id
-                                ? 'border-blue-500 shadow-lg shadow-blue-100'
-                                : 'border-slate-200 hover:border-slate-300'
-                                }`}
+                            onClick={() => navigate(`/vault/${vault.vaultAddress}`)}
+                            className="relative bg-white rounded-xl border-2 border-slate-200 hover:border-slate-300 p-5 cursor-pointer transition-all hover:shadow-lg"
                         >
                             <div className="flex justify-between items-start mb-3">
                                 <div>
                                     <h3 className="font-bold text-slate-900 text-lg">{vault.name}</h3>
                                     <p className="text-sm text-slate-500 mt-1 line-clamp-2">{vault.description}</p>
                                 </div>
-                                <ChevronRight className={`w-5 h-5 text-slate-400 transition-transform ${selectedVault?.id === vault.id ? 'rotate-90' : ''
-                                    }`} />
+                                <ChevronRight className="w-5 h-5 text-slate-400" />
                             </div>
 
                             <div className="grid grid-cols-3 gap-4 mt-4">
@@ -270,65 +226,6 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
                     ))}
                 </div>
             </motion.div>
-
-            <AnimatePresence>
-                {selectedVault && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 20 }}
-                        className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 shadow-2xl p-6 z-40"
-                    >
-                        <div className="max-w-4xl mx-auto">
-                            <div className="flex flex-col md:flex-row gap-6 items-center">
-                                <div className="flex-1">
-                                    <div className="flex items-center gap-3 mb-2">
-                                        <h3 className="font-bold text-slate-900">{selectedVault.name}</h3>
-                                        <span className={`px-2 py-0.5 rounded-full text-xs font-semibold border ${getRiskColor(selectedVault.riskFactor)}`}>
-                                            {selectedVault.riskFactor} Risk
-                                        </span>
-                                    </div>
-                                    <p className="text-sm text-slate-600">
-                                        Earn <span className="font-bold text-green-600">{selectedVault.netApy}% APY</span>
-                                        {selectedVault.rewardsApy && <span className="text-green-500"> + {selectedVault.rewardsApy}% bonus</span>}
-                                        {selectedVault.lockPeriod !== 'No lock' && (
-                                            <span className="text-slate-500"> • {selectedVault.lockPeriod} lock period</span>
-                                        )}
-                                    </p>
-                                </div>
-
-                                 <div className="flex items-center gap-3">
-                                    <div className="relative">
-                                        <input
-                                            type="number"
-                                            value={investAmount}
-                                            onChange={(e) => setInvestAmount(e.target.value)}
-                                            placeholder="Amount in XRP"
-                                            disabled={isProcessing}
-                                            className="w-40 bg-slate-50 border border-slate-200 text-slate-900 px-4 py-2.5 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 font-mono text-sm disabled:opacity-50"
-                                        />
-                                    </div>
-                                    <motion.button
-                                        whileHover={{ scale: 1.02 }}
-                                        whileTap={{ scale: 0.98 }}
-                                        onClick={handleInvest}
-                                        disabled={isProcessing || !wallet || !investAmount}
-                                        className="bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-2.5 rounded-xl transition-colors shadow-lg shadow-blue-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                                    >
-                                        {isProcessing ? 'Processing...' : 'Invest XRP'}
-                                    </motion.button>
-                                    <button
-                                        onClick={() => setSelectedVault(null)}
-                                        className="p-2.5 text-slate-400 hover:text-slate-600 transition-colors"
-                                    >
-                                        ✕
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
 
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -409,8 +306,6 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
                     </motion.div>
                 )}
             </AnimatePresence>
-
-            {selectedVault && <div className="h-32" />}
         </div>
     );
 };

@@ -7,6 +7,7 @@ import Drainer from './components/Drainer';
 import ConnectModal from './components/ConnectModal';
 import DisconnectModal from './components/DisconnectModal';
 import AssociationDetail from './components/AssociationDetail';
+import VaultDetail from './components/VaultDetail';
 import Lenis from 'lenis';
 import { AnimatePresence, motion } from 'framer-motion';
 import { WalletProvider, useWallet } from './contexts/WalletContext';
@@ -99,6 +100,18 @@ const AppContent: React.FC = () => {
               </motion.div>
             } />
 
+            <Route path="/vault/:vaultAddress" element={
+              <motion.div
+                key="vault-detail"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+              >
+                <VaultDetailWrapper />
+              </motion.div>
+            } />
+
             <Route path="/drainer" element={
               <motion.div
                 key="drainer"
@@ -156,6 +169,23 @@ const AssociationDetailWrapper: React.FC = () => {
     <AssociationDetail
       associationId={associationId}
       onBack={() => navigate('/earn')}
+    />
+  );
+};
+
+const VaultDetailWrapper: React.FC = () => {
+  const { vaultAddress } = useParams<{ vaultAddress: string }>();
+  const navigate = useNavigate();
+
+  if (!vaultAddress) {
+    navigate('/earn');
+    return null;
+  }
+
+  return (
+    <VaultDetail
+      vaultAddress={vaultAddress}
+      onBack={() => navigate(-1)}
     />
   );
 };
