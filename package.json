@@ -1,15 +1,37 @@
 {
-  "name": "xrpl_hackathon",
-  "module": "index.ts",
-  "type": "module",
+  "name": "yaid",
   "private": true,
-  "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5"
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "xrpl": "^4.4.3"
+    "@gemwallet/api": "^3.8.0",
+    "@google/genai": "^1.30.0",
+    "framer-motion": "^12.23.24",
+    "gsap": "3.12.5",
+    "lenis": "1.1.18",
+    "lucide-react": "0.460.0",
+    "qrcode.react": "^4.2.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-is": "^19.2.0",
+    "react-router-dom": "^7.9.6",
+    "recharts": "^3.5.1",
+    "xrpl": "^4.4.3",
+    "xrpl-wallet-kit": "^0.1.31",
+    "xumm": "^1.8.0",
+    "xumm-sdk": "^1.11.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.0.0",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0"
   }
 }

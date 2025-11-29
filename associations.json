@@ -1,0 +1,372 @@
+{
+  "associations": [
+    {
+      "id": "wwf",
+      "name": "World Wildlife Fund",
+      "shortName": "WWF",
+      "category": "Conservation",
+      "description": "Organisation internationale de protection de la nature et de l'environnement. Le WWF travaille dans plus de 100 pays pour protéger les espèces menacées et leurs habitats.",
+      "focus": [
+        "Conservation de la biodiversité",
+        "Protection des espèces menacées",
+        "Préservation des habitats naturels",
+        "Lutte contre le changement climatique"
+      ],
+      "focusDetails": {
+        "Conservation de la biodiversité": "La biodiversité est essentielle à la vie sur Terre. WWF travaille à protéger la diversité des espèces, des écosystèmes et des gènes à travers le monde.",
+        "Protection des espèces menacées": "De nombreuses espèces iconiques comme les tigres, les éléphants, les pandas et les rhinocéros sont en danger critique d'extinction.",
+        "Préservation des habitats naturels": "Les habitats naturels comme les forêts, les océans, les zones humides et les prairies sont essentiels à la survie de la faune sauvage.",
+        "Lutte contre le changement climatique": "Le changement climatique est la plus grande menace pour la nature et l'humanité."
+      },
+      "location": {
+        "headquarters": "Gland, Suisse",
+        "scope": "International"
+      },
+      "branding": {
+        "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/2/24/WWF_logo.svg/200px-WWF_logo.svg.png",
+        "color": "#000000",
+        "secondaryColor": "#FFFFFF"
+      },
+      "contact": {
+        "website": "https://www.wwf.org",
+        "websiteFR": "https://www.wwf.fr"
+      }
+    },
+    {
+      "id": "greenpeace",
+      "name": "Greenpeace",
+      "shortName": "Greenpeace",
+      "category": "Climate Action",
+      "description": "Organisation de protection de l'environnement présente dans plus de 55 pays. Greenpeace mène des campagnes pour protéger le climat, les forêts et les océans.",
+      "focus": [
+        "Lutte contre le changement climatique",
+        "Protection des océans",
+        "Préservation des forêts",
+        "Promotion des énergies renouvelables",
+        "Agriculture écologique"
+      ],
+      "location": {
+        "headquarters": "Amsterdam, Pays-Bas",
+        "scope": "International"
+      },
+      "branding": {
+        "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Greenpeace_logo.svg/200px-Greenpeace_logo.svg.png",
+        "color": "#00A95C",
+        "secondaryColor": "#FFFFFF"
+      },
+      "contact": {
+        "website": "https://www.greenpeace.org",
+        "websiteFR": "https://www.greenpeace.fr"
+      }
+    },
+    {
+      "id": "surfrider",
+      "name": "Surfrider Foundation Europe",
+      "shortName": "Surfrider",
+      "category": "Ocean Protection",
+      "description": "Association de protection des océans, du littoral, des vagues et des pratiquants. Surfrider mobilise les citoyens pour protéger les mers et les côtes.",
+      "focus": [
+        "Protection des océans",
+        "Lutte contre la pollution plastique",
+        "Préservation du littoral",
+        "Qualité de l'eau",
+        "Défense des vagues et spots de surf"
+      ],
+      "location": {
+        "headquarters": "Biarritz, France",
+        "scope": "Europe"
+      },
+      "branding": {
+        "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Surfrider_Foundation_Logo.svg/220px-Surfrider_Foundation_Logo.svg.png",
+        "color": "#0066CC",
+        "secondaryColor": "#00A3E0"
+      },
+      "contact": {
+        "website": "https://www.surfrider.eu"
+      }
+    },
+    {
+      "id": "fne",
+      "name": "France Nature Environnement",
+      "shortName": "FNE",
+      "category": "Biodiversity",
+      "description": "Fédération française des associations de protection de la nature et de l'environnement, regroupant plus de 6000 associations.",
+      "focus": [
+        "Protection de la biodiversité",
+        "Préservation des espaces naturels",
+        "Qualité de l'eau et de l'air",
+        "Transition énergétique",
+        "Agriculture durable"
+      ],
+      "location": {
+        "headquarters": "Montreuil, France",
+        "scope": "France"
+      },
+      "branding": {
+        "logo": "https://www.fne.asso.fr/sites/default/files/atoms/files/logo_fne_carr%C3%A9.jpg",
+        "color": "#7AC143",
+        "secondaryColor": "#59B200"
+      },
+      "contact": {
+        "website": "https://www.fne.asso.fr"
+      }
+    },
+    {
+      "id": "zerowaste",
+      "name": "Zero Waste France",
+      "shortName": "Zero Waste",
+      "category": "Waste Reduction",
+      "description": "Association citoyenne qui milite pour la réduction des déchets et une société zéro déchet, zéro gaspillage.",
+      "focus": [
+        "Réduction des déchets à la source",
+        "Lutte contre le gaspillage",
+        "Promotion de l'économie circulaire",
+        "Réemploi et réparation",
+        "Lutte contre les plastiques jetables"
+      ],
+      "location": {
+        "headquarters": "Paris, France",
+        "scope": "France"
+      },
+      "branding": {
+        "logo": "https://www.zerowastefrance.org/wp-content/uploads/2020/01/logo-zero-waste-france.png",
+        "color": "#E85D00",
+        "secondaryColor": "#FF6B00"
+      },
+      "contact": {
+        "website": "https://www.zerowastefrance.org"
+      }
+    },
+    {
+      "id": "sea-shepherd",
+      "name": "Sea Shepherd",
+      "shortName": "Sea Shepherd",
+      "category": "Ocean Protection",
+      "description": "Organisation internationale de défense des océans et de la vie marine. Sea Shepherd intervient directement pour protéger la faune marine.",
+      "focus": [
+        "Protection de la faune marine",
+        "Lutte contre la pêche illégale",
+        "Défense des baleines et dauphins",
+        "Préservation des écosystèmes marins"
+      ],
+      "location": {
+        "headquarters": "Amsterdam, Pays-Bas",
+        "scope": "International"
+      },
+      "branding": {
+        "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/1/1c/Sea_Shepherd_Conservation_Society_logo.svg/200px-Sea_Shepherd_Conservation_Society_logo.svg.png",
+        "color": "#000000",
+        "secondaryColor": "#FFFFFF"
+      },
+      "contact": {
+        "website": "https://www.seashepherd.org",
+        "websiteFR": "https://www.seashepherd.fr"
+      }
+    }
+  ],
+  "vaults": [
+    {
+      "id": "wwf-impact-fund",
+      "associationId": "wwf",
+      "name": "WWF Impact Fund",
+      "description": "Fonds d'investissement à impact direct pour la conservation de la biodiversité. Vos XRP financent des projets de terrain.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 8.45,
+      "rewardsApy": 1.2,
+      "totalSupply": 450000000,
+      "totalBorrow": 380000000,
+      "utilization": 84.4,
+      "liquidity": 70000000,
+      "riskFactor": "Low",
+      "lockPeriod": "No lock"
+    },
+    {
+      "id": "wwf-species-protection",
+      "associationId": "wwf",
+      "name": "Species Protection Vault",
+      "description": "Vault dédié à la protection des espèces menacées. Rendements liés aux succès des programmes de conservation.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 6.2,
+      "totalSupply": 120000000,
+      "totalBorrow": 90000000,
+      "utilization": 75.0,
+      "liquidity": 30000000,
+      "riskFactor": "Low",
+      "lockPeriod": "30 days"
+    },
+    {
+      "id": "greenpeace-climate-vault",
+      "associationId": "greenpeace",
+      "name": "Climate Action Vault",
+      "description": "Investissez dans la lutte contre le changement climatique. Fonds utilisés pour les campagnes et actions directes.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 5.8,
+      "totalSupply": 320000000,
+      "totalBorrow": 180000000,
+      "utilization": 56.2,
+      "liquidity": 140000000,
+      "riskFactor": "Medium",
+      "lockPeriod": "No lock"
+    },
+    {
+      "id": "greenpeace-ocean-fund",
+      "associationId": "greenpeace",
+      "name": "Ocean Defense Fund",
+      "description": "Protection des océans et lutte contre la surpêche. Financement des navires et expéditions maritimes.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 7.2,
+      "rewardsApy": 0.8,
+      "totalSupply": 180000000,
+      "totalBorrow": 150000000,
+      "utilization": 83.3,
+      "liquidity": 30000000,
+      "riskFactor": "Medium",
+      "lockPeriod": "60 days"
+    },
+    {
+      "id": "surfrider-beach-cleanup",
+      "associationId": "surfrider",
+      "name": "Beach Cleanup Vault",
+      "description": "Financement des opérations de nettoyage des plages et du littoral en Europe.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 4.5,
+      "totalSupply": 80000000,
+      "totalBorrow": 32000000,
+      "utilization": 40.0,
+      "liquidity": 48000000,
+      "riskFactor": "Low",
+      "lockPeriod": "No lock"
+    },
+    {
+      "id": "surfrider-plastic-free",
+      "associationId": "surfrider",
+      "name": "Plastic Free Ocean",
+      "description": "Lutte contre la pollution plastique dans les océans. Projets de sensibilisation et actions de terrain.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 5.2,
+      "rewardsApy": 0.5,
+      "totalSupply": 95000000,
+      "totalBorrow": 68000000,
+      "utilization": 71.5,
+      "liquidity": 27000000,
+      "riskFactor": "Low",
+      "lockPeriod": "14 days"
+    },
+    {
+      "id": "fne-biodiversity",
+      "associationId": "fne",
+      "name": "Biodiversity France",
+      "description": "Protection de la biodiversité en France. Soutien aux 6000 associations locales du réseau FNE.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 7.1,
+      "totalSupply": 120000000,
+      "totalBorrow": 100000000,
+      "utilization": 83.3,
+      "liquidity": 20000000,
+      "riskFactor": "Medium",
+      "lockPeriod": "30 days"
+    },
+    {
+      "id": "zerowaste-circular",
+      "associationId": "zerowaste",
+      "name": "Circular Economy Fund",
+      "description": "Financement de projets d'économie circulaire et de réduction des déchets.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 9.8,
+      "rewardsApy": 2.5,
+      "totalSupply": 60000000,
+      "totalBorrow": 55000000,
+      "utilization": 91.6,
+      "liquidity": 5000000,
+      "riskFactor": "High",
+      "lockPeriod": "No lock"
+    },
+    {
+      "id": "zerowaste-education",
+      "associationId": "zerowaste",
+      "name": "Zero Waste Education",
+      "description": "Programmes éducatifs et sensibilisation au zéro déchet.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 4.2,
+      "totalSupply": 25000000,
+      "totalBorrow": 12000000,
+      "utilization": 48.0,
+      "liquidity": 13000000,
+      "riskFactor": "Low",
+      "lockPeriod": "No lock"
+    },
+    {
+      "id": "sea-shepherd-patrol",
+      "associationId": "sea-shepherd",
+      "name": "Ocean Patrol Fund",
+      "description": "Financement des patrouilles maritimes contre la pêche illégale.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 6.8,
+      "rewardsApy": 1.0,
+      "totalSupply": 200000000,
+      "totalBorrow": 160000000,
+      "utilization": 80.0,
+      "liquidity": 40000000,
+      "riskFactor": "Medium",
+      "lockPeriod": "90 days"
+    },
+    {
+      "id": "sea-shepherd-sanctuary",
+      "associationId": "sea-shepherd",
+      "name": "Marine Sanctuary",
+      "description": "Création et protection de sanctuaires marins pour les espèces menacées.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 5.5,
+      "totalSupply": 85000000,
+      "totalBorrow": 45000000,
+      "utilization": 52.9,
+      "liquidity": 40000000,
+      "riskFactor": "Low",
+      "lockPeriod": "60 days"
+    }
+  ],
+  "categories": {
+    "Conservation": {
+      "description": "Protection de la biodiversité et des espaces naturels",
+      "color": "#000000"
+    },
+    "Climate Action": {
+      "description": "Lutte contre le changement climatique et transition énergétique",
+      "color": "#00A95C"
+    },
+    "Ocean Protection": {
+      "description": "Protection des océans, des mers et de la vie marine",
+      "color": "#0066CC"
+    },
+    "Biodiversity": {
+      "description": "Préservation de la diversité biologique et des écosystèmes",
+      "color": "#7AC143"
+    },
+    "Waste Reduction": {
+      "description": "Réduction des déchets et économie circulaire",
+      "color": "#E85D00"
+    }
+  }
+}
