@@ -80,6 +80,25 @@ class XRPLService {
       })),
     };
   }
+
+  transfer(
+    account: string,
+    destination: string,
+    currency: string,
+    amount: number,
+    issuer: string,
+  ) {
+    return {
+      TransactionType: "Payment",
+      Account: account,
+      Destination: destination,
+      Amount: {
+        currency,
+        issuer,
+        value: amount,
+      },
+    };
+  }
 }
 
 export const xrplService = new XRPLService();
