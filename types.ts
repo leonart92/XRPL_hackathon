@@ -21,11 +21,43 @@ export interface Vault {
   liquidity: number; // In USD
   history: APYDataPoint[];
   riskFactor: 'Low' | 'Medium' | 'High';
-  protocol: 'Morpho Blue' | 'Aave V3' | 'Compound';
+  protocol: 'Conservation' | 'Climate Action' | 'Ocean Protection' | 'Biodiversity' | 'Waste Reduction';
 }
 
 export interface ChatMessage {
   role: 'user' | 'model';
   text: string;
   timestamp: number;
+}
+
+export interface Association {
+  id: string;
+  name: string;
+  shortName: string;
+  symbol: string;
+  category: string;
+  description: string;
+  focus: string[];
+  location: {
+    headquarters: string;
+    scope: string;
+  };
+  branding: {
+    logo: string;
+    color: string;
+    secondaryColor?: string;
+  };
+  contact: {
+    website: string;
+    websiteFR?: string;
+  };
+  metrics?: {
+    netApy: number;
+    rewardsApy?: number;
+    totalSupply: number;
+    totalBorrow: number;
+    utilization: number;
+    liquidity: number;
+    riskFactor: 'Low' | 'Medium' | 'High';
+  };
 }

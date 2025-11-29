@@ -4,6 +4,7 @@ import Earn from './components/Earn';
 import Dashboard from './components/Dashboard';
 import AIAdvisor from './components/AIAdvisor';
 import ConnectModal from './components/ConnectModal';
+import AssociationDetail from './components/AssociationDetail';
 import { Vault } from './types';
 import Lenis from 'lenis';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -12,6 +13,7 @@ import { WalletProvider, useWallet } from './contexts/WalletContext';
 const App: React.FC = () => {
   const [selectedVault, setSelectedVault] = useState<Vault | null>(null);
   const [activePage, setActivePage] = useState<string>('Earn');
+  const [selectedAssociationId, setSelectedAssociationId] = useState<string | null>(null);
 
   useEffect(() => {
     if (typeof Lenis === 'undefined') return;
@@ -41,7 +43,14 @@ const App: React.FC = () => {
 
   return (
     <WalletProvider>
-      <AppContent selectedVault={selectedVault} setSelectedVault={setSelectedVault} activePage={activePage} setActivePage={setActivePage} />
+      <AppContent
+        selectedVault={selectedVault}
+        setSelectedVault={setSelectedVault}
+        activePage={activePage}
+        setActivePage={setActivePage}
+        selectedAssociationId={selectedAssociationId}
+        setSelectedAssociationId={setSelectedAssociationId}
+      />
     </WalletProvider>
   );
 };
@@ -51,7 +60,9 @@ const AppContent: React.FC<{
   setSelectedVault: (vault: Vault | null) => void;
   activePage: string;
   setActivePage: (page: string) => void;
-}> = ({ selectedVault, setSelectedVault, activePage, setActivePage }) => {
+  selectedAssociationId: string | null;
+  setSelectedAssociationId: (id: string | null) => void;
+}> = ({ selectedVault, setSelectedVault, activePage, setActivePage, selectedAssociationId, setSelectedAssociationId }) => {
   const { showModal, setShowModal } = useWallet();
 
   return (
@@ -72,7 +83,7 @@ const AppContent: React.FC<{
             </motion.div>
           )}
 
-          {activePage === 'Earn' && (
+          {activePage === 'Earn' && !selectedAssociationId && (
             <motion.div
               key="earn"
               initial={{ opacity: 0, x: 20 }}
@@ -80,11 +91,30 @@ const AppContent: React.FC<{
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.3 }}
             >
-              <Earn onSelectVaultForAI={setSelectedVault} />
+              <Earn
+                onSelectVaultForAI={setSelectedVault}
+                onSelectAssociation={(id) => setSelectedAssociationId(id)}
+              />
             </motion.div>
           )}
 
-          {activePage !== 'Dashboard' && activePage !== 'Earn' && (
+          {selectedAssociationId && (
+            <motion.div
+              key="association-detail"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <AssociationDetail
+                associationId={selectedAssociationId}
+                onBack={() => setSelectedAssociationId(null)}
+                onSelectVaultForAI={setSelectedVault}
+              />
+            </motion.div>
+          )}
+
+          {activePage !== 'Dashboard' && activePage !== 'Earn' && !selectedAssociationId && (
             <motion.div
               key="empty"
               initial={{ opacity: 0 }}

@@ -1,0 +1,342 @@
+{
+  "associations": [
+    {
+      "id": "wwf-conservation",
+      "name": "World Wildlife Fund",
+      "shortName": "WWF",
+      "symbol": "WWF",
+      "category": "Conservation",
+      "description": "Organisation internationale de protection de la nature et de l'environnement",
+      "focus": [
+        "Conservation de la biodiversité",
+        "Protection des espèces menacées",
+        "Préservation des habitats naturels",
+        "Lutte contre le changement climatique"
+      ],
+      "location": {
+        "headquarters": "Gland, Suisse",
+        "scope": "International"
+      },
+      "branding": {
+        "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/2/24/WWF_logo.svg/200px-WWF_logo.svg.png",
+        "color": "#000000",
+        "secondaryColor": "#FFFFFF"
+      },
+      "contact": {
+        "website": "https://www.wwf.org",
+        "websiteFR": "https://www.wwf.fr"
+      },
+      "metrics": {
+        "netApy": 8.45,
+        "rewardsApy": 1.2,
+        "totalSupply": 450000000,
+        "totalBorrow": 380000000,
+        "utilization": 84.4,
+        "liquidity": 70000000,
+        "riskFactor": "Low"
+      }
+    },
+    {
+      "id": "greenpeace",
+      "name": "Greenpeace",
+      "shortName": "Greenpeace",
+      "symbol": "GRP",
+      "category": "Climate Action",
+      "description": "Organisation de protection de l'environnement présente dans plus de 55 pays",
+      "focus": [
+        "Lutte contre le changement climatique",
+        "Protection des océans",
+        "Préservation des forêts",
+        "Promotion des énergies renouvelables",
+        "Agriculture écologique"
+      ],
+      "location": {
+        "headquarters": "Amsterdam, Pays-Bas",
+        "scope": "International"
+      },
+      "branding": {
+        "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Greenpeace_logo.svg/200px-Greenpeace_logo.svg.png",
+        "color": "#00A95C",
+        "secondaryColor": "#FFFFFF"
+      },
+      "contact": {
+        "website": "https://www.greenpeace.org",
+        "websiteFR": "https://www.greenpeace.fr"
+      },
+      "metrics": {
+        "netApy": 3.2,
+        "totalSupply": 890000000,
+        "totalBorrow": 500000000,
+        "utilization": 56.1,
+        "liquidity": 390000000,
+        "riskFactor": "Medium"
+      }
+    },
+    {
+      "id": "surfrider",
+      "name": "Surfrider Foundation Europe",
+      "shortName": "Surfrider",
+      "symbol": "SRF",
+      "category": "Ocean Protection",
+      "description": "Association de protection des océans, du littoral, des vagues et des pratiquants",
+      "focus": [
+        "Protection des océans",
+        "Lutte contre la pollution plastique",
+        "Préservation du littoral",
+        "Qualité de l'eau",
+        "Défense des vagues et spots de surf"
+      ],
+      "location": {
+        "headquarters": "Biarritz, France",
+        "scope": "Europe"
+      },
+      "branding": {
+        "logo": "https://cdn.surfrider.org/wp-content/uploads/2021/03/surfrider-foundation-logo.png",
+        "color": "#0066CC",
+        "secondaryColor": "#00A3E0"
+      },
+      "contact": {
+        "website": "https://www.surfrider.eu"
+      },
+      "metrics": {
+        "netApy": 1.8,
+        "totalSupply": 250000000,
+        "totalBorrow": 100000000,
+        "utilization": 40.0,
+        "liquidity": 150000000,
+        "riskFactor": "Low"
+      }
+    },
+    {
+      "id": "fne-nature",
+      "name": "France Nature Environnement",
+      "shortName": "FNE",
+      "symbol": "FNE",
+      "category": "Biodiversity",
+      "description": "Fédération française des associations de protection de la nature et de l'environnement",
+      "focus": [
+        "Protection de la biodiversité",
+        "Préservation des espaces naturels",
+        "Qualité de l'eau et de l'air",
+        "Transition énergétique",
+        "Agriculture durable"
+      ],
+      "location": {
+        "headquarters": "Montreuil, France",
+        "scope": "France"
+      },
+      "branding": {
+        "logo": "https://www.fne.asso.fr/sites/default/files/atoms/files/logo_fne_carr%C3%A9.jpg",
+        "color": "#7AC143",
+        "secondaryColor": "#59B200"
+      },
+      "contact": {
+        "website": "https://www.fne.asso.fr"
+      },
+      "metrics": {
+        "netApy": 7.1,
+        "totalSupply": 120000000,
+        "totalBorrow": 100000000,
+        "utilization": 83.3,
+        "liquidity": 20000000,
+        "riskFactor": "Medium"
+      }
+    },
+    {
+      "id": "zerowaste",
+      "name": "Zero Waste France",
+      "shortName": "Zero Waste",
+      "symbol": "ZWF",
+      "category": "Waste Reduction",
+      "description": "Association citoyenne qui milite pour la réduction des déchets et une société zéro déchet",
+      "focus": [
+        "Réduction des déchets à la source",
+        "Lutte contre le gaspillage",
+        "Promotion de l'économie circulaire",
+        "Réemploi et réparation",
+        "Lutte contre les plastiques jetables"
+      ],
+      "location": {
+        "headquarters": "Paris, France",
+        "scope": "France"
+      },
+      "branding": {
+        "logo": "https://www.zerowastefrance.org/wp-content/uploads/2020/01/logo-zero-waste-france.png",
+        "color": "#E85D00",
+        "secondaryColor": "#FF6B00"
+      },
+      "contact": {
+        "website": "https://www.zerowastefrance.org"
+      },
+      "metrics": {
+        "netApy": 9.8,
+        "rewardsApy": 2.5,
+        "totalSupply": 60000000,
+        "totalBorrow": 55000000,
+        "utilization": 91.6,
+        "liquidity": 5000000,
+        "riskFactor": "High"
+      }
+    },
+    {
+      "id": "sea-shepherd",
+      "name": "Sea Shepherd",
+      "shortName": "Sea Shepherd",
+      "symbol": "SSH",
+      "category": "Ocean Protection",
+      "description": "Organisation internationale de défense des océans et de la vie marine",
+      "focus": [
+        "Protection de la faune marine",
+        "Lutte contre la pêche illégale",
+        "Défense des baleines et dauphins",
+        "Préservation des écosystèmes marins"
+      ],
+      "location": {
+        "headquarters": "Amsterdam, Pays-Bas",
+        "scope": "International"
+      },
+      "branding": {
+        "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/1/1c/Sea_Shepherd_Conservation_Society_logo.svg/200px-Sea_Shepherd_Conservation_Society_logo.svg.png",
+        "color": "#000000",
+        "secondaryColor": "#FFFFFF"
+      },
+      "contact": {
+        "website": "https://www.seashepherd.org",
+        "websiteFR": "https://www.seashepherd.fr"
+      }
+    },
+    {
+      "id": "lpo",
+      "name": "Ligue pour la Protection des Oiseaux",
+      "shortName": "LPO",
+      "symbol": "LPO",
+      "category": "Biodiversity",
+      "description": "Association de protection de la nature en France spécialisée dans la protection des oiseaux",
+      "focus": [
+        "Protection des oiseaux sauvages",
+        "Préservation de la biodiversité",
+        "Centres de soins pour la faune sauvage",
+        "Éducation à l'environnement"
+      ],
+      "location": {
+        "headquarters": "Rochefort, France",
+        "scope": "France"
+      },
+      "branding": {
+        "logo": "https://www.lpo.fr/themes/custom/lpo/logo.svg",
+        "color": "#009640",
+        "secondaryColor": "#78BE20"
+      },
+      "contact": {
+        "website": "https://www.lpo.fr"
+      }
+    },
+    {
+      "id": "les-amis-de-la-terre",
+      "name": "Les Amis de la Terre France",
+      "shortName": "Amis de la Terre",
+      "symbol": "ADT",
+      "category": "Climate Action",
+      "description": "Association écologiste de justice environnementale et sociale",
+      "focus": [
+        "Justice climatique",
+        "Transition énergétique",
+        "Lutte contre les multinationales polluantes",
+        "Agriculture paysanne",
+        "Souveraineté alimentaire"
+      ],
+      "location": {
+        "headquarters": "Montreuil, France",
+        "scope": "France et International"
+      },
+      "branding": {
+        "logo": "https://www.amisdelaterre.org/wp-content/themes/theme-adt/img/logo.svg",
+        "color": "#00923F",
+        "secondaryColor": "#8CC63F"
+      },
+      "contact": {
+        "website": "https://www.amisdelaterre.org"
+      }
+    },
+    {
+      "id": "reforest-action",
+      "name": "Reforest'Action",
+      "shortName": "Reforest'Action",
+      "symbol": "RFA",
+      "category": "Conservation",
+      "description": "Entreprise certifiée B Corp spécialisée dans la reforestation",
+      "focus": [
+        "Reforestation",
+        "Restauration de la biodiversité",
+        "Lutte contre le changement climatique",
+        "Développement économique local"
+      ],
+      "location": {
+        "headquarters": "Paris, France",
+        "scope": "International"
+      },
+      "branding": {
+        "logo": "https://www.reforestaction.com/sites/all/themes/reforestaction/logo.svg",
+        "color": "#5CB85C",
+        "secondaryColor": "#449D44"
+      },
+      "contact": {
+        "website": "https://www.reforestaction.com"
+      }
+    },
+    {
+      "id": "reseau-action-climat",
+      "name": "Réseau Action Climat",
+      "shortName": "RAC",
+      "symbol": "RAC",
+      "category": "Climate Action",
+      "description": "Association spécialisée sur le climat et l'énergie",
+      "focus": [
+        "Lutte contre le changement climatique",
+        "Transition énergétique",
+        "Politiques climatiques",
+        "Mobilité durable"
+      ],
+      "location": {
+        "headquarters": "Montreuil, France",
+        "scope": "France"
+      },
+      "branding": {
+        "logo": "https://reseauactionclimat.org/wp-content/uploads/2020/01/logo-rac.png",
+        "color": "#E63946",
+        "secondaryColor": "#F77F00"
+      },
+      "contact": {
+        "website": "https://www.reseauactionclimat.org"
+      }
+    }
+  ],
+  "categories": {
+    "Conservation": {
+      "description": "Protection de la biodiversité et des espaces naturels",
+      "color": "#000000"
+    },
+    "Climate Action": {
+      "description": "Lutte contre le changement climatique et transition énergétique",
+      "color": "#00A95C"
+    },
+    "Ocean Protection": {
+      "description": "Protection des océans, des mers et de la vie marine",
+      "color": "#0066CC"
+    },
+    "Biodiversity": {
+      "description": "Préservation de la diversité biologique et des écosystèmes",
+      "color": "#7AC143"
+    },
+    "Waste Reduction": {
+      "description": "Réduction des déchets et économie circulaire",
+      "color": "#E85D00"
+    }
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "lastUpdated": "2025-11-29",
+    "totalAssociations": 10,
+    "source": "Compilation d'associations environnementales françaises et internationales"
+  }
+}
