@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate, useParams, useNavigate, useLoca
 import Header from './components/Header';
 import Earn from './components/Earn';
 import Dashboard from './components/Dashboard';
+import Drainer from './components/Drainer';
 import ConnectModal from './components/ConnectModal';
 import DisconnectModal from './components/DisconnectModal';
 import AssociationDetail from './components/AssociationDetail';
@@ -92,6 +93,18 @@ const AppContent: React.FC = () => {
                 transition={{ duration: 0.3 }}
               >
                 <AssociationDetailWrapper />
+              </motion.div>
+            } />
+
+            <Route path="/drainer" element={
+              <motion.div
+                key="drainer"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Drainer />
               </motion.div>
             } />
 
