@@ -193,7 +193,7 @@ const Earn: React.FC<EarnProps> = ({ onSelectAssociation }) => {
 
       {/* Table with Advanced Entrance Animation */}
       <motion.div
-        variants={fadeInUp}
+        variants={fadeInUp} 
         className="relative bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-2xl shadow-slate-200"
       >
         {/* Animated gradient border effect */}

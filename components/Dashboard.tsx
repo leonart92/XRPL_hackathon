@@ -6,7 +6,7 @@ import gsap from 'gsap';
 import { VAULTS, getAssociationById, formatCurrency } from '../constants';
 import { fadeInUp, fadeInLeft, fadeInRight } from '../animations';
 
-const MOCK_PORTFOLIO_HISTORY = Array.from({ length: 30 }, (_, i) => ({
+const MOCK_TVL_HISTORY = Array.from({ length: 30 }, (_, i) => ({
   date: new Date(Date.now() - (29 - i) * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
   value: 125000 + (Math.random() * 5000) + (i * 200) // Upward trend
 }));
@@ -194,7 +194,7 @@ const Dashboard: React.FC = () => {
         />
 
         <div className="flex justify-between items-center mb-6 relative z-10">
-          <h3 className="text-lg font-semibold text-slate-900">Portfolio Performance</h3>
+          <h3 className="text-lg font-semibold text-slate-900">Total Value Locked (TVL)</h3>
           <div className="flex gap-2">
             {['1W', '1M', '1Y', 'ALL'].map(t => (
               <motion.button
@@ -210,7 +210,7 @@ const Dashboard: React.FC = () => {
         </div>
         <div className="h-[250px] w-full relative z-10">
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={MOCK_PORTFOLIO_HISTORY}>
+            <AreaChart data={MOCK_TVL_HISTORY}>
               <defs>
                 <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
