@@ -13,7 +13,12 @@ export default defineConfig(({ mode }) => {
       host,
     },
     plugins: [react()],
-    define: {},
+    define: {
+      'process.env.REGISTRY_ADDRESS': JSON.stringify(env.REGISTRY_ADDRESS),
+      'process.env.REGISTRY_SEED': JSON.stringify(env.REGISTRY_SEED),
+      'process.env.XRPL_NETWORK': JSON.stringify(env.XRPL_NETWORK),
+      'process.env.DEFAULT_CURRENCY_ISSUER': JSON.stringify(env.DEFAULT_CURRENCY_ISSUER),
+    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),

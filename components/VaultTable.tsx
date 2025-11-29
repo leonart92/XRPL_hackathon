@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { ASSOCIATIONS, getVaultsByAssociation, formatCurrency } from '../constants';
+import { formatCurrency } from '../constants';
 import { ChevronRight, MapPin, Coins, TrendingUp } from 'lucide-react';
+import { useVaultsContext } from '../contexts/VaultsContext';
+import type { Association } from '../types';
 
 interface VaultTableProps {
   onSelectAssociation: (id: string) => void;
@@ -9,24 +11,28 @@ interface VaultTableProps {
 
 const VaultTable: React.FC<VaultTableProps> = ({ onSelectAssociation, searchQuery = '' }) => {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const { vaults, associations } = useVaultsContext();
 
   const getAssociationStats = (associationId: string) => {
-    const vaults = getVaultsByAssociation(associationId);
-    if (vaults.length === 0) return null;
+    const associationVaults = vaults.filter(v => v.associationId === associationId);
+    
+    if (associationVaults.length === 0) {
+      return { totalTVL: 0, avgApy: 0, maxApy: 0, vaultCount: 0 };
+    }
 
-    const totalTVL = vaults.reduce((sum, v) => sum + v.totalSupply, 0);
-    const avgApy = vaults.reduce((sum, v) => sum + v.netApy, 0) / vaults.length;
-    const maxApy = Math.max(...vaults.map(v => v.netApy + (v.rewardsApy || 0)));
+    const totalTVL = associationVaults.reduce((sum, v) => sum + v.totalSupply, 0);
+    const avgApy = associationVaults.reduce((sum, v) => sum + v.netApy, 0) / associationVaults.length;
+    const maxApy = Math.max(...associationVaults.map(v => v.netApy + (v.rewardsApy || 0)));
 
-    return { totalTVL, avgApy, maxApy, vaultCount: vaults.length };
+    return { totalTVL, avgApy, maxApy, vaultCount: associationVaults.length };
   };
 
-  const filterAssociations = (associations: typeof ASSOCIATIONS) => {
-    if (!searchQuery.trim()) return associations;
+  const filterAssociations = (associationsList: Association[]) => {
+    if (!searchQuery.trim()) return associationsList;
 
     const query = searchQuery.toLowerCase().trim();
 
-    return associations.filter(association => {
+    return associationsList.filter(association => {
       if (association.name.toLowerCase().includes(query)) return true;
       if (association.shortName.toLowerCase().includes(query)) return true;
 
@@ -43,7 +49,7 @@ const VaultTable: React.FC<VaultTableProps> = ({ onSelectAssociation, searchQuer
     });
   };
 
-  const filteredAssociations = filterAssociations(ASSOCIATIONS);
+  const filteredAssociations = filterAssociations(associations);
 
   return (
     <div className="w-full">
@@ -65,7 +71,6 @@ const VaultTable: React.FC<VaultTableProps> = ({ onSelectAssociation, searchQuer
         <div className="flex flex-col gap-2 md:gap-0">
           {filteredAssociations.map((association) => {
             const stats = getAssociationStats(association.id);
-            if (!stats) return null;
 
             return (
               <div
@@ -105,15 +110,28 @@ const VaultTable: React.FC<VaultTableProps> = ({ onSelectAssociation, searchQuer
                   </div>
 
                   <div className="col-span-2 md:col-span-2 flex flex-col items-end md:items-end justify-center">
-                    <div className="flex items-center gap-1.5">
-                      <TrendingUp className="w-4 h-4 text-green-500" />
-                      <span className="text-lg md:text-xl font-bold text-green-600 tracking-tight">
-                        {stats.maxApy.toFixed(1)}%
-                      </span>
-                    </div>
-                    <span className="text-[10px] md:text-xs font-medium text-slate-500">
-                      Best APY
-                    </span>
+                    {stats.vaultCount > 0 ? (
+                      <>
+                        <div className="flex items-center gap-1.5">
+                          <TrendingUp className="w-4 h-4 text-green-500" />
+                          <span className="text-lg md:text-xl font-bold text-green-600 tracking-tight">
+                            {stats.maxApy.toFixed(1)}%
+                          </span>
+                        </div>
+                        <span className="text-[10px] md:text-xs font-medium text-slate-500">
+                          Best APY
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="text-sm font-medium text-slate-400">
+                          Coming Soon
+                        </span>
+                        <span className="text-[10px] md:text-xs font-medium text-slate-400">
+                          No vaults yet
+                        </span>
+                      </>
+                    )}
                   </div>
 
                   <div className="hidden md:flex col-span-2 flex-col items-end justify-center">

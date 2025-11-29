@@ -10,6 +10,7 @@ import AssociationDetail from './components/AssociationDetail';
 import Lenis from 'lenis';
 import { AnimatePresence, motion } from 'framer-motion';
 import { WalletProvider, useWallet } from './contexts/WalletContext';
+import { VaultsProvider } from './contexts/VaultsContext';
 
 const App: React.FC = () => {
   useEffect(() => {
@@ -40,9 +41,11 @@ const App: React.FC = () => {
 
   return (
     <WalletProvider>
-      <BrowserRouter>
-        <AppContent />
-      </BrowserRouter>
+      <VaultsProvider>
+        <BrowserRouter>
+          <AppContent />
+        </BrowserRouter>
+      </VaultsProvider>
     </WalletProvider>
   );
 };

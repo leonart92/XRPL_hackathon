@@ -7,6 +7,7 @@ interface VaultMetadata {
   acceptedCurrency: string;
   acceptedCurrencyIssuer: string;
   strategyType: "AMM" | "SWAP" | "TOKEN_YIELD";
+  ngoAddress: string;
   name?: string;
   description?: string;
   createdAt: number;
@@ -17,6 +18,7 @@ interface CompactVaultMetadata {
   a: string;
   i: string;
   s: "A" | "S" | "T";
+  g: string;
   n?: string;
   d?: string;
   t: number;
@@ -52,13 +54,17 @@ class RegistryService {
       a: metadata.acceptedCurrency,
       i: metadata.acceptedCurrencyIssuer,
       s: metadata.strategyType === "AMM" ? "A" : metadata.strategyType === "SWAP" ? "S" : "T",
+      g: metadata.ngoAddress,
       n: metadata.name,
       d: metadata.description,
       t: fullMetadata.createdAt,
     };
 
     const metadataJson = JSON.stringify(compactMetadata);
-    const hexDomain = Buffer.from(metadataJson).toString("hex").toUpperCase();
+    const hexDomain = Array.from(new TextEncoder().encode(metadataJson))
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('')
+      .toUpperCase();
 
     console.log(`📝 Setting vault metadata in Domain field...`);
     const setDomainTx = await client.autofill({
@@ -128,7 +134,8 @@ class RegistryService {
           continue;
         }
 
-        const metadataJson = Buffer.from(domain, "hex").toString("utf-8");
+        const hexBytes = domain.match(/.{1,2}/g)?.map(byte => parseInt(byte, 16)) || [];
+        const metadataJson = new TextDecoder().decode(new Uint8Array(hexBytes));
         const compact: CompactVaultMetadata = JSON.parse(metadataJson);
 
         const metadata: VaultMetadata = {
@@ -137,6 +144,7 @@ class RegistryService {
           acceptedCurrency: compact.a,
           acceptedCurrencyIssuer: compact.i,
           strategyType: compact.s === "A" ? "AMM" : compact.s === "S" ? "SWAP" : "TOKEN_YIELD",
+          ngoAddress: compact.g,
           name: compact.n,
           description: compact.d,
           createdAt: compact.t,
@@ -170,7 +178,8 @@ class RegistryService {
         return null;
       }
 
-      const metadataJson = Buffer.from(domain, "hex").toString("utf-8");
+      const hexBytes = domain.match(/.{1,2}/g)?.map(byte => parseInt(byte, 16)) || [];
+      const metadataJson = new TextDecoder().decode(new Uint8Array(hexBytes));
       const compact: CompactVaultMetadata = JSON.parse(metadataJson);
 
       const metadata: VaultMetadata = {
@@ -179,6 +188,7 @@ class RegistryService {
         acceptedCurrency: compact.a,
         acceptedCurrencyIssuer: compact.i,
         strategyType: compact.s === "A" ? "AMM" : compact.s === "S" ? "SWAP" : "TOKEN_YIELD",
+        ngoAddress: compact.g,
         name: compact.n,
         description: compact.d,
         createdAt: compact.t,

@@ -35,13 +35,16 @@ export function useVaults({
       setLoading(true);
       setError(null);
 
+      console.log('[useVaults] effectiveRegistryAddress:', effectiveRegistryAddress);
+
       if (!effectiveRegistryAddress) {
         throw new Error(
           "Registry address not provided. Pass registryAddress prop or set REGISTRY_ADDRESS in .env"
         );
       }
 
-      if (autoConnect && !xrplService.getClient().isConnected()) {
+      if (autoConnect && !xrplService.isConnected()) {
+        console.log('[useVaults] Connecting to XRPL...');
         await xrplService.connect(network);
       }
 
@@ -51,7 +54,9 @@ export function useVaults({
         registryWallet: dummyWallet,
       });
 
+      console.log('[useVaults] Fetching vaults...');
       const fetchedVaults = await registry.listVaults();
+      console.log('[useVaults] Fetched vaults:', fetchedVaults);
       setVaults(fetchedVaults);
     } catch (err) {
       setError(err as Error);

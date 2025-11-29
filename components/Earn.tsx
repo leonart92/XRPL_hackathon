@@ -3,8 +3,8 @@ import { motion } from 'framer-motion';
 import { Search, SlidersHorizontal, ArrowUpRight, TrendingUp } from 'lucide-react';
 import gsap from 'gsap';
 import VaultTable from './VaultTable';
-import { VAULTS, ASSOCIATIONS } from '../constants';
 import { fadeInUp, fadeInLeft, fadeInRight } from '../animations';
+import { useVaultsContext } from '../contexts/VaultsContext';
 
 interface EarnProps {
   onSelectAssociation: (id: string) => void;
@@ -17,11 +17,12 @@ const Earn: React.FC<EarnProps> = ({ onSelectAssociation }) => {
   const titleRef = useRef<HTMLHeadingElement>(null);
   const [searchFocused, setSearchFocused] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  
+  const { vaults, loading } = useVaultsContext();
 
-  const totalDeposit = VAULTS.reduce((acc, v) => acc + v.totalSupply, 0);
-  const avgApy = VAULTS.reduce((acc, v) => acc + v.netApy, 0) / VAULTS.length;
+  const totalDeposit = vaults.reduce((acc, v) => acc + v.totalSupply, 0);
+  const avgApy = vaults.length > 0 ? vaults.reduce((acc, v) => acc + v.netApy, 0) / vaults.length : 0;
   const depositInBillions = totalDeposit / 1e9;
-  const associationCount = ASSOCIATIONS.length;
 
   useEffect(() => {
     if (typeof gsap === 'undefined') return;
@@ -76,6 +77,14 @@ const Earn: React.FC<EarnProps> = ({ onSelectAssociation }) => {
 
   return (
     <div className="space-y-8">
+      {loading && (
+        <div className="flex justify-center items-center py-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        </div>
+      )}
+      
+      {!loading && (
+        <>
       <div className="flex flex-col lg:flex-row gap-8 lg:items-end justify-between mb-12">
         <motion.div
           variants={fadeInLeft}
@@ -243,6 +252,8 @@ const Earn: React.FC<EarnProps> = ({ onSelectAssociation }) => {
           />
         ))}
       </div>
+        </>
+      )}
     </div>
   );
 };

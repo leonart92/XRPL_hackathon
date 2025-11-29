@@ -5,6 +5,7 @@ export interface Association {
   symbol: string;
   category: 'Conservation' | 'Climate Action' | 'Ocean Protection' | 'Biodiversity' | 'Waste Reduction';
   description: string;
+  walletAddress: string;
   focus: string[];
   location: {
     headquarters: string;

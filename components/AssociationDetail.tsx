@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, ExternalLink, MapPin, Globe, TrendingUp, ArrowUpRight, Clock, Coins, ChevronRight } from 'lucide-react';
+import { ArrowLeft, ExternalLink, MapPin, Globe, TrendingUp, Clock, Coins, ChevronRight } from 'lucide-react';
 import { Vault } from '../types';
-import { ASSOCIATIONS, getVaultsByAssociation, formatCurrency } from '../constants';
+import { formatCurrency } from '../constants';
+import { useVaultsContext } from '../contexts/VaultsContext';
+import { useWallet } from '../contexts/WalletContext';
+import { useDeposit } from '../hooks/useDeposit';
+import { useTrustline } from '../hooks/useTrustline';
 
 interface AssociationDetailProps {
     associationId: string;
@@ -62,9 +66,24 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
     const [selectedFocus, setSelectedFocus] = useState<{ title: string, image: string, description: string, index: number } | null>(null);
     const [selectedVault, setSelectedVault] = useState<Vault | null>(null);
     const [investAmount, setInvestAmount] = useState('');
+    const [isProcessing, setIsProcessing] = useState(false);
 
-    const association = ASSOCIATIONS.find(a => a.id === associationId);
-    const vaults = getVaultsByAssociation(associationId);
+    const { vaults, associations } = useVaultsContext();
+    const { wallet } = useWallet();
+
+    const association = associations.find(a => a.id === associationId);
+    const associationVaults = vaults.filter(v => v.associationId === associationId);
+
+    const trustlineHook = selectedVault ? useTrustline({
+        vaultAddress: selectedVault.vaultAddress,
+        vaultTokenCurrency: selectedVault.vaultTokenCurrency,
+    }) : null;
+
+    const depositHook = selectedVault ? useDeposit({
+        vaultAddress: selectedVault.vaultAddress,
+        acceptedCurrency: selectedVault.acceptedCurrency,
+        acceptedCurrencyIssuer: selectedVault.acceptedCurrencyIssuer,
+    }) : null;
 
     if (!association) {
         return (
@@ -74,6 +93,30 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
             </div>
         );
     }
+
+    const handleInvest = async () => {
+        if (!selectedVault || !investAmount || !wallet || !trustlineHook || !depositHook) {
+            if (!wallet) {
+                alert('Please connect your wallet first');
+            }
+            return;
+        }
+
+        setIsProcessing(true);
+        try {
+            await trustlineHook.setupTrustline(wallet);
+            await depositHook.deposit(wallet, investAmount);
+
+            setInvestAmount('');
+            setSelectedVault(null);
+            alert('Investment successful!');
+        } catch (error) {
+            console.error('Investment failed:', error);
+            alert(`Investment failed: ${(error as Error).message}`);
+        } finally {
+            setIsProcessing(false);
+        }
+    };
 
     const getRiskColor = (risk: string) => {
         switch (risk) {
@@ -164,12 +207,12 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
                     <Coins size={24} className="text-blue-500" />
                     Investment Vaults
                     <span className="text-sm font-normal text-slate-500 ml-2">
-                        ({vaults.length} available)
+                                 ({associationVaults.length} available)
                     </span>
                 </h2>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                    {vaults.map((vault, index) => (
+                    {associationVaults.map((vault, index) => (
                         <motion.div
                             key={vault.id}
                             initial={{ opacity: 0, y: 20 }}
@@ -254,22 +297,25 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
                                     </p>
                                 </div>
 
-                                <div className="flex items-center gap-3">
+                                 <div className="flex items-center gap-3">
                                     <div className="relative">
                                         <input
                                             type="number"
                                             value={investAmount}
                                             onChange={(e) => setInvestAmount(e.target.value)}
                                             placeholder="Amount in XRP"
-                                            className="w-40 bg-slate-50 border border-slate-200 text-slate-900 px-4 py-2.5 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 font-mono text-sm"
+                                            disabled={isProcessing}
+                                            className="w-40 bg-slate-50 border border-slate-200 text-slate-900 px-4 py-2.5 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 font-mono text-sm disabled:opacity-50"
                                         />
                                     </div>
                                     <motion.button
                                         whileHover={{ scale: 1.02 }}
                                         whileTap={{ scale: 0.98 }}
-                                        className="bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-2.5 rounded-xl transition-colors shadow-lg shadow-blue-200"
+                                        onClick={handleInvest}
+                                        disabled={isProcessing || !wallet || !investAmount}
+                                        className="bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-2.5 rounded-xl transition-colors shadow-lg shadow-blue-200 disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
-                                        Invest XRP
+                                        {isProcessing ? 'Processing...' : 'Invest XRP'}
                                     </motion.button>
                                     <button
                                         onClick={() => setSelectedVault(null)}

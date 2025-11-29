@@ -24,14 +24,21 @@ export interface Association {
     website: string;
     websiteFR?: string;
   };
+  walletAddress: string;
 }
 
 export interface Vault {
   id: string;
+  vaultAddress: string;
   associationId: string;
   name: string;
   description: string;
   acceptedTokens: string[];
+  vaultTokenCurrency: string;
+  acceptedCurrency: string;
+  acceptedCurrencyIssuer: string;
+  strategyType: string;
+  ngoAddress: string;
   netApy: number;
   rewardsApy?: number;
   totalSupply: number;
@@ -41,6 +48,7 @@ export interface Vault {
   history: APYDataPoint[];
   riskFactor: 'Low' | 'Medium' | 'High';
   lockPeriod?: string;
+  createdAt: number;
 }
 
 export interface ChatMessage {

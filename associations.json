@@ -6,6 +6,7 @@
       "shortName": "WWF",
       "category": "Conservation",
       "description": "Organisation internationale de protection de la nature et de l'environnement. Le WWF travaille dans plus de 100 pays pour protéger les espèces menacées et leurs habitats.",
+      "walletAddress": "rWWFProtectNatureBiodiversityXRPL",
       "focus": [
         "Conservation de la biodiversité",
         "Protection des espèces menacées",
@@ -38,6 +39,7 @@
       "shortName": "Greenpeace",
       "category": "Climate Action",
       "description": "Organisation de protection de l'environnement présente dans plus de 55 pays. Greenpeace mène des campagnes pour protéger le climat, les forêts et les océans.",
+      "walletAddress": "rGreenPeaceClimateActionOceanXRP",
       "focus": [
         "Lutte contre le changement climatique",
         "Protection des océans",
@@ -65,6 +67,7 @@
       "shortName": "Surfrider",
       "category": "Ocean Protection",
       "description": "Association de protection des océans, du littoral, des vagues et des pratiquants. Surfrider mobilise les citoyens pour protéger les mers et les côtes.",
+      "walletAddress": "rSurfriderOceanBeachPlasticXRPL",
       "focus": [
         "Protection des océans",
         "Lutte contre la pollution plastique",
@@ -91,6 +94,7 @@
       "shortName": "FNE",
       "category": "Biodiversity",
       "description": "Fédération française des associations de protection de la nature et de l'environnement, regroupant plus de 6000 associations.",
+      "walletAddress": "rFNEBiodiversityNatureFranceXRP",
       "focus": [
         "Protection de la biodiversité",
         "Préservation des espaces naturels",
@@ -117,6 +121,7 @@
       "shortName": "Zero Waste",
       "category": "Waste Reduction",
       "description": "Association citoyenne qui milite pour la réduction des déchets et une société zéro déchet, zéro gaspillage.",
+      "walletAddress": "rZeroWasteCircularEconomyXRPL",
       "focus": [
         "Réduction des déchets à la source",
         "Lutte contre le gaspillage",
@@ -143,6 +148,7 @@
       "shortName": "Sea Shepherd",
       "category": "Ocean Protection",
       "description": "Organisation internationale de défense des océans et de la vie marine. Sea Shepherd intervient directement pour protéger la faune marine.",
+      "walletAddress": "rSeaShepherdMarineProtectionXRP",
       "focus": [
         "Protection de la faune marine",
         "Lutte contre la pêche illégale",

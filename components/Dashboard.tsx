@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { AreaChart, Area, ResponsiveContainer, XAxis, Tooltip } from 'recharts';
-import { ArrowUpRight, ShieldCheck, Wallet, Activity, TrendingUp } from 'lucide-react';
+import { ArrowUpRight, ShieldCheck, Activity, TrendingUp } from 'lucide-react';
 import gsap from 'gsap';
-import { VAULTS, getAssociationById, formatCurrency } from '../constants';
-import { fadeInUp, fadeInLeft, fadeInRight } from '../animations';
+import { formatCurrency } from '../constants';
+import { fadeInUp, fadeInLeft } from '../animations';
+import { useVaultsContext } from '../contexts/VaultsContext';
 
 const MOCK_PORTFOLIO_HISTORY = Array.from({ length: 30 }, (_, i) => ({
   date: new Date(Date.now() - (29 - i) * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
@@ -16,6 +17,8 @@ const Dashboard: React.FC = () => {
   const apyRef = useRef<HTMLSpanElement>(null);
   const healthFactorRef = useRef<HTMLSpanElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
+
+  const { vaults, associations } = useVaultsContext();
 
   const netWorthValue = 131240.50;
   const apyValue = 7.24;
@@ -248,8 +251,8 @@ const Dashboard: React.FC = () => {
             <div className="col-span-2 text-right">Type</div>
           </div>
 
-          {VAULTS.slice(0, 3).map((vault, i) => {
-            const association = getAssociationById(vault.associationId);
+          {vaults.slice(0, 3).map((vault, i) => {
+            const association = associations.find(a => a.id === vault.associationId);
             return (
               <motion.div
                 key={vault.id}

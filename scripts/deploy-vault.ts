@@ -10,6 +10,7 @@ interface DeployConfig {
   acceptedCurrency: string;
   acceptedCurrencyIssuer: string;
   strategyType: "AMM" | "SWAP" | "TOKEN_YIELD";
+  ngoAddress: string;
   createAmmPool?: boolean;
   ammPoolAmount?: {
     xrp: string;
@@ -20,13 +21,15 @@ interface DeployConfig {
 async function deployVault(config: DeployConfig) {
   console.log(`🚀 Deploying Vault: ${config.vaultName}\n`);
 
-  const network = (process.env.XRPL_NETWORK || "testnet") as "mainnet" | "testnet";
+  const network = (process.env.XRPL_NETWORK || "testnet") as
+    | "mainnet"
+    | "testnet";
   const registryAddress = process.env.REGISTRY_ADDRESS;
   const registrySeed = process.env.REGISTRY_SEED;
 
   if (!registryAddress || !registrySeed) {
     throw new Error(
-      "Missing environment variables: REGISTRY_ADDRESS and REGISTRY_SEED are required"
+      "Missing environment variables: REGISTRY_ADDRESS and REGISTRY_SEED are required",
     );
   }
 
@@ -84,6 +87,7 @@ async function deployVault(config: DeployConfig) {
     acceptedCurrency: config.acceptedCurrency,
     acceptedCurrencyIssuer: config.acceptedCurrencyIssuer,
     strategyType: config.strategyType,
+    ngoAddress: config.ngoAddress,
     name: config.vaultName,
     description: config.vaultDescription,
   };
@@ -106,13 +110,13 @@ async function deployVault(config: DeployConfig) {
 }
 
 const exampleConfig: DeployConfig = {
-  vaultName: "XRP/USD Yield Vault",
-  vaultDescription:
-    "Automated yield generation through XRP/USD AMM liquidity provision",
-  vaultTokenCurrency: "VLT",
+  vaultName: "Green peace impact fund",
+  vaultDescription: "Provide water to communities in need.",
+  vaultTokenCurrency: "WWF",
   acceptedCurrency: "USD",
   acceptedCurrencyIssuer: process.env.DEFAULT_CURRENCY_ISSUER || "",
-  strategyType: "AMM",
+  strategyType: "TOKEN_YIELD",
+  ngoAddress: "rGreenPeaceClimateActionOceanXRP",
   createAmmPool: false,
 };
 
