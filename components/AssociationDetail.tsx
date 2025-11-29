@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, ExternalLink, MapPin, Globe, TrendingUp, ArrowUpRight, Clock, Coins, ChevronRight } from 'lucide-react';
+import { ArrowLeft, ExternalLink, MapPin, Globe, TrendingUp, ArrowUpRight, Clock, Coins, ChevronRight, X, Target } from 'lucide-react';
 import { Vault } from '../types';
 import { ASSOCIATIONS, getVaultsByAssociation, formatCurrency } from '../constants';
 
@@ -231,55 +231,96 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
             <AnimatePresence>
                 {selectedVault && (
                     <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 20 }}
-                        className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 shadow-2xl p-6 z-40"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setSelectedVault(null)}
+                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
                     >
-                        <div className="max-w-4xl mx-auto">
-                            <div className="flex flex-col md:flex-row gap-6 items-center">
-                                <div className="flex-1">
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.95, opacity: 0, y: 20 }}
+                            onClick={(e) => e.stopPropagation()}
+                            className="bg-white rounded-3xl overflow-hidden max-w-xl w-full shadow-2xl relative"
+                        >
+                            {/* Header */}
+                            <div className="bg-slate-50 p-6 border-b border-slate-100 flex justify-between items-start">
+                                <div>
                                     <div className="flex items-center gap-3 mb-2">
-                                        <h3 className="font-bold text-slate-900">{selectedVault.name}</h3>
-                                        <span className={`px-2 py-0.5 rounded-full text-xs font-semibold border ${getRiskColor(selectedVault.riskFactor)}`}>
+                                        <h3 className="font-bold text-slate-900 text-xl">{selectedVault.name}</h3>
+                                        <span className={`px-2.5 py-1 rounded-full text-xs font-bold border ${getRiskColor(selectedVault.riskFactor)}`}>
                                             {selectedVault.riskFactor} Risk
                                         </span>
                                     </div>
-                                    <p className="text-sm text-slate-600">
-                                        Earn <span className="font-bold text-green-600">{selectedVault.netApy}% APY</span>
-                                        {selectedVault.rewardsApy && <span className="text-green-500"> + {selectedVault.rewardsApy}% bonus</span>}
-                                        {selectedVault.lockPeriod !== 'No lock' && (
-                                            <span className="text-slate-500"> • {selectedVault.lockPeriod} lock period</span>
-                                        )}
-                                    </p>
+                                    <p className="text-slate-500 text-sm">{selectedVault.description}</p>
+                                </div>
+                                <button
+                                    onClick={() => setSelectedVault(null)}
+                                    className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors"
+                                >
+                                    <X size={20} />
+                                </button>
+                            </div>
+
+                            {/* Body */}
+                            <div className="p-6 space-y-6">
+                                {/* Stats Grid */}
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="bg-emerald-50 rounded-2xl p-4 border border-emerald-100">
+                                        <div className="text-emerald-600 text-sm font-medium mb-1">Target APY</div>
+                                        <div className="flex items-baseline gap-1">
+                                            <span className="text-3xl font-bold text-emerald-700">{selectedVault.netApy}%</span>
+                                            {selectedVault.rewardsApy && (
+                                                <span className="text-xs font-semibold text-emerald-600">+ {selectedVault.rewardsApy}%</span>
+                                            )}
+                                        </div>
+                                    </div>
+                                    <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+                                        <div className="text-slate-500 text-sm font-medium mb-1">Lock Period</div>
+                                        <div className="flex items-center gap-2 h-9">
+                                            <Clock size={20} className="text-slate-400" />
+                                            <span className="text-xl font-bold text-slate-700">
+                                                {selectedVault.lockPeriod === 'No lock' ? 'Flexible' : selectedVault.lockPeriod}
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div className="flex items-center gap-3">
+                                {/* Investment Input */}
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                                        Investment Amount
+                                    </label>
                                     <div className="relative">
                                         <input
                                             type="number"
                                             value={investAmount}
                                             onChange={(e) => setInvestAmount(e.target.value)}
-                                            placeholder="Amount in XRP"
-                                            className="w-40 bg-slate-50 border border-slate-200 text-slate-900 px-4 py-2.5 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 font-mono text-sm"
+                                            placeholder="0.00"
+                                            className="w-full bg-white border border-slate-200 text-slate-900 pl-4 pr-16 py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 font-mono text-lg transition-all"
                                         />
+                                        <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none">
+                                            <span className="text-slate-400 font-medium">XRP</span>
+                                        </div>
                                     </div>
-                                    <motion.button
-                                        whileHover={{ scale: 1.02 }}
-                                        whileTap={{ scale: 0.98 }}
-                                        className="bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-2.5 rounded-xl transition-colors shadow-lg shadow-blue-200"
-                                    >
-                                        Invest XRP
-                                    </motion.button>
-                                    <button
-                                        onClick={() => setSelectedVault(null)}
-                                        className="p-2.5 text-slate-400 hover:text-slate-600 transition-colors"
-                                    >
-                                        ✕
-                                    </button>
+                                    <div className="flex justify-between text-xs text-slate-400 mt-2 px-1">
+                                        <span>Balance: 0.00 XRP</span>
+                                        <span>Min: 10 XRP</span>
+                                    </div>
                                 </div>
+
+                                {/* Action Button */}
+                                <motion.button
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl transition-colors shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2"
+                                >
+                                    <span>Confirm Investment</span>
+                                    <ArrowUpRight size={18} />
+                                </motion.button>
                             </div>
-                        </div>
+                        </motion.div>
                     </motion.div>
                 )}
             </AnimatePresence>
@@ -290,34 +331,39 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
                 transition={{ delay: 0.4 }}
                 className="mb-8"
             >
-                <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2 mb-4">
-                    <TrendingUp size={20} className="text-blue-500" />
+                <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2 mb-4">
+                    <TrendingUp size={24} className="text-blue-500" />
                     Causes & Actions
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
                     {association.focus.map((item, index) => (
                         <motion.div
                             key={index}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.5 + index * 0.05 }}
                             onClick={() => setSelectedFocus({
                                 title: item,
                                 image: getFocusImage(item, index),
                                 description: association.focusDetails?.[item] || "Detailed description coming soon for this cause.",
                                 index: index
                             })}
-                            className="relative group overflow-hidden rounded-xl h-32 cursor-pointer"
+                            className="group relative h-64 rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-md transition-shadow duration-300"
                         >
                             <div
-                                className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                                className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
                                 style={{ backgroundImage: `url(${getFocusImage(item, index)})` }}
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-                            <div className="absolute inset-0 p-4 flex flex-col justify-end">
-                                <h3 className="text-white font-semibold text-sm leading-tight">
-                                    {item}
-                                </h3>
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90 transition-opacity" />
+
+                            <div className="absolute inset-0 p-6 flex flex-col justify-end">
+                                <div>
+                                    <div className="w-10 h-1 bg-blue-500 rounded-full mb-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                    <h3 className="text-white font-bold text-xl leading-tight mb-2 drop-shadow-md">
+                                        {item}
+                                    </h3>
+                                    <div className="flex items-center gap-2 text-blue-200 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                        <span>Learn more</span>
+                                        <ArrowUpRight size={14} />
+                                    </div>
+                                </div>
                             </div>
                         </motion.div>
                     ))}
@@ -331,40 +377,59 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={() => setSelectedFocus(null)}
-                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
                     >
                         <motion.div
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.9, opacity: 0 }}
+                            initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.95, opacity: 0, y: 20 }}
                             onClick={(e) => e.stopPropagation()}
-                            className="bg-white rounded-2xl overflow-hidden max-w-2xl w-full shadow-2xl"
+                            className="bg-white rounded-3xl overflow-hidden max-w-2xl w-full shadow-2xl relative"
                         >
-                            <div
-                                className="h-48 bg-cover bg-center relative"
-                                style={{ backgroundImage: `url(${selectedFocus.image})` }}
-                            >
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                                <div className="absolute bottom-0 left-0 right-0 p-6">
-                                    <h2 className="text-2xl font-bold text-white">{selectedFocus.title}</h2>
-                                    <p className="text-white/80 text-sm">{association.name}</p>
-                                </div>
-                            </div>
-                            <div className="p-6">
-                                <p className="text-slate-700 leading-relaxed">{selectedFocus.description}</p>
+                            <div className="relative h-72">
+                                <img
+                                    src={selectedFocus.image}
+                                    alt={selectedFocus.title}
+                                    className="w-full h-full object-cover"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+
                                 <button
                                     onClick={() => setSelectedFocus(null)}
-                                    className="mt-6 w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium rounded-xl transition-colors"
+                                    className="absolute top-4 right-4 p-2 bg-black/20 hover:bg-black/40 text-white rounded-full backdrop-blur-md transition-colors border border-white/10"
                                 >
-                                    Close
+                                    <X size={20} />
                                 </button>
+
+                                <div className="absolute bottom-0 left-0 right-0 p-8">
+                                    <div className="flex items-center gap-2 text-blue-300 mb-2 font-medium">
+                                    </div>
+                                    <h2 className="text-3xl font-bold text-white leading-tight">{selectedFocus.title}</h2>
+                                </div>
+                            </div>
+
+                            <div className="p-8">
+                                <div className="prose prose-slate max-w-none">
+                                    <p className="text-lg text-slate-600 leading-relaxed">
+                                        {selectedFocus.description}
+                                    </p>
+                                </div>
+
+                                <div className="mt-8 pt-8 border-t border-slate-100 flex justify-end">
+                                    <button
+                                        onClick={() => setSelectedFocus(null)}
+                                        className="px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl transition-colors"
+                                    >
+                                        Close Details
+                                    </button>
+                                </div>
                             </div>
                         </motion.div>
                     </motion.div>
                 )}
             </AnimatePresence>
 
-            {selectedVault && <div className="h-32" />}
+
         </div>
     );
 };
