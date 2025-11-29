@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useParams, useNavigate, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Earn from './components/Earn';
 import Dashboard from './components/Dashboard';
@@ -12,10 +13,6 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { WalletProvider, useWallet } from './contexts/WalletContext';
 
 const App: React.FC = () => {
-  const [selectedVault, setSelectedVault] = useState<Vault | null>(null);
-  const [activePage, setActivePage] = useState<string>('Earn');
-  const [selectedAssociationId, setSelectedAssociationId] = useState<string | null>(null);
-
   useEffect(() => {
     if (typeof Lenis === 'undefined') return;
 
@@ -44,89 +41,76 @@ const App: React.FC = () => {
 
   return (
     <WalletProvider>
-      <AppContent
-        selectedVault={selectedVault}
-        setSelectedVault={setSelectedVault}
-        activePage={activePage}
-        setActivePage={setActivePage}
-        selectedAssociationId={selectedAssociationId}
-        setSelectedAssociationId={setSelectedAssociationId}
-      />
+      <BrowserRouter>
+        <AppContent />
+      </BrowserRouter>
     </WalletProvider>
   );
 };
 
-const AppContent: React.FC<{
-  selectedVault: Vault | null;
-  setSelectedVault: (vault: Vault | null) => void;
-  activePage: string;
-  setActivePage: (page: string) => void;
-  selectedAssociationId: string | null;
-  setSelectedAssociationId: (id: string | null) => void;
-}> = ({ selectedVault, setSelectedVault, activePage, setActivePage, selectedAssociationId, setSelectedAssociationId }) => {
+const AppContent: React.FC = () => {
+  const [selectedVault, setSelectedVault] = useState<Vault | null>(null);
   const { showModal, setShowModal, showDisconnectModal, setShowDisconnectModal } = useWallet();
+  const location = useLocation();
 
   return (
     <div className="min-h-screen bg-[#020617] text-slate-100 font-sans selection:bg-blue-500/30">
-      <Header activePage={activePage} onNavigate={setActivePage} />
+      <Header />
 
       <main className="container mx-auto px-4 py-8 pb-20">
         <AnimatePresence mode="wait">
-          {activePage === 'Dashboard' && (
-            <motion.div
-              key="dashboard"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
-              transition={{ duration: 0.3 }}
-            >
-              <Dashboard />
-            </motion.div>
-          )}
+          <Routes location={location} key={location.pathname}>
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
-          {activePage === 'Earn' && !selectedAssociationId && (
-            <motion.div
-              key="earn"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3 }}
-            >
-              <Earn
-                onSelectVaultForAI={setSelectedVault}
-                onSelectAssociation={(id) => setSelectedAssociationId(id)}
-              />
-            </motion.div>
-          )}
+            <Route path="/dashboard" element={
+              <motion.div
+                key="dashboard"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Dashboard />
+              </motion.div>
+            } />
 
-          {selectedAssociationId && (
-            <motion.div
-              key="association-detail"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3 }}
-            >
-              <AssociationDetail
-                associationId={selectedAssociationId}
-                onBack={() => setSelectedAssociationId(null)}
-                onSelectVaultForAI={setSelectedVault}
-              />
-            </motion.div>
-          )}
+            <Route path="/earn" element={
+              <motion.div
+                key="earn"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+              >
+                <EarnWrapper onSelectVaultForAI={setSelectedVault} />
+              </motion.div>
+            } />
 
-          {activePage !== 'Dashboard' && activePage !== 'Earn' && !selectedAssociationId && (
-            <motion.div
-              key="empty"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="flex flex-col items-center justify-center h-[50vh] text-slate-500"
-            >
-              <h2 className="text-2xl font-bold text-slate-300 mb-2">Coming Soon</h2>
-              <p>The {activePage} module is currently under development.</p>
-            </motion.div>
-          )}
+            <Route path="/earn/:associationId" element={
+              <motion.div
+                key="association-detail"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+              >
+                <AssociationDetailWrapper onSelectVaultForAI={setSelectedVault} />
+              </motion.div>
+            } />
+
+            <Route path="*" element={
+              <motion.div
+                key="empty"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex flex-col items-center justify-center h-[50vh] text-slate-500"
+              >
+                <h2 className="text-2xl font-bold text-slate-300 mb-2">Coming Soon</h2>
+                <p>This module is currently under development.</p>
+              </motion.div>
+            } />
+          </Routes>
         </AnimatePresence>
       </main>
 
@@ -142,6 +126,35 @@ const AppContent: React.FC<{
       <ConnectModal show={showModal} setShow={setShowModal} />
       <DisconnectModal show={showDisconnectModal} setShow={setShowDisconnectModal} />
     </div>
+  );
+};
+
+const EarnWrapper: React.FC<{ onSelectVaultForAI: (vault: Vault) => void }> = ({ onSelectVaultForAI }) => {
+  const navigate = useNavigate();
+
+  return (
+    <Earn
+      onSelectVaultForAI={onSelectVaultForAI}
+      onSelectAssociation={(id) => navigate(`/earn/${id}`)}
+    />
+  );
+};
+
+const AssociationDetailWrapper: React.FC<{ onSelectVaultForAI: (vault: Vault) => void }> = ({ onSelectVaultForAI }) => {
+  const { associationId } = useParams<{ associationId: string }>();
+  const navigate = useNavigate();
+
+  if (!associationId) {
+    navigate('/earn');
+    return null;
+  }
+
+  return (
+    <AssociationDetail
+      associationId={associationId}
+      onBack={() => navigate('/earn')}
+      onSelectVaultForAI={onSelectVaultForAI}
+    />
   );
 };
 

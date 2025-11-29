@@ -1,19 +1,30 @@
 import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Hexagon, Wallet, Menu, CheckCircle, AlertCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useWallet } from '../contexts/WalletContext';
 
-interface HeaderProps {
-  activePage: string;
-  onNavigate: (page: string) => void;
-}
-
-const Header: React.FC<HeaderProps> = ({ activePage, onNavigate }) => {
+const Header: React.FC = () => {
   const { address, isConnected, openModal, isLoading, isVerified, setShowDisconnectModal } = useWallet();
+  const location = useLocation();
 
   const formatAddress = (addr: string | null) => {
     if (!addr) return '';
     return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+  };
+
+  const navItems = [
+    { name: 'Dashboard', path: '/dashboard' },
+    { name: 'Earn', path: '/earn' },
+    { name: 'Borrow', path: '/borrow' },
+    { name: 'Portfolio', path: '/portfolio' },
+  ];
+
+  const isActivePage = (path: string) => {
+    if (path === '/earn') {
+      return location.pathname === '/earn' || location.pathname.startsWith('/earn/');
+    }
+    return location.pathname === path;
   };
 
   return (
@@ -24,29 +35,27 @@ const Header: React.FC<HeaderProps> = ({ activePage, onNavigate }) => {
       className="sticky top-0 z-50 w-full border-b border-slate-800 bg-slate-950/80 backdrop-blur-md"
     >
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <div
-          className="flex items-center gap-2 cursor-pointer"
-          onClick={() => onNavigate('Dashboard')}
-        >
+        <Link to="/dashboard" className="flex items-center gap-2 cursor-pointer">
           <div className="relative flex items-center justify-center">
             <Hexagon className="w-8 h-8 text-blue-500 fill-blue-500/20" />
             <span className="absolute text-xs font-bold text-blue-100">M</span>
           </div>
           <span className="text-xl font-bold tracking-tight text-white hidden sm:block">Morpho</span>
-        </div>
+        </Link>
 
         <nav className="hidden md:flex items-center gap-1">
-          {['Dashboard', 'Earn', 'Borrow', 'Portfolio'].map((item) => (
-            <button
-              key={item}
-              onClick={() => onNavigate(item)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${activePage === item
-                ? 'bg-slate-800 text-white shadow-sm ring-1 ring-slate-700'
-                : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
-                }`}
+          {navItems.map((item) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                isActivePage(item.path)
+                  ? 'bg-slate-800 text-white shadow-sm ring-1 ring-slate-700'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
+              }`}
             >
-              {item}
-            </button>
+              {item.name}
+            </Link>
           ))}
         </nav>
 
