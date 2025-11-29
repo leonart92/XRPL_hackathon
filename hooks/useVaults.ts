@@ -57,7 +57,40 @@ export function useVaults({
       console.log('[useVaults] Fetching vaults...');
       const fetchedVaults = await registry.listVaults();
       console.log('[useVaults] Fetched vaults:', fetchedVaults);
-      setVaults(fetchedVaults);
+      
+      // Enrich vaults with on-chain data (totalSupply)
+      const client = xrplService.getClient();
+      const enrichedVaults = await Promise.all(
+        fetchedVaults.map(async (vault) => {
+          try {
+            const response = await client.request({
+              command: "account_lines",
+              account: vault.vaultAddress,
+              ledger_index: "validated",
+            });
+
+            let totalSupply = 0;
+            for (const line of response.result.lines) {
+              if (line.currency === vault.vaultTokenCurrency) {
+                const balance = parseFloat(line.balance);
+                if (balance < 0) {
+                  totalSupply += Math.abs(balance);
+                }
+              }
+            }
+
+            return {
+              ...vault,
+              totalSupply,
+            };
+          } catch (err) {
+            console.error(`Error fetching totalSupply for vault ${vault.vaultAddress}:`, err);
+            return vault;
+          }
+        })
+      );
+      
+      setVaults(enrichedVaults);
     } catch (err) {
       setError(err as Error);
       console.error("Error fetching vaults:", err);

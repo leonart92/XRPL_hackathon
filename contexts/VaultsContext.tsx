@@ -27,8 +27,6 @@ export function VaultsProvider({ children }: { children: React.ReactNode }) {
     
     if (!onChainVaults) return;
 
-    const mockVaults = associationsData.vaults;
-
     const enrichedVaults: Vault[] = onChainVaults.map((onChainVault) => {
       const association = associations.find(
         (a) => a.walletAddress === onChainVault.ngoAddress
@@ -39,10 +37,8 @@ export function VaultsProvider({ children }: { children: React.ReactNode }) {
         ngoAddress: onChainVault.ngoAddress,
         matchedAssociation: association?.name
       });
-      
-      const mockVault = mockVaults.find(
-        (v) => v.associationId === association?.id
-      );
+
+      const netApy = onChainVault.strategyType === 'AMM' ? 2 : 10;
 
       return {
         id: onChainVault.vaultAddress,
@@ -56,15 +52,9 @@ export function VaultsProvider({ children }: { children: React.ReactNode }) {
         acceptedCurrencyIssuer: onChainVault.acceptedCurrencyIssuer,
         strategyType: onChainVault.strategyType,
         ngoAddress: onChainVault.ngoAddress,
-        netApy: mockVault?.netApy || 0,
-        rewardsApy: mockVault?.rewardsApy,
-        totalSupply: mockVault?.totalSupply || 0,
-        totalBorrow: mockVault?.totalBorrow || 0,
-        utilization: mockVault?.utilization || 0,
-        liquidity: mockVault?.liquidity || 0,
+        netApy,
+        totalSupply: onChainVault.totalSupply,
         history: [],
-        riskFactor: (mockVault?.riskFactor as "Low" | "Medium" | "High") || "Low",
-        lockPeriod: mockVault?.lockPeriod,
         createdAt: onChainVault.createdAt,
       };
     });

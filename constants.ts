@@ -5,7 +5,8 @@ export const ASSOCIATIONS: Association[] = associationsData.associations as Asso
 
 export const CATEGORIES = associationsData.categories;
 
-export const formatCurrency = (value: number) => {
+export const formatCurrency = (value: number | undefined) => {
+  if (value === undefined || isNaN(value)) return '-';
   if (value >= 1e9) return `$${(value / 1e9).toFixed(2)}B`;
   if (value >= 1e6) return `$${(value / 1e6).toFixed(2)}M`;
   if (value >= 1e3) return `$${(value / 1e3).toFixed(2)}K`;

@@ -39,14 +39,14 @@ export interface Vault {
   acceptedCurrencyIssuer: string;
   strategyType: string;
   ngoAddress: string;
-  netApy: number;
+  netApy?: number;
   rewardsApy?: number;
-  totalSupply: number;
-  totalBorrow: number;
-  utilization: number;
-  liquidity: number;
+  totalSupply?: number;
+  totalBorrow?: number;
+  utilization?: number;
+  liquidity?: number;
   history: APYDataPoint[];
-  riskFactor: 'Low' | 'Medium' | 'High';
+  riskFactor?: 'Low' | 'Medium' | 'High';
   lockPeriod?: string;
   createdAt: number;
 }

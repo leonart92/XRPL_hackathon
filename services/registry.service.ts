@@ -11,6 +11,7 @@ interface VaultMetadata {
   name?: string;
   description?: string;
   createdAt: number;
+  totalSupply?: number;
 }
 
 interface CompactVaultMetadata {

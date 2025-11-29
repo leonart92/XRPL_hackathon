@@ -29,9 +29,26 @@ const Dashboard: React.FC = () => {
     vaults,
   });
 
-  const netWorthValue = 131240.50;
-  const apyValue = 7.24;
-  const healthFactorValue = 2.45;
+  const netWorthValue = balances.reduce((total, userBalance) => {
+    const vault = vaults.find(v => v.vaultAddress === userBalance.vaultAddress);
+    if (!vault) return total;
+    const balanceNum = parseFloat(userBalance.balance);
+    return total + balanceNum;
+  }, 0);
+
+  const apyValue = balances.length > 0
+    ? balances.reduce((total, userBalance) => {
+        const vault = vaults.find(v => v.vaultAddress === userBalance.vaultAddress);
+        return total + (vault?.netApy ?? 0);
+      }, 0) / balances.length
+    : 0;
+
+  const projectsSupported = new Set(balances.map(b => {
+    const vault = vaults.find(v => v.vaultAddress === b.vaultAddress);
+    return vault?.associationId;
+  }).filter(Boolean)).size;
+
+  const healthFactorValue = projectsSupported;
 
   useEffect(() => {
     if (typeof gsap === 'undefined') return;
@@ -54,7 +71,7 @@ const Dashboard: React.FC = () => {
         ease: "power3.out",
         onUpdate: () => {
           if (netWorthRef.current) {
-            netWorthRef.current.innerText = `$${netWorthProxy.value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            netWorthRef.current.innerText = `${netWorthProxy.value.toFixed(2)} XRP`;
           }
         }
       });
@@ -178,7 +195,7 @@ const Dashboard: React.FC = () => {
             Total Impact Invested
           </div>
           <span ref={netWorthRef} className="text-3xl font-bold text-slate-900 tracking-tight relative z-10 block">
-            $0.00
+            {netWorthValue.toFixed(2)} XRP
           </span>
           <div className="text-sm text-green-600 flex items-center gap-1 mt-2 relative z-10">
             <TrendingUp size={14} /> Growing daily
@@ -221,6 +238,8 @@ const Dashboard: React.FC = () => {
               const vault = vaults.find(v => v.vaultAddress === userBalance.vaultAddress);
               if (!vault) return null;
               
+              console.log('[Dashboard] Vault:', vault.name, 'totalSupply:', vault.totalSupply);
+              
               const association = associations.find(a => a.id === vault.associationId);
               const balanceNum = parseFloat(userBalance.balance);
               
@@ -249,10 +268,14 @@ const Dashboard: React.FC = () => {
                     <div className="text-xs text-slate-600">≈ {balanceNum.toFixed(2)} {vault.acceptedCurrency}</div>
                   </div>
                   <div className="col-span-2 text-right">
-                    <div className="text-sm font-bold text-slate-900">{formatCurrency(vault.totalSupply / 100)}</div>
+                    <div className="text-sm font-bold text-slate-900">
+                      {formatCurrency(vault.totalSupply ? vault.totalSupply / 100 : undefined)}
+                    </div>
                   </div>
                   <div className="col-span-2 text-right">
-                    <div className="text-sm font-bold text-green-600">{vault.netApy}%</div>
+                    <div className="text-sm font-bold text-green-600">
+                      {vault.netApy !== undefined ? `${vault.netApy}%` : '-'}
+                    </div>
                   </div>
                   <div className="col-span-1 text-right">
                     <span className="text-[10px] font-bold px-2 py-1 rounded bg-blue-50 text-blue-600 border border-blue-200 uppercase">

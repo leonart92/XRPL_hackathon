@@ -8,6 +8,7 @@ import { useDeposit } from '../hooks/useDeposit';
 import { useTrustline } from '../hooks/useTrustline';
 import { useVaultBalance } from '../hooks/useVaultBalance';
 import { useWithdraw } from '../hooks/useWithdraw';
+import { useVaultOnChainData } from '../hooks/useVaultOnChainData';
 
 interface VaultDetailProps {
     vaultAddress: string;
@@ -64,6 +65,11 @@ const VaultDetail: React.FC<VaultDetailProps> = ({ vaultAddress, onBack }) => {
     });
 
     const withdrawHook = useWithdraw({
+        vaultAddress: vault?.vaultAddress || '',
+        vaultTokenCurrency: vault?.vaultTokenCurrency || '',
+    });
+
+    const { data: vaultData, loading: vaultDataLoading } = useVaultOnChainData({
         vaultAddress: vault?.vaultAddress || '',
         vaultTokenCurrency: vault?.vaultTokenCurrency || '',
     });
@@ -199,7 +205,7 @@ const VaultDetail: React.FC<VaultDetailProps> = ({ vaultAddress, onBack }) => {
         }
     };
 
-    const getRiskColor = (risk: string) => {
+    const getRiskColor = (risk?: string) => {
         switch (risk) {
             case 'Low': return 'text-green-600 bg-green-50 border-green-200';
             case 'Medium': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
@@ -247,27 +253,31 @@ const VaultDetail: React.FC<VaultDetailProps> = ({ vaultAddress, onBack }) => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                    <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border border-green-200">
-                        <div className="flex items-center gap-2 text-green-600 mb-2">
-                            <TrendingUp size={20} />
-                            <span className="text-sm font-semibold uppercase tracking-wider">Annual Return</span>
+                    {vault.netApy !== undefined && (
+                        <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border border-green-200">
+                            <div className="flex items-center gap-2 text-green-600 mb-2">
+                                <TrendingUp size={20} />
+                                <span className="text-sm font-semibold uppercase tracking-wider">Annual Return</span>
+                            </div>
+                            <div className="flex items-baseline gap-2">
+                                <span className="text-4xl font-bold text-green-700">{vault.netApy}%</span>
+                                {vault.rewardsApy && (
+                                    <span className="text-lg text-green-600">+{vault.rewardsApy}%</span>
+                                )}
+                            </div>
                         </div>
-                        <div className="flex items-baseline gap-2">
-                            <span className="text-4xl font-bold text-green-700">{vault.netApy}%</span>
-                            {vault.rewardsApy && (
-                                <span className="text-lg text-green-600">+{vault.rewardsApy}%</span>
-                            )}
-                        </div>
-                    </div>
+                    )}
 
-                    <div className="bg-slate-50 rounded-xl p-6 border border-slate-200">
-                        <div className="flex items-center gap-2 text-slate-600 mb-2">
-                            <Coins size={20} />
-                            <span className="text-sm font-semibold uppercase tracking-wider">Total Funding</span>
+                    {vaultData && (
+                        <div className="bg-slate-50 rounded-xl p-6 border border-slate-200">
+                            <div className="flex items-center gap-2 text-slate-600 mb-2">
+                                <Coins size={20} />
+                                <span className="text-sm font-semibold uppercase tracking-wider">Total Funding</span>
+                            </div>
+                            <div className="text-3xl font-bold text-slate-900">{vaultData.totalSupply.toFixed(2)} {vault.acceptedCurrency}</div>
+                            <div className="text-sm text-slate-500 mt-1">{vaultData.holders} holders</div>
                         </div>
-                        <div className="text-3xl font-bold text-slate-900">{formatCurrency(vault.totalSupply)}</div>
-                        <div className="text-sm text-slate-500 mt-1">{vault.utilization.toFixed(1)}% deployed</div>
-                    </div>
+                    )}
 
                     <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
                         <div className="flex items-center gap-2 text-blue-600 mb-2">
@@ -286,16 +296,20 @@ const VaultDetail: React.FC<VaultDetailProps> = ({ vaultAddress, onBack }) => {
                         )}
                     </div>
 
-                    <div className="bg-slate-50 rounded-xl p-6 border border-slate-200">
-                        <div className="flex items-center gap-2 text-slate-600 mb-2">
-                            <Clock size={20} />
-                            <span className="text-sm font-semibold uppercase tracking-wider">Lock Period</span>
+                    {vault.lockPeriod && (
+                        <div className="bg-slate-50 rounded-xl p-6 border border-slate-200">
+                            <div className="flex items-center gap-2 text-slate-600 mb-2">
+                                <Clock size={20} />
+                                <span className="text-sm font-semibold uppercase tracking-wider">Lock Period</span>
+                            </div>
+                            <div className="text-2xl font-bold text-slate-900 mb-2">{vault.lockPeriod}</div>
+                            {vault.riskFactor && (
+                                <span className={`inline-flex px-3 py-1 rounded-full text-sm font-semibold border ${getRiskColor(vault.riskFactor)}`}>
+                                    {vault.riskFactor} Risk
+                                </span>
+                            )}
                         </div>
-                        <div className="text-2xl font-bold text-slate-900 mb-2">{vault.lockPeriod || 'No lock'}</div>
-                        <span className={`inline-flex px-3 py-1 rounded-full text-sm font-semibold border ${getRiskColor(vault.riskFactor)}`}>
-                            {vault.riskFactor} Risk
-                        </span>
-                    </div>
+                    )}
                 </div>
 
                 <div className="bg-white border-2 border-slate-200 rounded-2xl p-8">

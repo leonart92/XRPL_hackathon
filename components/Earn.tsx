@@ -20,9 +20,8 @@ const Earn: React.FC<EarnProps> = ({ onSelectAssociation }) => {
   
   const { vaults, loading } = useVaultsContext();
 
-  const totalDeposit = vaults.reduce((acc, v) => acc + v.totalSupply, 0);
-  const avgApy = vaults.length > 0 ? vaults.reduce((acc, v) => acc + v.netApy, 0) / vaults.length : 0;
-  const depositInBillions = totalDeposit / 1e9;
+  const totalDeposit = vaults.reduce((acc, v) => acc + (v.totalSupply ?? 0), 0);
+  const avgApy = vaults.length > 0 ? vaults.reduce((acc, v) => acc + (v.netApy ?? 0), 0) / vaults.length : 0;
 
   useEffect(() => {
     if (typeof gsap === 'undefined') return;
@@ -47,13 +46,13 @@ const Earn: React.FC<EarnProps> = ({ onSelectAssociation }) => {
 
       const depositProxy = { value: 0 };
       gsap.to(depositProxy, {
-        value: depositInBillions,
+        value: totalDeposit,
         duration: 2.5,
         delay: 0.3,
         ease: "power3.out",
         onUpdate: () => {
           if (depositRef.current) {
-            depositRef.current.innerText = `$${depositProxy.value.toFixed(2)}B`;
+            depositRef.current.innerText = `${depositProxy.value.toFixed(0)} XRP`;
           }
         }
       });
@@ -73,7 +72,7 @@ const Earn: React.FC<EarnProps> = ({ onSelectAssociation }) => {
     });
 
     return () => ctx.revert();
-  }, [depositInBillions, avgApy]);
+  }, [totalDeposit, avgApy]);
 
   return (
     <div className="space-y-8">
@@ -144,7 +143,7 @@ const Earn: React.FC<EarnProps> = ({ onSelectAssociation }) => {
               Total Impact Funding
             </span>
             <span ref={depositRef} className="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight relative z-10">
-              $0.00B
+              {totalDeposit.toFixed(0)} XRP
             </span>
           </div>
 

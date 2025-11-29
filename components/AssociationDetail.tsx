@@ -190,38 +190,50 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
                             </div>
 
                             <div className="grid grid-cols-3 gap-4 mt-4">
-                                <div>
-                                    <div className="text-xs text-slate-500 uppercase tracking-wider mb-1">APY</div>
-                                    <div className="flex items-center gap-1">
-                                        <span className="text-xl font-bold text-green-600">{vault.netApy}%</span>
-                                        {vault.rewardsApy && (
-                                            <span className="text-xs text-green-500">+{vault.rewardsApy}%</span>
-                                        )}
+                                {vault.netApy !== undefined && (
+                                    <div>
+                                        <div className="text-xs text-slate-500 uppercase tracking-wider mb-1">APY</div>
+                                        <div className="flex items-center gap-1">
+                                            <span className="text-xl font-bold text-green-600">{vault.netApy}%</span>
+                                            {vault.rewardsApy && (
+                                                <span className="text-xs text-green-500">+{vault.rewardsApy}%</span>
+                                            )}
+                                        </div>
                                     </div>
-                                </div>
-                                <div>
-                                    <div className="text-xs text-slate-500 uppercase tracking-wider mb-1">Risk</div>
-                                    <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-semibold border ${getRiskColor(vault.riskFactor)}`}>
-                                        {vault.riskFactor}
-                                    </span>
-                                </div>
-                                <div>
-                                    <div className="text-xs text-slate-500 uppercase tracking-wider mb-1">Lock</div>
-                                    <div className="flex items-center gap-1 text-sm text-slate-700">
-                                        <Clock size={12} />
-                                        {vault.lockPeriod || 'No lock'}
+                                )}
+                                {vault.riskFactor && (
+                                    <div>
+                                        <div className="text-xs text-slate-500 uppercase tracking-wider mb-1">Risk</div>
+                                        <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-semibold border ${getRiskColor(vault.riskFactor)}`}>
+                                            {vault.riskFactor}
+                                        </span>
                                     </div>
-                                </div>
+                                )}
+                                {vault.lockPeriod && (
+                                    <div>
+                                        <div className="text-xs text-slate-500 uppercase tracking-wider mb-1">Lock</div>
+                                        <div className="flex items-center gap-1 text-sm text-slate-700">
+                                            <Clock size={12} />
+                                            {vault.lockPeriod}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
 
-                            <div className="flex items-center justify-between mt-4 pt-4 border-t border-slate-100">
-                                <div className="text-sm text-slate-500">
-                                    <span className="font-medium text-slate-700">{formatCurrency(vault.totalSupply)}</span> TVL
+                            {(vault.totalSupply !== undefined || vault.utilization !== undefined) && (
+                                <div className="flex items-center justify-between mt-4 pt-4 border-t border-slate-100">
+                                    {vault.totalSupply !== undefined && (
+                                        <div className="text-sm text-slate-500">
+                                            <span className="font-medium text-slate-700">{formatCurrency(vault.totalSupply)}</span> TVL
+                                        </div>
+                                    )}
+                                    {vault.utilization !== undefined && (
+                                        <div className="text-sm text-slate-500">
+                                            <span className="font-medium text-slate-700">{vault.utilization.toFixed(1)}%</span> Utilization
+                                        </div>
+                                    )}
                                 </div>
-                                <div className="text-sm text-slate-500">
-                                    <span className="font-medium text-slate-700">{vault.utilization.toFixed(1)}%</span> Utilization
-                                </div>
-                            </div>
+                            )}
                         </motion.div>
                     ))}
                 </div>
