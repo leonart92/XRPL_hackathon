@@ -1,4 +1,4 @@
-import { Client } from "xrpl";
+import { type Amount, Client } from "xrpl";
 
 type NetworkType = "mainnet" | "testnet" | "devnet";
 
@@ -85,7 +85,7 @@ class XRPLService {
     account: string,
     destination: string,
     currency: string,
-    amount: number,
+    amount: Amount,
     issuer: string,
   ) {
     return {
