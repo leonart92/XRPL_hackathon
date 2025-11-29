@@ -54,7 +54,7 @@ const AppContent: React.FC = () => {
   const location = useLocation();
 
   return (
-    <div className="min-h-screen bg-[#020617] text-slate-100 font-sans selection:bg-blue-500/30">
+    <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-blue-500/30">
       <Header />
 
       <main className="container mx-auto px-4 py-8 pb-20">
@@ -106,7 +106,7 @@ const AppContent: React.FC = () => {
                 exit={{ opacity: 0 }}
                 className="flex flex-col items-center justify-center h-[50vh] text-slate-500"
               >
-                <h2 className="text-2xl font-bold text-slate-300 mb-2">Coming Soon</h2>
+                <h2 className="text-2xl font-bold text-slate-700 mb-2">Coming Soon</h2>
                 <p>This module is currently under development.</p>
               </motion.div>
             } />

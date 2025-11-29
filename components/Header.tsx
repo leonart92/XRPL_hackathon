@@ -32,15 +32,15 @@ const Header: React.FC = () => {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5, ease: "circOut" }}
-      className="sticky top-0 z-50 w-full border-b border-slate-800 bg-slate-950/80 backdrop-blur-md"
+      className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/80 backdrop-blur-md"
     >
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Link to="/dashboard" className="flex items-center gap-2 cursor-pointer">
           <div className="relative flex items-center justify-center">
             <Hexagon className="w-8 h-8 text-blue-500 fill-blue-500/20" />
-            <span className="absolute text-xs font-bold text-blue-100">M</span>
+            <span className="absolute text-xs font-bold text-blue-600">M</span>
           </div>
-          <span className="text-xl font-bold tracking-tight text-white hidden sm:block">Morpho</span>
+          <span className="text-xl font-bold tracking-tight text-slate-900 hidden sm:block">Morpho</span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-1">
@@ -50,8 +50,8 @@ const Header: React.FC = () => {
               to={item.path}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                 isActivePage(item.path)
-                  ? 'bg-slate-800 text-white shadow-sm ring-1 ring-slate-700'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
+                  ? 'bg-blue-50 text-blue-600 shadow-sm ring-1 ring-blue-200'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
               }`}
             >
               {item.name}
@@ -60,9 +60,9 @@ const Header: React.FC = () => {
         </nav>
 
         <div className="flex items-center gap-3">
-          <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800">
-            <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500 animate-pulse' : 'bg-slate-500'}`}></div>
-            <span className="text-xs font-medium text-slate-300">XRP</span>
+          <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200">
+            <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500 animate-pulse' : 'bg-slate-400'}`}></div>
+            <span className="text-xs font-medium text-slate-700">XRP</span>
           </div>
 
           {isConnected ? (
@@ -88,7 +88,7 @@ const Header: React.FC = () => {
             </button>
           )}
 
-          <button className="md:hidden p-2 text-slate-400 hover:text-white">
+          <button className="md:hidden p-2 text-slate-600 hover:text-slate-900">
             <Menu className="w-6 h-6" />
           </button>
         </div>
