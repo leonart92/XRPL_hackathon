@@ -25,9 +25,6 @@ const Header: React.FC<HeaderProps> = ({ activePage, onNavigate }) => {
             <span className="absolute text-xs font-bold text-blue-100">M</span>
           </div>
           <span className="text-xl font-bold tracking-tight text-white hidden sm:block">Morpho</span>
-          <span className="ml-2 px-2 py-0.5 rounded-full bg-slate-800 text-[10px] font-medium text-slate-400 border border-slate-700">
-            CLONE
-          </span>
         </div>
 
         <nav className="hidden md:flex items-center gap-1">
