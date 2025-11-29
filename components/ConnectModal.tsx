@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { X, Chrome, Smartphone, ExternalLink } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, Chrome, Smartphone, ExternalLink, ArrowLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { isValidAddress } from 'xrpl';
 import { useWallet } from '../contexts/WalletContext';
 import { isInstalled as isGemWalletInstalled, getAddress as getGemWalletAddress } from '@gemwallet/api';
-import { Xumm } from 'xumm';
 
 interface ConnectModalProps {
     show: boolean;
@@ -16,7 +16,7 @@ interface WalletOption {
     description: string;
     icon?: string;
     logo?: string;
-    type: 'extension' | 'qrcode';
+    type: 'extension' | 'mobile';
     available: boolean;
     installUrl?: string;
 }
@@ -24,20 +24,10 @@ interface WalletOption {
 const ConnectModal: React.FC<ConnectModalProps> = ({ show, setShow }) => {
     const { address, connect } = useWallet();
     const [connectingWallet, setConnectingWallet] = useState<string | null>(null);
-    const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
-    const [xummInstance, setXummInstance] = useState<Xumm | null>(null);
-    const xummApiKey = (import.meta as any).env?.VITE_XUMM_API_KEY;
-    const hasXummApiKey = !!xummApiKey;
+    const [showXamanView, setShowXamanView] = useState(false);
+    const [manualAddress, setManualAddress] = useState('');
 
     const [wallets, setWallets] = useState<WalletOption[]>([
-        {
-            id: 'xumm-qr',
-            name: 'Xumm (QR Code)',
-            description: hasXummApiKey ? 'Scan with Xumm app on mobile' : 'Configure VITE_XUMM_API_KEY',
-            icon: '📱',
-            type: 'qrcode',
-            available: hasXummApiKey,
-        },
         {
             id: 'gem',
             name: 'GemWallet',
@@ -45,7 +35,7 @@ const ConnectModal: React.FC<ConnectModalProps> = ({ show, setShow }) => {
             logo: '/gemWalletLogo.png',
             type: 'extension',
             available: false,
-            installUrl: 'https://gemwallet.app',
+            installUrl: 'https://chromewebstore.google.com/detail/gemwallet/egebedonbdapoieedfcfkofloclfghab',
         },
         {
             id: 'crossmark',
@@ -54,7 +44,16 @@ const ConnectModal: React.FC<ConnectModalProps> = ({ show, setShow }) => {
             logo: '/crossmarkLogo.png',
             type: 'extension',
             available: false,
-            installUrl: 'https://crossmark.io',
+            installUrl: 'https://chromewebstore.google.com/detail/crossmark-wallet/canipghmckojpianfgiklhbgpfmhjkjg',
+        },
+        {
+            id: 'xaman-app',
+            name: 'Xaman',
+            description: 'Connect with your mobile wallet',
+            logo: '/xamanLogo.jpeg',
+            type: 'mobile',
+            available: true,
+            installUrl: 'https://xaman.app/',
         },
     ]);
 
@@ -91,20 +90,19 @@ const ConnectModal: React.FC<ConnectModalProps> = ({ show, setShow }) => {
     useEffect(() => {
         if (address) {
             setShow(false);
-            setQrCodeUrl(null);
         }
     }, [address, setShow]);
 
     useEffect(() => {
         if (!show) {
-            setQrCodeUrl(null);
             setConnectingWallet(null);
+            setShowXamanView(false);
+            setManualAddress('');
         }
     }, [show]);
 
     const handleConnect = async (walletId: string) => {
         setConnectingWallet(walletId);
-        setQrCodeUrl(null);
 
         try {
             await connectWallet(walletId);
@@ -118,54 +116,31 @@ const ConnectModal: React.FC<ConnectModalProps> = ({ show, setShow }) => {
         }
     };
 
+    const handleManualConnect = async () => {
+        const trimmedAddress = manualAddress.trim();
+
+        if (!trimmedAddress) {
+            alert('Please enter an XRPL address');
+            return;
+        }
+
+        if (!isValidAddress(trimmedAddress)) {
+            alert('Invalid XRPL address format.\n\nValid addresses:\n- Start with "r"\n- 25-35 characters\n- Use Base58 encoding (case-sensitive)\n- No 0, O, I, or l characters');
+            return;
+        }
+
+        localStorage.setItem('xrpl_address', trimmedAddress);
+        await connect();
+        setShowXamanView(false);
+        setManualAddress('');
+    };
+
     const connectWallet = async (walletId: string) => {
         const win = window as any;
 
-        if (walletId === 'xumm-qr') {
-            try {
-                if (!xummApiKey) {
-                    throw new Error('Xumm API key not configured. Add VITE_XUMM_API_KEY to your .env file');
-                }
-
-                const xumm = new Xumm(xummApiKey);
-                setXummInstance(xumm);
-
-                const payload = await xumm.payload?.create({
-                    txjson: {
-                        TransactionType: 'SignIn'
-                    }
-                });
-
-                if (!payload?.uuid) {
-                    throw new Error('Unable to create Xumm payload');
-                }
-
-                if (payload?.refs?.qr_png) {
-                    setQrCodeUrl(payload.refs.qr_png);
-                }
-
-                const subscription = await xumm.payload?.subscribe(payload.uuid, (event) => {
-                    if (event.data.signed === true) {
-                        return true; // Resolve the subscription
-                    }
-                    if (event.data.signed === false) {
-                        throw new Error('Connection rejected by user');
-                    }
-                });
-
-                const resolvedPayload = await subscription?.resolved as any;
-
-                if (resolvedPayload?.response?.account) {
-                    localStorage.setItem('xrpl_address', resolvedPayload.response.account);
-                    await connect();
-                    return;
-                }
-
-                throw new Error('Connection cancelled or expired');
-            } catch (e: any) {
-                console.error('Xumm QR error:', e);
-                throw new Error(e.message || 'Failed to connect via QR code');
-            }
+        if (walletId === 'xaman-app') {
+            setShowXamanView(true);
+            throw new Error('cancelled');
         }
 
         if (walletId === 'gem') {
@@ -207,7 +182,7 @@ const ConnectModal: React.FC<ConnectModalProps> = ({ show, setShow }) => {
     };
 
     const extensionWallets = wallets.filter(w => w.type === 'extension');
-    const qrWallets = wallets.filter(w => w.type === 'qrcode');
+    const mobileWallet = wallets.find(w => w.id === 'xaman-app');
 
     return (
         <AnimatePresence>
@@ -241,80 +216,136 @@ const ConnectModal: React.FC<ConnectModalProps> = ({ show, setShow }) => {
                             </div>
 
                             <div className="p-6 space-y-6">
-                                {qrCodeUrl && (
-                                    <div className="flex flex-col items-center gap-4 p-4 bg-white rounded-xl">
-                                        <p className="text-slate-900 font-medium text-center">
-                                            Scan with Xumm app
-                                        </p>
-                                        <img src={qrCodeUrl} alt="QR Code Xumm" className="w-48 h-48" />
-                                        <p className="text-slate-500 text-sm text-center">
-                                            Waiting for confirmation...
-                                        </p>
-                                    </div>
-                                )}
+                                {showXamanView ? (
+                                    <div className="space-y-5">
+                                        <button
+                                            onClick={() => {
+                                                setShowXamanView(false);
+                                                setManualAddress('');
+                                            }}
+                                            className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors"
+                                        >
+                                            <ArrowLeft className="w-4 h-4" />
+                                            <span className="text-sm">Back to wallets</span>
+                                        </button>
 
-                                {!qrCodeUrl && (
-                                    <>
-                                        <div>
-                                            <div className="flex items-center gap-2 mb-3">
-                                                <Smartphone className="w-4 h-4 text-slate-400" />
-                                                <span className="text-sm font-medium text-slate-400">Via QR Code (Mobile)</span>
+                                        <div className="text-center space-y-3">
+                                            <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-slate-800 overflow-hidden">
+                                                <img
+                                                    src="/xamanLogo.jpeg"
+                                                    alt="Xaman logo"
+                                                    className="w-full h-full object-cover rounded-xl"
+                                                />
                                             </div>
-                                            <div className="space-y-2">
-                                                {qrWallets.map((wallet) => (
-                                                    <button
-                                                        key={wallet.id}
-                                                        onClick={() => wallet.available ? handleConnect(wallet.id) : undefined}
-                                                        disabled={!wallet.available || connectingWallet !== null}
-                                                        className={`w-full flex items-center gap-4 p-4 rounded-xl border transition-all ${wallet.available
-                                                            ? 'bg-gradient-to-r from-blue-500/10 to-purple-500/10 border-blue-500/30 hover:from-blue-500/20 hover:to-purple-500/20 hover:border-blue-500/50 cursor-pointer'
-                                                            : 'bg-slate-900/50 border-slate-800 opacity-60 cursor-not-allowed'
-                                                            } ${connectingWallet !== null ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                                    >
-                                                        {wallet.logo ? (
-                                                            <img
-                                                                src={wallet.logo}
-                                                                alt={`${wallet.name} logo`}
-                                                                className="w-10 h-10 object-contain"
-                                                            />
-                                                        ) : (
-                                                            <div className="text-2xl">{wallet.icon}</div>
-                                                        )}
-                                                        <div className="flex-1 text-left">
-                                                            <div className="font-semibold text-white flex items-center gap-2">
-                                                                {wallet.name}
-                                                                {wallet.available && (
-                                                                    <span className="text-xs bg-green-500/20 text-green-400 px-2 py-0.5 rounded">
-                                                                        Recommended
-                                                                    </span>
-                                                                )}
-                                                            </div>
-                                                            <div className="text-sm text-slate-400">{wallet.description}</div>
-                                                        </div>
-                                                        {connectingWallet === wallet.id && (
-                                                            <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
-                                                        )}
-                                                        {!wallet.available && (
-                                                            <a
-                                                                href="https://apps.xumm.dev/"
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                                className="flex items-center gap-1 text-xs text-blue-400 hover:text-blue-300"
-                                                                onClick={(e) => e.stopPropagation()}
-                                                            >
-                                                                <span>Get API key</span>
-                                                                <ExternalLink className="w-3 h-3" />
-                                                            </a>
-                                                        )}
-                                                    </button>
-                                                ))}
+                                            <div>
+                                                <h3 className="text-xl font-bold text-white">Xaman Wallet</h3>
+                                                <p className="text-sm text-slate-400 mt-1">
+                                                    Enter your XRPL address to connect
+                                                </p>
                                             </div>
                                         </div>
+
+                                        <div className="bg-slate-800/50 rounded-xl p-5 space-y-4 border border-slate-700/50">
+                                            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">How to connect</p>
+                                            <div className="space-y-3">
+                                                <div className="flex items-center gap-4">
+                                                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold">1</div>
+                                                    <p className="text-sm text-slate-200">Open <span className="font-semibold text-white">Xaman</span> on your phone</p>
+                                                </div>
+                                                <div className="flex items-center gap-4">
+                                                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold">2</div>
+                                                    <p className="text-sm text-slate-200">Tap your account to copy the <span className="font-semibold text-white">r-address</span></p>
+                                                </div>
+                                                <div className="flex items-center gap-4">
+                                                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold">3</div>
+                                                    <p className="text-sm text-slate-200">Paste it below and connect</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-4">
+                                            <div className="relative">
+                                                <input
+                                                    type="text"
+                                                    value={manualAddress}
+                                                    onChange={(e) => setManualAddress(e.target.value)}
+                                                    placeholder="rXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+                                                    className="w-full px-5 py-4 bg-slate-800 border-2 border-slate-600 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 font-mono text-sm transition-all"
+                                                />
+                                                {manualAddress && (
+                                                    <button
+                                                        onClick={() => setManualAddress('')}
+                                                        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors"
+                                                    >
+                                                        <X className="w-4 h-4" />
+                                                    </button>
+                                                )}
+                                            </div>
+                                            <button
+                                                onClick={handleManualConnect}
+                                                disabled={!manualAddress}
+                                                className="w-full py-4 bg-blue-600 hover:bg-blue-500 disabled:bg-slate-700 disabled:opacity-50 text-white rounded-xl transition-all font-semibold text-base"
+                                            >
+                                                Connect Wallet
+                                            </button>
+                                        </div>
+
+                                        <div className="text-center pt-2">
+                                            <a
+                                                href="https://xaman.app"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-blue-400 transition-colors"
+                                            >
+                                                <span>Don't have Xaman?</span>
+                                                <span className="text-blue-400 font-medium">Download here</span>
+                                                <ExternalLink className="w-3 h-3 text-blue-400" />
+                                            </a>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <>
+                                        {mobileWallet && (
+                                            <div>
+                                                <div className="flex items-center gap-2 mb-3">
+                                                    <Smartphone className="w-4 h-4 text-slate-400" />
+                                                    <span className="text-sm font-medium text-slate-400">Mobile</span>
+                                                </div>
+                                                <button
+                                                    onClick={() => handleConnect(mobileWallet.id)}
+                                                    disabled={connectingWallet !== null}
+                                                    className={`w-full flex items-center gap-4 p-4 rounded-xl border transition-all bg-blue-600/10 border-blue-500/30 hover:bg-blue-600/20 hover:border-blue-500/50 cursor-pointer ${connectingWallet !== null ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                                >
+                                                    {mobileWallet.logo ? (
+                                                        <div className="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center overflow-hidden">
+                                                            <img
+                                                                src={mobileWallet.logo}
+                                                                alt={`${mobileWallet.name} logo`}
+                                                                className="w-full h-full object-cover rounded-lg"
+                                                            />
+                                                        </div>
+                                                    ) : (
+                                                        <div className="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center">
+                                                            <span className="text-2xl">{mobileWallet.icon}</span>
+                                                        </div>
+                                                    )}
+                                                    <div className="flex-1 text-left">
+                                                        <div className="font-semibold text-white flex items-center gap-2">
+                                                            {mobileWallet.name}
+                                                        </div>
+                                                        <div className="text-sm text-slate-400">{mobileWallet.description}</div>
+                                                    </div>
+                                                    {connectingWallet === mobileWallet.id && (
+                                                        <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+                                                    )}
+                                                </button>
+                                            </div>
+                                        )}
 
                                         <div>
                                             <div className="flex items-center gap-2 mb-3">
                                                 <Chrome className="w-4 h-4 text-slate-400" />
-                                                <span className="text-sm font-medium text-slate-400">Extensions Chrome</span>
+                                                <span className="text-sm font-medium text-slate-400">Browser Extensions</span>
                                             </div>
                                             <div className="space-y-2">
                                                 {extensionWallets.map((wallet) => (
@@ -328,13 +359,17 @@ const ConnectModal: React.FC<ConnectModalProps> = ({ show, setShow }) => {
                                                             } ${connectingWallet !== null ? 'opacity-50 cursor-not-allowed' : ''}`}
                                                     >
                                                         {wallet.logo ? (
-                                                            <img
-                                                                src={wallet.logo}
-                                                                alt={`${wallet.name} logo`}
-                                                                className="w-10 h-10 object-contain"
-                                                            />
+                                                            <div className="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center overflow-hidden">
+                                                                <img
+                                                                    src={wallet.logo}
+                                                                    alt={`${wallet.name} logo`}
+                                                                    className="w-full h-full object-cover rounded-lg"
+                                                                />
+                                                            </div>
                                                         ) : (
-                                                            <div className="text-2xl">{wallet.icon}</div>
+                                                            <div className="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center">
+                                                                <span className="text-2xl">{wallet.icon}</span>
+                                                            </div>
                                                         )}
                                                         <div className="flex-1 text-left">
                                                             <div className="font-semibold text-white">{wallet.name}</div>
@@ -352,12 +387,6 @@ const ConnectModal: React.FC<ConnectModalProps> = ({ show, setShow }) => {
                                                     </button>
                                                 ))}
                                             </div>
-                                        </div>
-
-                                        <div className="p-4 bg-slate-800/30 rounded-xl border border-slate-700/50">
-                                            <p className="text-sm text-slate-400 text-center">
-                                                💡 <strong className="text-slate-300">Tip:</strong> Use Xumm QR code to easily connect from your phone without installing an extension.
-                                            </p>
                                         </div>
                                     </>
                                 )}

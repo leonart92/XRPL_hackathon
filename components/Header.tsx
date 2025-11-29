@@ -1,5 +1,5 @@
 import React from 'react';
-import { Hexagon, Wallet, Menu } from 'lucide-react';
+import { Hexagon, Wallet, Menu, CheckCircle, AlertCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useWallet } from '../contexts/WalletContext';
 
@@ -9,7 +9,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ activePage, onNavigate }) => {
-  const { address, isConnected, openModal, disconnect, isLoading } = useWallet();
+  const { address, isConnected, openModal, isLoading, isVerified, setShowDisconnectModal } = useWallet();
 
   const formatAddress = (addr: string | null) => {
     if (!addr) return '';
@@ -58,10 +58,14 @@ const Header: React.FC<HeaderProps> = ({ activePage, onNavigate }) => {
 
           {isConnected ? (
             <button
-              onClick={disconnect}
+              onClick={() => setShowDisconnectModal(true)}
               className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all shadow-lg shadow-blue-900/20 active:scale-95 duration-100"
             >
-              <Wallet className="w-4 h-4" />
+              {isVerified ? (
+                <CheckCircle className="w-4 h-4 text-green-300" />
+              ) : (
+                <AlertCircle className="w-4 h-4 text-yellow-300" />
+              )}
               <span>{formatAddress(address)}</span>
             </button>
           ) : (
