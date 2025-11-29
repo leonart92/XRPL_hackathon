@@ -89,7 +89,7 @@ const Earn: React.FC<EarnProps> = ({ onSelectVaultForAI, onSelectAssociation }) 
           className="relative"
         >
           <motion.div
-            className="absolute -left-4 top-0 w-1 h-16 bg-blue-500 rounded-full"
+            className="absolute -left-4 top-0 w-1 h-16 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 64, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
@@ -210,7 +210,7 @@ const Earn: React.FC<EarnProps> = ({ onSelectVaultForAI, onSelectAssociation }) 
           whileTap={{ scale: 0.98 }}
         >
           <motion.div
-            className="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
           />
           <SlidersHorizontal className="w-4 h-4 relative z-10" />
           <span className="relative z-10">Filters</span>
@@ -224,7 +224,7 @@ const Earn: React.FC<EarnProps> = ({ onSelectVaultForAI, onSelectAssociation }) 
       >
         {/* Animated gradient border effect */}
         <motion.div
-          className="absolute inset-0 bg-blue-500/20 opacity-0 hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+          className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-green-500/20 opacity-0 hover:opacity-100 transition-opacity duration-500 pointer-events-none"
           style={{ padding: '1px' }}
         />
         <div className="bg-white backdrop-blur-xl rounded-3xl border border-slate-200 overflow-hidden">

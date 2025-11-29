@@ -93,7 +93,7 @@ const Dashboard: React.FC = () => {
           className="relative"
         >
           <motion.div
-            className="absolute -left-4 top-0 w-1 h-16 bg-blue-500 rounded-full"
+            className="absolute -left-4 top-0 w-1 h-16 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 64, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
@@ -119,7 +119,7 @@ const Dashboard: React.FC = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            Welcome back! Track your portfolio performance and positions.
+            Welcome back, 0x12...4F8A. Track your portfolio performance and positions.
           </motion.p>
         </motion.div>
 

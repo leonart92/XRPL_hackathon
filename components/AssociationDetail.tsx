@@ -106,7 +106,7 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
 
     if (!association || !vault) {
         return (
-            <div className="flex flex-col items-center justify-center h-[50vh] text-slate-500">
+            <div className="flex flex-col items-center justify-center h-[50vh] text-slate-600">
                 <p>Association not found</p>
                 <button onClick={onBack} className="mt-4 text-blue-400 hover:underline">Go Back</button>
             </div>
@@ -118,18 +118,18 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
             case 'Low': return 'text-green-400 bg-green-500/10 border-green-500/20';
             case 'Medium': return 'text-yellow-400 bg-yellow-500/10 border-yellow-500/20';
             case 'High': return 'text-red-400 bg-red-500/10 border-red-500/20';
-            default: return 'text-slate-400 bg-slate-500/10 border-slate-500/20';
+            default: return 'text-slate-600 bg-slate-500/10 border-slate-500/20';
         }
     };
 
     return (
-        <div className="min-h-screen bg-[#020617]">
+        <div className="min-h-screen bg-white">
             <div className="mb-6">
                 <button
                     onClick={onBack}
-                    className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors group"
+                    className="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors group"
                 >
-                    <div className="p-2 rounded-full bg-slate-900 border border-slate-800 group-hover:border-slate-700 transition-colors">
+                    <div className="p-2 rounded-full bg-slate-50 border border-slate-200 group-hover:border-slate-300 transition-colors">
                         <ArrowLeft size={20} />
                     </div>
                     <span className="font-medium">Back to Earn</span>
@@ -152,7 +152,7 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
                                     className="w-24 h-24 rounded-2xl bg-white p-2 shadow-lg"
                                 />
                                 <div
-                                    className="absolute -bottom-3 -right-3 px-2.5 py-1 rounded-lg text-xs font-bold border shadow-sm bg-slate-950"
+                                    className="absolute -bottom-3 -right-3 px-2.5 py-1 rounded-lg text-xs font-bold border shadow-sm bg-white"
                                     style={{
                                         borderColor: `${association.branding.color}40`,
                                         color: association.branding.color,
@@ -162,7 +162,7 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
                                 </div>
                             </div>
                             <div className="flex-1 pt-2">
-                                <h1 className="text-3xl md:text-5xl font-bold text-white mb-3 tracking-tight">
+                                <h1 className="text-3xl md:text-5xl font-bold text-slate-900 mb-3 tracking-tight">
                                     {association.name}
                                 </h1>
                                 <div className="flex flex-wrap items-center gap-3">
@@ -185,28 +185,29 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
                             </div>
                         </div>
 
-                        <p className="text-lg text-slate-300 leading-relaxed max-w-4xl">
+                        <p className="text-lg text-slate-700 leading-relaxed max-w-4xl">
                             {association.description}
                         </p>
                     </motion.div>
 
+                    {/* Location & Contact */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2 }}
                         className="grid grid-cols-1 md:grid-cols-2 gap-4"
                     >
-                        <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-5 hover:bg-slate-900/80 transition-colors">
-                            <div className="flex items-center gap-2 text-slate-400 mb-2">
+                        <div className="bg-slate-50/50 border border-slate-200 rounded-xl p-5 hover:bg-slate-50/80 transition-colors">
+                            <div className="flex items-center gap-2 text-slate-600 mb-2">
                                 <MapPin size={18} className="text-blue-400" />
                                 <span className="text-xs font-semibold uppercase tracking-wider">Location</span>
                             </div>
-                            <div className="text-white font-medium text-lg">{association.location.headquarters}</div>
-                            <div className="text-sm text-slate-400">{association.location.scope}</div>
+                            <div className="text-slate-900 font-medium text-lg">{association.location.headquarters}</div>
+                            <div className="text-sm text-slate-600">{association.location.scope}</div>
                         </div>
 
-                        <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-5 hover:bg-slate-900/80 transition-colors">
-                            <div className="flex items-center gap-2 text-slate-400 mb-2">
+                        <div className="bg-slate-50/50 border border-slate-200 rounded-xl p-5 hover:bg-slate-50/80 transition-colors">
+                            <div className="flex items-center gap-2 text-slate-600 mb-2">
                                 <Globe size={18} className="text-blue-400" />
                                 <span className="text-xs font-semibold uppercase tracking-wider">Website</span>
                             </div>
@@ -215,7 +216,7 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
                                     href={association.contact.website}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="text-white hover:text-blue-400 font-medium flex items-center gap-2 transition-colors group"
+                                    className="text-slate-900 hover:text-blue-400 font-medium flex items-center gap-2 transition-colors group"
                                 >
                                     Visit Official Website
                                     <ExternalLink size={14} className="opacity-50 group-hover:opacity-100 transition-opacity" />
@@ -225,7 +226,7 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
                                         href={association.contact.websiteFR}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-sm text-slate-400 hover:text-blue-400 flex items-center gap-2 transition-colors"
+                                        className="text-sm text-slate-600 hover:text-blue-400 flex items-center gap-2 transition-colors"
                                     >
                                         French Version <ExternalLink size={12} />
                                     </a>
@@ -234,13 +235,14 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
                         </div>
                     </motion.div>
 
+                    {/* Focus Areas */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3 }}
                         className="space-y-4"
                     >
-                        <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                        <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
                             <TrendingUp size={20} className="text-blue-400" />
                             Causes & Actions
                         </h2>
@@ -260,6 +262,7 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
                                     })}
                                     className="relative group overflow-hidden rounded-xl h-48 cursor-pointer"
                                 >
+                                    {/* Image de fond */}
                                     <div
                                         className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
                                         style={{
@@ -267,11 +270,13 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
                                         }}
                                     />
 
-                                    <div className="absolute inset-0 bg-black/70 group-hover:bg-black/80 transition-all duration-300" />
+                                    {/* Overlay gradient */}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20 group-hover:from-black/95 transition-all duration-300" />
 
+                                    {/* Contenu */}
                                     <div className="absolute inset-0 p-6 flex flex-col justify-end">
                                         <div className="transform transition-transform duration-300 group-hover:translate-y-[-4px]">
-                                            <h3 className="text-white font-bold text-lg leading-tight mb-2">
+                                            <h3 className="text-slate-900 font-bold text-lg leading-tight mb-2">
                                                 {item}
                                             </h3>
                                             <div
@@ -284,6 +289,7 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
                                         </div>
                                     </div>
 
+                                    {/* Border effect on hover */}
                                     <div
                                         className="absolute inset-0 border-2 border-transparent group-hover:border-white/20 rounded-xl transition-all duration-300"
                                     />
@@ -292,6 +298,7 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
                         </div>
                     </motion.div>
 
+                    {/* APY Metric */}
                     {association.metrics && (
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
@@ -299,8 +306,8 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
                             transition={{ delay: 0.5 }}
                             className="space-y-4"
                         >
-                            <h2 className="text-xl font-bold text-white">Expected Returns</h2>
-                            <div className="bg-blue-950/50 border border-blue-500/30 rounded-xl p-6 relative overflow-hidden group">
+                            <h2 className="text-xl font-bold text-slate-900">Expected Returns</h2>
+                            <div className="bg-gradient-to-br from-blue-950 to-slate-900 border border-blue-500/30 rounded-xl p-6 relative overflow-hidden group">
                                 <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                                 <div className="text-sm text-blue-300/80 font-medium uppercase tracking-wider mb-2">Net APY</div>
                                 <div className="text-4xl md:text-5xl font-bold text-blue-400 flex items-center gap-2">
@@ -317,60 +324,65 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
                     )}
                 </div>
 
+                {/* Right Section - Investment Panel */}
                 <motion.div
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.2 }}
                     className="w-full lg:w-96 shrink-0"
                 >
-                    <div className="bg-slate-900/80 backdrop-blur-xl border border-slate-800 rounded-2xl p-6 lg:sticky lg:top-24 shadow-xl">
+                    <div className="bg-slate-50/80 backdrop-blur-xl border border-slate-200 rounded-2xl p-6 lg:sticky lg:top-24 shadow-xl">
                         <div className="space-y-6">
                             <div>
-                                <h2 className="text-xl font-bold text-white mb-2">Manage Investment</h2>
-                                <p className="text-sm text-slate-400">Support this cause and earn rewards</p>
+                                <h2 className="text-xl font-bold text-slate-900 mb-2">Manage Investment</h2>
+                                <p className="text-sm text-slate-600">Support this cause and earn rewards</p>
                             </div>
 
-                            <div className="bg-slate-950/50 border border-slate-800 rounded-xl p-4 flex justify-between items-center">
+                            {/* Wallet Balance */}
+                            <div className="bg-white/50 border border-slate-200 rounded-xl p-4 flex justify-between items-center">
                                 <div>
-                                    <div className="text-xs text-slate-500 uppercase tracking-wider mb-1">Wallet Balance</div>
-                                    <div className="text-xl font-bold text-white">0.00 {association.symbol}</div>
+                                    <div className="text-xs text-slate-600 uppercase tracking-wider mb-1">Wallet Balance</div>
+                                    <div className="text-xl font-bold text-slate-900">0.00 {association.symbol}</div>
                                 </div>
                                 <div className="text-right">
-                                    <div className="text-xs text-slate-500 uppercase tracking-wider mb-1">Value</div>
-                                    <div className="text-sm font-medium text-slate-300">≈ $0.00</div>
+                                    <div className="text-xs text-slate-600 uppercase tracking-wider mb-1">Value</div>
+                                    <div className="text-sm font-medium text-slate-700">≈ $0.00</div>
                                 </div>
                             </div>
 
+                            {/* Investment Amount */}
                             <div className="space-y-3">
-                                <label className="text-sm font-semibold text-slate-300">Amount to Invest</label>
+                                <label className="text-sm font-semibold text-slate-700">Amount to Invest</label>
                                 <input
                                     type="number"
                                     value={investAmount}
                                     onChange={(e) => setInvestAmount(e.target.value)}
                                     placeholder="0.00"
-                                    className="w-full bg-slate-950 border border-slate-800 text-white px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all font-mono"
+                                    className="w-full bg-white border border-slate-200 text-slate-900 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all font-mono"
                                 />
                             </div>
 
+                            {/* Action Buttons */}
                             <div className="space-y-3 pt-2">
                                 <motion.button
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
-                                    className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl transition-colors shadow-lg shadow-blue-900/30 flex items-center justify-center gap-2"
+                                    className="w-full bg-blue-600 hover:bg-blue-500 text-slate-900 font-bold py-3.5 rounded-xl transition-colors shadow-lg shadow-blue-900/30 flex items-center justify-center gap-2"
                                 >
                                     Supply Assets
                                 </motion.button>
                                 <motion.button
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
-                                    className="w-full bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-3.5 rounded-xl border border-slate-700 transition-colors"
+                                    className="w-full bg-slate-100 hover:bg-slate-700 text-slate-700 font-bold py-3.5 rounded-xl border border-slate-300 transition-colors"
                                 >
                                     Withdraw Assets
                                 </motion.button>
                             </div>
 
-                            <div className="bg-slate-800/30 border border-slate-800 rounded-xl p-4">
-                                <p className="text-xs text-slate-400 leading-relaxed text-center">
+                            {/* Risk Warning */}
+                            <div className="bg-slate-100/30 border border-slate-200 rounded-xl p-4">
+                                <p className="text-xs text-slate-600 leading-relaxed text-center">
                                     Supplying to {association.name} incurs smart contract risk. Please ensure you understand the risks before investing.
                                 </p>
                             </div>
@@ -401,7 +413,7 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
                                 opacity: { duration: 0.2, ease: [0.43, 0.13, 0.23, 0.96] }
                             }}
                             onClick={(e) => e.stopPropagation()}
-                            className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden max-w-6xl w-full h-[90vh] relative"
+                            className="bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden max-w-6xl w-full h-[90vh] relative"
                         >
                             <div className="absolute inset-0 z-0">
                                 <div
@@ -431,10 +443,10 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
                                                 boxShadow: `0 0 12px ${association.branding.color}`
                                             }}
                                         />
-                                        <h2 className="text-4xl md:text-6xl font-bold text-white mb-4">
+                                        <h2 className="text-4xl md:text-6xl font-bold text-slate-900 mb-4">
                                             {selectedFocus.title}
                                         </h2>
-                                        <p className="text-slate-400 text-lg">
+                                        <p className="text-slate-600 text-lg">
                                             {association.name}
                                         </p>
                                     </motion.div>
@@ -457,7 +469,7 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
                                             whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
                                             whileTap={{ scale: 0.95 }}
                                             onClick={() => setSelectedFocus(null)}
-                                            className="px-8 py-4 bg-slate-800 hover:bg-slate-700 text-white font-bold text-lg rounded-xl transition-colors border border-slate-700"
+                                            className="px-8 py-4 bg-slate-100 hover:bg-slate-700 text-slate-900 font-bold text-lg rounded-xl transition-colors border border-slate-300"
                                         >
                                             Fermer
                                         </motion.button>
