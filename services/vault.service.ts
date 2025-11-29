@@ -60,6 +60,14 @@ class VaultService {
     }
 
     if (
+      amount.currency === this.config.vaultTokenCurrency &&
+      amount.issuer === this.config.address
+    ) {
+      await this.handleWithdrawal(transaction.Account, amount.value);
+      return;
+    }
+
+    if (
       amount.currency !== this.config.acceptedCurrency ||
       amount.issuer !== this.config.acceptedCurrencyIssuer
     ) {
@@ -86,6 +94,43 @@ class VaultService {
         parseFloat(currentDeposit.vTokensIssued) + parseFloat(depositAmount)
       ).toString(),
     });
+  }
+
+  private async handleWithdrawal(user: string, vTokenAmount: string) {
+    await this.config.strategy.withdraw(vTokenAmount);
+
+    const client = xrplService.getClient();
+    const returnTx = await client.autofill({
+      TransactionType: "Payment" as const,
+      Account: this.config.address,
+      Destination: user,
+      Amount: {
+        currency: this.config.acceptedCurrency,
+        issuer: this.config.acceptedCurrencyIssuer,
+        value: vTokenAmount,
+      },
+      SendMax: {
+        currency: this.config.acceptedCurrency,
+        issuer: this.config.acceptedCurrencyIssuer,
+        value: vTokenAmount,
+      },
+      Flags: 0x00020000, // tfPartialPayment
+    });
+
+    const signed = this.config.wallet.sign(returnTx);
+    const result = await client.submitAndWait(signed.tx_blob);
+
+    const currentDeposit = this.userDeposits.get(user);
+    if (currentDeposit) {
+      this.userDeposits.set(user, {
+        totalDeposited: (
+          parseFloat(currentDeposit.totalDeposited) - parseFloat(vTokenAmount)
+        ).toString(),
+        vTokensIssued: (
+          parseFloat(currentDeposit.vTokensIssued) - parseFloat(vTokenAmount)
+        ).toString(),
+      });
+    }
   }
 
   private async issueVaultTokens(recipient: string, amount: string) {

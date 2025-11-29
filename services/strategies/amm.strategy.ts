@@ -24,103 +24,82 @@ class AMMStrategy implements YieldStrategy {
   async deploy(amount: string): Promise<void> {
     const client = xrplService.getClient();
 
-    const ammInfo = await this.getAMMInfo();
-    
     const depositTx = {
       TransactionType: "AMMDeposit" as const,
       Account: this.config.vaultAddress,
-      Asset: this.config.asset,
+      Asset: this.config.asset as any,
       Asset2: this.config.asset2,
-      LPTokenOut: {
-        currency: ammInfo.lpToken.currency,
-        issuer: ammInfo.lpToken.issuer,
-        value: "1",
+      Amount: {
+        currency: this.config.baseCurrency,
+        issuer: this.config.baseCurrencyIssuer,
+        value: amount,
       },
-      Flags: 0x00100000,
+      Flags: 524288,
     };
 
-    const prepared = await client.autofill(depositTx);
+    const prepared = await client.autofill(depositTx as any);
     const signed = this.config.vaultWallet.sign(prepared);
-    const result = await client.submitAndWait(signed.tx_blob);
+    await client.submitAndWait(signed.tx_blob);
 
     this.totalDeployed += parseFloat(amount);
 
-    const meta = result.result.meta;
-    if (typeof meta === "object" && "AffectedNodes" in meta) {
-      for (const node of meta.AffectedNodes) {
-        if ("ModifiedNode" in node) {
-          const nodeData = node.ModifiedNode;
-          if (nodeData.LedgerEntryType === "RippleState") {
-            const finalFields = nodeData.FinalFields;
-            if (finalFields && "Balance" in finalFields) {
-              const balance = finalFields.Balance;
-              if (
-                balance &&
-                typeof balance === "object" &&
-                "value" in balance &&
-                typeof balance.value === "string"
-              ) {
-                this.lpTokensHeld = (
-                  parseFloat(this.lpTokensHeld) + parseFloat(balance.value)
-                ).toString();
-              }
-            }
-          }
-        } else if ("CreatedNode" in node) {
-          const nodeData = node.CreatedNode as any;
-          if (nodeData.LedgerEntryType === "RippleState") {
-            const newFields = nodeData.NewFields;
-            if (newFields && "Balance" in newFields) {
-              const balance = newFields.Balance;
-              if (
-                balance &&
-                typeof balance === "object" &&
-                "value" in balance &&
-                typeof balance.value === "string"
-              ) {
-                this.lpTokensHeld = (
-                  parseFloat(this.lpTokensHeld) + parseFloat(balance.value)
-                ).toString();
-              }
-            }
-          }
-        }
-      }
+    const ammInfo = await this.getAMMInfo();
+    const accountLines = await client.request({
+      command: "account_lines",
+      account: this.config.vaultAddress,
+      ledger_index: "validated",
+    });
+
+    const lpLine = accountLines.result.lines.find(
+      (line: any) =>
+        line.account === ammInfo.account &&
+        line.currency === ammInfo.lpToken.currency,
+    );
+
+    if (lpLine) {
+      this.lpTokensHeld = lpLine.balance;
+    } else {
     }
   }
 
   async withdraw(amount: string): Promise<string> {
     const client = xrplService.getClient();
 
-    const ammInfo = await this.getAMMInfo();
-    const totalLPTokens = parseFloat(ammInfo.lpToken.value);
-    const asset1Amount =
-      typeof ammInfo.amount === "string"
-        ? parseFloat(ammInfo.amount)
-        : parseFloat(ammInfo.amount.value);
-
-    const lpTokensNeeded = (parseFloat(amount) / asset1Amount) * totalLPTokens;
-
     const withdrawTx = {
       TransactionType: "AMMWithdraw" as const,
       Account: this.config.vaultAddress,
-      Asset: this.config.asset,
+      Asset: this.config.asset as any,
       Asset2: this.config.asset2,
-      LPTokenIn: {
-        currency: ammInfo.lpToken.currency,
-        issuer: ammInfo.lpToken.issuer,
-        value: lpTokensNeeded.toString(),
-      } as IssuedCurrencyAmount,
+      Amount: {
+        currency: this.config.baseCurrency,
+        issuer: this.config.baseCurrencyIssuer,
+        value: amount,
+      },
+      Flags: 524288,
     };
 
-    const prepared = await client.autofill(withdrawTx);
+    const prepared = await client.autofill(withdrawTx as any);
     const signed = this.config.vaultWallet.sign(prepared);
     await client.submitAndWait(signed.tx_blob);
 
-    this.lpTokensHeld = (
-      parseFloat(this.lpTokensHeld) - lpTokensNeeded
-    ).toString();
     this.totalDeployed -= parseFloat(amount);
+
+    const ammInfo = await this.getAMMInfo();
+    const accountLines = await client.request({
+      command: "account_lines",
+      account: this.config.vaultAddress,
+      ledger_index: "validated",
+    });
+
+    const lpLine = accountLines.result.lines.find(
+      (line: any) =>
+        line.account === ammInfo.account &&
+        line.currency === ammInfo.lpToken.currency,
+    );
+
+    if (lpLine) {
+      this.lpTokensHeld = lpLine.balance;
+    }
 
     return amount;
   }
