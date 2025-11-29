@@ -203,13 +203,13 @@ const ConnectModal: React.FC<ConnectModalProps> = ({ show, setShow }) => {
                     >
                         <div
                             onClick={(e) => e.stopPropagation()}
-                            className="bg-slate-900 rounded-2xl border border-slate-800 shadow-2xl w-full max-w-md overflow-hidden"
+                            className="bg-white rounded-2xl border border-slate-200 shadow-2xl w-full max-w-md overflow-hidden"
                         >
-                            <div className="flex items-center justify-between p-6 border-b border-slate-800">
-                                <h2 className="text-xl font-bold text-white">Connect XRPL Wallet</h2>
+                            <div className="flex items-center justify-between p-6 border-b border-slate-100">
+                                <h2 className="text-xl font-bold text-slate-900">Connect XRPL Wallet</h2>
                                 <button
                                     onClick={() => setShow(false)}
-                                    className="p-2 hover:bg-slate-800 rounded-lg transition-colors"
+                                    className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
                                 >
                                     <X className="w-5 h-5 text-slate-400" />
                                 </button>
@@ -223,14 +223,14 @@ const ConnectModal: React.FC<ConnectModalProps> = ({ show, setShow }) => {
                                                 setShowXamanView(false);
                                                 setManualAddress('');
                                             }}
-                                            className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors"
+                                            className="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors"
                                         >
                                             <ArrowLeft className="w-4 h-4" />
                                             <span className="text-sm">Back to wallets</span>
                                         </button>
 
                                         <div className="text-center space-y-3">
-                                            <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-slate-800 overflow-hidden">
+                                            <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-slate-50 overflow-hidden shadow-sm border border-slate-100">
                                                 <img
                                                     src="/xamanLogo.jpeg"
                                                     alt="Xaman logo"
@@ -238,27 +238,27 @@ const ConnectModal: React.FC<ConnectModalProps> = ({ show, setShow }) => {
                                                 />
                                             </div>
                                             <div>
-                                                <h3 className="text-xl font-bold text-white">Xaman Wallet</h3>
-                                                <p className="text-sm text-slate-400 mt-1">
+                                                <h3 className="text-xl font-bold text-slate-900">Xaman Wallet</h3>
+                                                <p className="text-sm text-slate-600 mt-1">
                                                     Enter your XRPL address to connect
                                                 </p>
                                             </div>
                                         </div>
 
-                                        <div className="bg-slate-800/50 rounded-xl p-5 space-y-4 border border-slate-700/50">
-                                            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">How to connect</p>
+                                        <div className="bg-slate-50 rounded-xl p-5 space-y-4 border border-slate-100">
+                                            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">How to connect</p>
                                             <div className="space-y-3">
                                                 <div className="flex items-center gap-4">
-                                                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold">1</div>
-                                                    <p className="text-sm text-slate-200">Open <span className="font-semibold text-white">Xaman</span> on your phone</p>
+                                                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold shadow-md shadow-blue-200">1</div>
+                                                    <p className="text-sm text-slate-600">Open <span className="font-semibold text-slate-900">Xaman</span> on your phone</p>
                                                 </div>
                                                 <div className="flex items-center gap-4">
-                                                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold">2</div>
-                                                    <p className="text-sm text-slate-200">Tap your account to copy the <span className="font-semibold text-white">r-address</span></p>
+                                                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold shadow-md shadow-blue-200">2</div>
+                                                    <p className="text-sm text-slate-600">Tap your account to copy the <span className="font-semibold text-slate-900">r-address</span></p>
                                                 </div>
                                                 <div className="flex items-center gap-4">
-                                                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold">3</div>
-                                                    <p className="text-sm text-slate-200">Paste it below and connect</p>
+                                                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold shadow-md shadow-blue-200">3</div>
+                                                    <p className="text-sm text-slate-600">Paste it below and connect</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -270,12 +270,12 @@ const ConnectModal: React.FC<ConnectModalProps> = ({ show, setShow }) => {
                                                     value={manualAddress}
                                                     onChange={(e) => setManualAddress(e.target.value)}
                                                     placeholder="rXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-                                                    className="w-full px-5 py-4 bg-slate-800 border-2 border-slate-600 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 font-mono text-sm transition-all"
+                                                    className="w-full px-5 py-4 bg-white border-2 border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 font-mono text-sm transition-all focus:shadow-lg focus:shadow-blue-500/10"
                                                 />
                                                 {manualAddress && (
                                                     <button
                                                         onClick={() => setManualAddress('')}
-                                                        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors"
+                                                        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
                                                     >
                                                         <X className="w-4 h-4" />
                                                     </button>
@@ -284,7 +284,7 @@ const ConnectModal: React.FC<ConnectModalProps> = ({ show, setShow }) => {
                                             <button
                                                 onClick={handleManualConnect}
                                                 disabled={!manualAddress}
-                                                className="w-full py-4 bg-blue-600 hover:bg-blue-500 disabled:bg-slate-700 disabled:opacity-50 text-white rounded-xl transition-all font-semibold text-base"
+                                                className="w-full py-4 bg-blue-600 hover:bg-blue-500 disabled:bg-slate-200 disabled:text-slate-400 text-white rounded-xl transition-all font-semibold text-base shadow-lg shadow-blue-200 disabled:shadow-none"
                                             >
                                                 Connect Wallet
                                             </button>
@@ -295,11 +295,11 @@ const ConnectModal: React.FC<ConnectModalProps> = ({ show, setShow }) => {
                                                 href="https://xaman.app"
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-blue-400 transition-colors"
+                                                className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-blue-600 transition-colors"
                                             >
                                                 <span>Don't have Xaman?</span>
-                                                <span className="text-blue-400 font-medium">Download here</span>
-                                                <ExternalLink className="w-3 h-3 text-blue-400" />
+                                                <span className="text-blue-600 font-medium">Download here</span>
+                                                <ExternalLink className="w-3 h-3" />
                                             </a>
                                         </div>
                                     </div>
@@ -308,16 +308,16 @@ const ConnectModal: React.FC<ConnectModalProps> = ({ show, setShow }) => {
                                         {mobileWallet && (
                                             <div>
                                                 <div className="flex items-center gap-2 mb-3">
-                                                    <Smartphone className="w-4 h-4 text-slate-400" />
-                                                    <span className="text-sm font-medium text-slate-400">Mobile</span>
+                                                    <Smartphone className="w-4 h-4 text-slate-500" />
+                                                    <span className="text-sm font-medium text-slate-500">Mobile</span>
                                                 </div>
                                                 <button
                                                     onClick={() => handleConnect(mobileWallet.id)}
                                                     disabled={connectingWallet !== null}
-                                                    className={`w-full flex items-center gap-4 p-4 rounded-xl border transition-all bg-blue-600/10 border-blue-500/30 hover:bg-blue-600/20 hover:border-blue-500/50 cursor-pointer ${connectingWallet !== null ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                                    className={`w-full flex items-center gap-4 p-4 rounded-xl border transition-all bg-blue-50 border-blue-200 hover:bg-blue-100 hover:border-blue-300 cursor-pointer shadow-sm hover:shadow-md ${connectingWallet !== null ? 'opacity-50 cursor-not-allowed' : ''}`}
                                                 >
                                                     {mobileWallet.logo ? (
-                                                        <div className="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center overflow-hidden">
+                                                        <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center overflow-hidden shadow-sm">
                                                             <img
                                                                 src={mobileWallet.logo}
                                                                 alt={`${mobileWallet.name} logo`}
@@ -325,15 +325,15 @@ const ConnectModal: React.FC<ConnectModalProps> = ({ show, setShow }) => {
                                                             />
                                                         </div>
                                                     ) : (
-                                                        <div className="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center">
+                                                        <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center shadow-sm">
                                                             <span className="text-2xl">{mobileWallet.icon}</span>
                                                         </div>
                                                     )}
                                                     <div className="flex-1 text-left">
-                                                        <div className="font-semibold text-white flex items-center gap-2">
+                                                        <div className="font-semibold text-slate-900 flex items-center gap-2">
                                                             {mobileWallet.name}
                                                         </div>
-                                                        <div className="text-sm text-slate-400">{mobileWallet.description}</div>
+                                                        <div className="text-sm text-slate-500">{mobileWallet.description}</div>
                                                     </div>
                                                     {connectingWallet === mobileWallet.id && (
                                                         <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
@@ -344,8 +344,8 @@ const ConnectModal: React.FC<ConnectModalProps> = ({ show, setShow }) => {
 
                                         <div>
                                             <div className="flex items-center gap-2 mb-3">
-                                                <Chrome className="w-4 h-4 text-slate-400" />
-                                                <span className="text-sm font-medium text-slate-400">Browser Extensions</span>
+                                                <Chrome className="w-4 h-4 text-slate-500" />
+                                                <span className="text-sm font-medium text-slate-500">Browser Extensions</span>
                                             </div>
                                             <div className="space-y-2">
                                                 {extensionWallets.map((wallet) => (
@@ -354,12 +354,12 @@ const ConnectModal: React.FC<ConnectModalProps> = ({ show, setShow }) => {
                                                         onClick={() => wallet.available ? handleConnect(wallet.id) : window.open(wallet.installUrl, '_blank')}
                                                         disabled={connectingWallet !== null}
                                                         className={`w-full flex items-center gap-4 p-4 rounded-xl border transition-all ${wallet.available
-                                                            ? 'bg-slate-800/50 border-slate-700 hover:bg-slate-800 hover:border-slate-600 cursor-pointer'
-                                                            : 'bg-slate-900/50 border-slate-800 hover:bg-slate-800/30 cursor-pointer'
+                                                            ? 'bg-white border-slate-200 hover:bg-slate-50 hover:border-slate-300 cursor-pointer shadow-sm hover:shadow-md'
+                                                            : 'bg-slate-50 border-slate-200 hover:bg-slate-100 cursor-pointer opacity-80'
                                                             } ${connectingWallet !== null ? 'opacity-50 cursor-not-allowed' : ''}`}
                                                     >
                                                         {wallet.logo ? (
-                                                            <div className="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center overflow-hidden">
+                                                            <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center overflow-hidden">
                                                                 <img
                                                                     src={wallet.logo}
                                                                     alt={`${wallet.name} logo`}
@@ -367,19 +367,19 @@ const ConnectModal: React.FC<ConnectModalProps> = ({ show, setShow }) => {
                                                                 />
                                                             </div>
                                                         ) : (
-                                                            <div className="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center">
+                                                            <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center">
                                                                 <span className="text-2xl">{wallet.icon}</span>
                                                             </div>
                                                         )}
                                                         <div className="flex-1 text-left">
-                                                            <div className="font-semibold text-white">{wallet.name}</div>
-                                                            <div className="text-sm text-slate-400">{wallet.description}</div>
+                                                            <div className="font-semibold text-slate-900">{wallet.name}</div>
+                                                            <div className="text-sm text-slate-500">{wallet.description}</div>
                                                         </div>
                                                         {connectingWallet === wallet.id && (
                                                             <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
                                                         )}
                                                         {!wallet.available && (
-                                                            <div className="flex items-center gap-1 text-xs text-blue-400">
+                                                            <div className="flex items-center gap-1 text-xs text-blue-600 font-medium">
                                                                 <span>Install</span>
                                                                 <ExternalLink className="w-3 h-3" />
                                                             </div>

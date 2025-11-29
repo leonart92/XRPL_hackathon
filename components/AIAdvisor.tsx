@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Vault } from '../types';
 import { analyzeVault } from '../services/geminiService';
+import { getAssociationById } from '../constants';
 import { Bot, X, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -18,7 +19,7 @@ const SimpleMarkdown = ({ text }: { text: string }) => {
           return <div key={idx} className="flex gap-2 ml-2"><span className="text-purple-400 mt-1.5">•</span><span>{line.replace(/^[-*] /, '')}</span></div>;
         }
         if (line.match(/^\d\./)) {
-           return <div key={idx} className="font-semibold text-white mt-4 mb-1">{line}</div>;
+          return <div key={idx} className="font-semibold text-white mt-4 mb-1">{line}</div>;
         }
         return <p key={idx} className={line.length === 0 ? 'h-2' : ''}>{line}</p>;
       })}
@@ -29,6 +30,7 @@ const SimpleMarkdown = ({ text }: { text: string }) => {
 const AIAdvisor: React.FC<AIAdvisorProps> = ({ vault, onClose }) => {
   const [analysis, setAnalysis] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+  const association = getAssociationById(vault.associationId);
 
   useEffect(() => {
     if (vault) {
@@ -42,22 +44,22 @@ const AIAdvisor: React.FC<AIAdvisorProps> = ({ vault, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center pointer-events-none">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm pointer-events-auto" 
-        onClick={onClose} 
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm pointer-events-auto"
+        onClick={onClose}
       />
-      
-      <motion.div 
+
+      <motion.div
         initial={{ y: "100%", opacity: 0, scale: 0.95 }}
         animate={{ y: 0, opacity: 1, scale: 1 }}
         exit={{ y: "20%", opacity: 0, scale: 0.95 }}
         transition={{ type: "spring", damping: 25, stiffness: 300 }}
         className="relative w-full max-w-lg bg-slate-900 border border-slate-700 rounded-t-2xl sm:rounded-2xl shadow-2xl pointer-events-auto flex flex-col max-h-[85vh] overflow-hidden m-0 sm:m-4"
       >
-        
+
         <div className="flex items-center justify-between p-4 border-b border-slate-800 bg-slate-900/90">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-purple-500/10 rounded-lg border border-purple-500/20">
@@ -75,12 +77,14 @@ const AIAdvisor: React.FC<AIAdvisorProps> = ({ vault, onClose }) => {
 
         <div className="p-6 overflow-y-auto custom-scrollbar">
           <div className="flex items-center gap-3 mb-6 p-4 bg-slate-800/30 rounded-xl border border-slate-800">
-            <img src={vault.token.logo} alt={vault.token.name} className="w-12 h-12 rounded-full" />
+            {association && (
+              <img src={association.branding.logo} alt={association.name} className="w-12 h-12 rounded-full object-contain bg-white p-1" />
+            )}
             <div>
-              <div className="text-xs text-slate-400 font-medium uppercase tracking-wide">Analyzing Market</div>
+              <div className="text-xs text-slate-400 font-medium uppercase tracking-wide">Analyzing Vault</div>
               <div className="text-lg font-bold text-white flex items-center gap-2">
-                {vault.token.name}
-                <span className="text-xs px-2 py-0.5 bg-slate-700 rounded text-slate-300 font-normal">{vault.protocol}</span>
+                {vault.name}
+                <span className="text-xs px-2 py-0.5 bg-slate-700 rounded text-slate-300 font-normal">{association?.shortName}</span>
               </div>
             </div>
           </div>
@@ -91,22 +95,21 @@ const AIAdvisor: React.FC<AIAdvisorProps> = ({ vault, onClose }) => {
               <p className="text-sm text-purple-300/80 animate-pulse">Analyzing on-chain metrics...</p>
             </div>
           ) : (
-            <motion.div 
-              initial={{ opacity: 0, y: 10 }} 
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
             >
               <div className="bg-slate-800/50 rounded-xl p-5 border border-slate-700/50 shadow-inner">
                 <SimpleMarkdown text={analysis} />
               </div>
-              
+
               <div className="mt-6 flex gap-3">
                 <div className="flex-1 bg-slate-800/50 p-4 rounded-xl border border-slate-700/50">
                   <span className="block text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1">Risk Factor</span>
-                  <span className={`text-xl font-bold ${
-                    vault.riskFactor === 'Low' ? 'text-green-400' : 
+                  <span className={`text-xl font-bold ${vault.riskFactor === 'Low' ? 'text-green-400' :
                     vault.riskFactor === 'Medium' ? 'text-yellow-400' : 'text-red-400'
-                  }`}>{vault.riskFactor}</span>
+                    }`}>{vault.riskFactor}</span>
                 </div>
                 <div className="flex-1 bg-slate-800/50 p-4 rounded-xl border border-slate-700/50">
                   <span className="block text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1">Current Net APY</span>

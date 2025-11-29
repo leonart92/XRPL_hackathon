@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Search, SlidersHorizontal, ArrowUpRight, TrendingUp } from 'lucide-react';
 import gsap from 'gsap';
 import VaultTable from './VaultTable';
-import { MOCK_VAULTS } from '../constants';
+import { VAULTS, ASSOCIATIONS } from '../constants';
 import { Vault } from '../types';
 import { fadeInUp, fadeInLeft, fadeInRight } from '../animations';
 
@@ -20,16 +20,15 @@ const Earn: React.FC<EarnProps> = ({ onSelectVaultForAI, onSelectAssociation }) 
   const [searchFocused, setSearchFocused] = useState(false);
   const [searchValue, setSearchValue] = useState('');
 
-  const totalDeposit = MOCK_VAULTS.reduce((acc, v) => acc + v.totalSupply, 0);
-  const avgApy = MOCK_VAULTS.reduce((acc, v) => acc + v.netApy, 0) / MOCK_VAULTS.length;
+  const totalDeposit = VAULTS.reduce((acc, v) => acc + v.totalSupply, 0);
+  const avgApy = VAULTS.reduce((acc, v) => acc + v.netApy, 0) / VAULTS.length;
   const depositInBillions = totalDeposit / 1e9;
+  const associationCount = ASSOCIATIONS.length;
 
-  // Advanced GSAP animations
   useEffect(() => {
     if (typeof gsap === 'undefined') return;
 
     const ctx = gsap.context(() => {
-      // Title animation with split text effect
       if (titleRef.current) {
         gsap.from(titleRef.current, {
           opacity: 0,
@@ -47,7 +46,6 @@ const Earn: React.FC<EarnProps> = ({ onSelectVaultForAI, onSelectAssociation }) 
         });
       }
 
-      // Number counter animations
       const depositProxy = { value: 0 };
       gsap.to(depositProxy, {
         value: depositInBillions,
@@ -80,7 +78,6 @@ const Earn: React.FC<EarnProps> = ({ onSelectVaultForAI, onSelectAssociation }) 
 
   return (
     <div className="space-y-8">
-      {/* Hero Section with Advanced Animations */}
       <div className="flex flex-col lg:flex-row gap-8 lg:items-end justify-between mb-12">
         <motion.div
           variants={fadeInLeft}
@@ -89,7 +86,7 @@ const Earn: React.FC<EarnProps> = ({ onSelectVaultForAI, onSelectAssociation }) 
           className="relative"
         >
           <motion.div
-            className="absolute -left-4 top-0 w-1 h-16 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full"
+            className="absolute -left-4 top-0 w-1 h-16 bg-blue-500 rounded-full"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 64, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
@@ -105,7 +102,7 @@ const Earn: React.FC<EarnProps> = ({ onSelectVaultForAI, onSelectAssociation }) 
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              Support Environmental
+              Invest in
             </motion.span>
             <br />
             <motion.span
@@ -114,7 +111,7 @@ const Earn: React.FC<EarnProps> = ({ onSelectVaultForAI, onSelectAssociation }) 
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              Associations
+              Environmental Impact
             </motion.span>
           </h1>
 
@@ -124,8 +121,8 @@ const Earn: React.FC<EarnProps> = ({ onSelectVaultForAI, onSelectAssociation }) 
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            Contribute to environmental causes through our partner associations.
-            Track your impact and support the planet.
+            Choose an association and invest your XRP in their vaults.
+            Earn returns while supporting environmental causes.
           </motion.p>
         </motion.div>
 
@@ -134,37 +131,32 @@ const Earn: React.FC<EarnProps> = ({ onSelectVaultForAI, onSelectAssociation }) 
           variants={fadeInRight}
           className="flex gap-4 md:gap-8"
         >
-          {/* Total Deposits Card */}
-          <div className="relative flex flex-col bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-2xl border border-slate-200 backdrop-blur-sm overflow-hidden">
+          <div className="relative flex flex-col bg-blue-50 p-4 rounded-2xl border border-blue-100 backdrop-blur-sm overflow-hidden">
             <span className="text-sm font-medium text-slate-600 uppercase tracking-wider mb-2 flex items-center gap-2 relative z-10">
               <TrendingUp className="w-4 h-4" />
-              Total Contributions
+              Total Value Locked
             </span>
             <span ref={depositRef} className="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight relative z-10">
               $0.00B
             </span>
-
           </div>
 
-          <div className="w-px bg-gradient-to-b from-transparent via-slate-300 to-transparent"></div>
+          <div className="w-px bg-slate-200"></div>
 
-          {/* Avg APY Card */}
-          <div className="relative flex flex-col bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-2xl border border-blue-200 backdrop-blur-sm overflow-hidden">
-            <span className="text-sm font-medium text-blue-700 uppercase tracking-wider mb-2 relative z-10">
-              Avg. Impact Score
+          <div className="relative flex flex-col bg-green-50 p-4 rounded-2xl border border-green-100 backdrop-blur-sm overflow-hidden">
+            <span className="text-sm font-medium text-green-700 uppercase tracking-wider mb-2 relative z-10">
+              Avg. APY
             </span>
             <div className="flex items-center gap-2 relative z-10">
-              <span ref={apyRef} className="text-2xl md:text-3xl font-bold text-blue-600 tracking-tight">
+              <span ref={apyRef} className="text-2xl md:text-3xl font-bold text-green-600 tracking-tight">
                 0.00%
               </span>
-              <ArrowUpRight className="w-5 h-5 text-green-600" />
+              <ArrowUpRight className="w-5 h-5 text-green-500" />
             </div>
-
           </div>
         </motion.div>
       </div>
 
-      {/* Search and Filters with Micro-interactions */}
       <motion.div
         variants={fadeInUp}
         className="flex flex-col md:flex-row gap-4 mb-6 sticky top-20 z-40 bg-white/95 backdrop-blur-sm py-4 border-b border-transparent md:border-slate-200 transition-all"

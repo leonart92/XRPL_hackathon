@@ -49,48 +49,52 @@ const DisconnectModal: React.FC<DisconnectModalProps> = ({ show, setShow }) => {
                     >
                         <div
                             onClick={(e) => e.stopPropagation()}
-                            className="bg-slate-900 rounded-2xl border border-slate-800 shadow-2xl w-full max-w-sm overflow-hidden"
+                            className="bg-white rounded-2xl border border-slate-200 shadow-2xl w-full max-w-sm overflow-hidden"
                         >
-                            <div className="flex items-center justify-between p-5 border-b border-slate-800">
-                                <h2 className="text-lg font-bold text-white">Account</h2>
+                            <div className="flex items-center justify-between p-5 border-b border-slate-100">
+                                <h2 className="text-lg font-bold text-slate-900">Account</h2>
                                 <button
                                     onClick={() => setShow(false)}
-                                    className="p-2 hover:bg-slate-800 rounded-lg transition-colors"
+                                    className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
                                 >
                                     <X className="w-5 h-5 text-slate-400" />
                                 </button>
                             </div>
 
                             <div className="p-5 space-y-4">
-                                <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-800/50 border border-slate-700/50">
+                                <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100">
                                     {isVerified ? (
-                                        <CheckCircle className="w-5 h-5 text-green-500" />
+                                        accountInfo?.exists ? (
+                                            <CheckCircle className="w-5 h-5 text-green-500" />
+                                        ) : (
+                                            <AlertCircle className="w-5 h-5 text-yellow-500" />
+                                        )
                                     ) : (
-                                        <AlertCircle className="w-5 h-5 text-yellow-500" />
+                                        <AlertCircle className="w-5 h-5 text-red-500" />
                                     )}
                                     <div className="flex-1">
-                                        <p className="text-sm font-medium text-white">
+                                        <p className="text-sm font-medium text-slate-900">
                                             {isVerified ? 'Verified on XRPL' : 'Not verified'}
                                         </p>
-                                        <p className="text-xs text-slate-400">
+                                        <p className="text-xs text-slate-500">
                                             {isVerified
-                                                ? 'Account exists on the ledger'
-                                                : accountInfo?.exists === false
-                                                    ? 'Account not found on ledger'
-                                                    : 'Verification pending...'}
+                                                ? (accountInfo?.exists
+                                                    ? 'Account exists on the ledger'
+                                                    : 'Needs 10 XRP to activate')
+                                                : 'Verification pending...'}
                                         </p>
                                     </div>
                                 </div>
 
                                 <div className="space-y-2">
-                                    <p className="text-xs font-medium text-slate-400 uppercase tracking-wider">Address</p>
-                                    <div className="flex items-center gap-2 p-3 rounded-xl bg-slate-800 border border-slate-700">
-                                        <code className="flex-1 text-sm text-white font-mono truncate">
+                                    <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Address</p>
+                                    <div className="flex items-center gap-2 p-3 rounded-xl bg-slate-50 border border-slate-200">
+                                        <code className="flex-1 text-sm text-slate-700 font-mono truncate">
                                             {formatAddress(address)}
                                         </code>
                                         <button
                                             onClick={handleCopy}
-                                            className="p-1.5 hover:bg-slate-700 rounded-lg transition-colors"
+                                            className="p-1.5 hover:bg-slate-200 rounded-lg transition-colors"
                                             title="Copy address"
                                         >
                                             {copied ? (
@@ -103,7 +107,7 @@ const DisconnectModal: React.FC<DisconnectModalProps> = ({ show, setShow }) => {
                                             href={`https://xrpscan.com/account/${address}`}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="p-1.5 hover:bg-slate-700 rounded-lg transition-colors"
+                                            className="p-1.5 hover:bg-slate-200 rounded-lg transition-colors"
                                             title="View on XRPScan"
                                         >
                                             <ExternalLink className="w-4 h-4 text-slate-400" />
@@ -113,16 +117,16 @@ const DisconnectModal: React.FC<DisconnectModalProps> = ({ show, setShow }) => {
 
                                 {accountInfo && (
                                     <div className="space-y-2">
-                                        <p className="text-xs font-medium text-slate-400 uppercase tracking-wider">Balance</p>
-                                        <div className="p-3 rounded-xl bg-slate-800 border border-slate-700">
+                                        <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Balance</p>
+                                        <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
                                             <div className="flex items-baseline gap-2">
-                                                <span className="text-2xl font-bold text-white">
+                                                <span className="text-2xl font-bold text-slate-900">
                                                     {accountInfo.balance}
                                                 </span>
-                                                <span className="text-sm text-slate-400">XRP</span>
+                                                <span className="text-sm text-slate-500">XRP</span>
                                             </div>
                                             {!accountInfo.exists && (
-                                                <p className="text-xs text-yellow-500 mt-1">
+                                                <p className="text-xs text-yellow-600 mt-1">
                                                     Account needs {accountInfo.reserve} XRP to activate
                                                 </p>
                                             )}
@@ -132,7 +136,7 @@ const DisconnectModal: React.FC<DisconnectModalProps> = ({ show, setShow }) => {
 
                                 <button
                                     onClick={handleDisconnect}
-                                    className="w-full flex items-center justify-center gap-2 py-3 bg-red-600/10 hover:bg-red-600/20 border border-red-500/30 text-red-400 rounded-xl transition-all font-medium"
+                                    className="w-full flex items-center justify-center gap-2 py-3 bg-red-50 hover:bg-red-100 border border-red-200 text-red-600 rounded-xl transition-all font-medium"
                                 >
                                     <LogOut className="w-4 h-4" />
                                     <span>Disconnect</span>

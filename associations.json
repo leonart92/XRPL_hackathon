@@ -1,12 +1,11 @@
 {
   "associations": [
     {
-      "id": "wwf-conservation",
+      "id": "wwf",
       "name": "World Wildlife Fund",
       "shortName": "WWF",
-      "symbol": "WWF",
       "category": "Conservation",
-      "description": "Organisation internationale de protection de la nature et de l'environnement",
+      "description": "Organisation internationale de protection de la nature et de l'environnement. Le WWF travaille dans plus de 100 pays pour protéger les espèces menacées et leurs habitats.",
       "focus": [
         "Conservation de la biodiversité",
         "Protection des espèces menacées",
@@ -14,10 +13,10 @@
         "Lutte contre le changement climatique"
       ],
       "focusDetails": {
-        "Conservation de la biodiversité": "La biodiversité est essentielle à la vie sur Terre. WWF travaille à protéger la diversité des espèces, des écosystèmes et des gènes à travers le monde. Nous identifions les zones prioritaires, développons des programmes de conservation et collaborons avec les communautés locales pour préserver la richesse naturelle de notre planète pour les générations futures.",
-        "Protection des espèces menacées": "De nombreuses espèces iconiques comme les tigres, les éléphants, les pandas et les rhinocéros sont en danger critique d'extinction. WWF mène des actions de terrain pour protéger ces espèces, lutte contre le braconnage et le trafic illégal d'animaux sauvages, et travaille avec les gouvernements pour renforcer les lois de protection.",
-        "Préservation des habitats naturels": "Les habitats naturels comme les forêts, les océans, les zones humides et les prairies sont essentiels à la survie de la faune sauvage. WWF œuvre pour la création et la gestion d'aires protégées, restaure les écosystèmes dégradés et promeut des pratiques d'utilisation durable des terres qui permettent à la nature et aux humains de coexister.",
-        "Lutte contre le changement climatique": "Le changement climatique est la plus grande menace pour la nature et l'humanité. WWF milite pour la réduction des émissions de gaz à effet de serre, promeut les énergies renouvelables, et aide les communautés à s'adapter aux impacts du changement climatique tout en protégeant les écosystèmes qui stockent naturellement le carbone."
+        "Conservation de la biodiversité": "La biodiversité est essentielle à la vie sur Terre. WWF travaille à protéger la diversité des espèces, des écosystèmes et des gènes à travers le monde.",
+        "Protection des espèces menacées": "De nombreuses espèces iconiques comme les tigres, les éléphants, les pandas et les rhinocéros sont en danger critique d'extinction.",
+        "Préservation des habitats naturels": "Les habitats naturels comme les forêts, les océans, les zones humides et les prairies sont essentiels à la survie de la faune sauvage.",
+        "Lutte contre le changement climatique": "Le changement climatique est la plus grande menace pour la nature et l'humanité."
       },
       "location": {
         "headquarters": "Gland, Suisse",
@@ -31,24 +30,14 @@
       "contact": {
         "website": "https://www.wwf.org",
         "websiteFR": "https://www.wwf.fr"
-      },
-      "metrics": {
-        "netApy": 8.45,
-        "rewardsApy": 1.2,
-        "totalSupply": 450000000,
-        "totalBorrow": 380000000,
-        "utilization": 84.4,
-        "liquidity": 70000000,
-        "riskFactor": "Low"
       }
     },
     {
       "id": "greenpeace",
       "name": "Greenpeace",
       "shortName": "Greenpeace",
-      "symbol": "GRP",
       "category": "Climate Action",
-      "description": "Organisation de protection de l'environnement présente dans plus de 55 pays",
+      "description": "Organisation de protection de l'environnement présente dans plus de 55 pays. Greenpeace mène des campagnes pour protéger le climat, les forêts et les océans.",
       "focus": [
         "Lutte contre le changement climatique",
         "Protection des océans",
@@ -68,23 +57,14 @@
       "contact": {
         "website": "https://www.greenpeace.org",
         "websiteFR": "https://www.greenpeace.fr"
-      },
-      "metrics": {
-        "netApy": 3.2,
-        "totalSupply": 890000000,
-        "totalBorrow": 500000000,
-        "utilization": 56.1,
-        "liquidity": 390000000,
-        "riskFactor": "Medium"
       }
     },
     {
       "id": "surfrider",
       "name": "Surfrider Foundation Europe",
       "shortName": "Surfrider",
-      "symbol": "SRF",
       "category": "Ocean Protection",
-      "description": "Association de protection des océans, du littoral, des vagues et des pratiquants",
+      "description": "Association de protection des océans, du littoral, des vagues et des pratiquants. Surfrider mobilise les citoyens pour protéger les mers et les côtes.",
       "focus": [
         "Protection des océans",
         "Lutte contre la pollution plastique",
@@ -103,23 +83,14 @@
       },
       "contact": {
         "website": "https://www.surfrider.eu"
-      },
-      "metrics": {
-        "netApy": 1.8,
-        "totalSupply": 250000000,
-        "totalBorrow": 100000000,
-        "utilization": 40.0,
-        "liquidity": 150000000,
-        "riskFactor": "Low"
       }
     },
     {
-      "id": "fne-nature",
+      "id": "fne",
       "name": "France Nature Environnement",
       "shortName": "FNE",
-      "symbol": "FNE",
       "category": "Biodiversity",
-      "description": "Fédération française des associations de protection de la nature et de l'environnement",
+      "description": "Fédération française des associations de protection de la nature et de l'environnement, regroupant plus de 6000 associations.",
       "focus": [
         "Protection de la biodiversité",
         "Préservation des espaces naturels",
@@ -138,23 +109,14 @@
       },
       "contact": {
         "website": "https://www.fne.asso.fr"
-      },
-      "metrics": {
-        "netApy": 7.1,
-        "totalSupply": 120000000,
-        "totalBorrow": 100000000,
-        "utilization": 83.3,
-        "liquidity": 20000000,
-        "riskFactor": "Medium"
       }
     },
     {
       "id": "zerowaste",
       "name": "Zero Waste France",
       "shortName": "Zero Waste",
-      "symbol": "ZWF",
       "category": "Waste Reduction",
-      "description": "Association citoyenne qui milite pour la réduction des déchets et une société zéro déchet",
+      "description": "Association citoyenne qui milite pour la réduction des déchets et une société zéro déchet, zéro gaspillage.",
       "focus": [
         "Réduction des déchets à la source",
         "Lutte contre le gaspillage",
@@ -173,24 +135,14 @@
       },
       "contact": {
         "website": "https://www.zerowastefrance.org"
-      },
-      "metrics": {
-        "netApy": 9.8,
-        "rewardsApy": 2.5,
-        "totalSupply": 60000000,
-        "totalBorrow": 55000000,
-        "utilization": 91.6,
-        "liquidity": 5000000,
-        "riskFactor": "High"
       }
     },
     {
       "id": "sea-shepherd",
       "name": "Sea Shepherd",
       "shortName": "Sea Shepherd",
-      "symbol": "SSH",
       "category": "Ocean Protection",
-      "description": "Organisation internationale de défense des océans et de la vie marine",
+      "description": "Organisation internationale de défense des océans et de la vie marine. Sea Shepherd intervient directement pour protéger la faune marine.",
       "focus": [
         "Protection de la faune marine",
         "Lutte contre la pêche illégale",
@@ -210,111 +162,189 @@
         "website": "https://www.seashepherd.org",
         "websiteFR": "https://www.seashepherd.fr"
       }
+    }
+  ],
+  "vaults": [
+    {
+      "id": "wwf-impact-fund",
+      "associationId": "wwf",
+      "name": "WWF Impact Fund",
+      "description": "Fonds d'investissement à impact direct pour la conservation de la biodiversité. Vos XRP financent des projets de terrain.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 8.45,
+      "rewardsApy": 1.2,
+      "totalSupply": 450000000,
+      "totalBorrow": 380000000,
+      "utilization": 84.4,
+      "liquidity": 70000000,
+      "riskFactor": "Low",
+      "lockPeriod": "No lock"
     },
     {
-      "id": "lpo",
-      "name": "Ligue pour la Protection des Oiseaux",
-      "shortName": "LPO",
-      "symbol": "LPO",
-      "category": "Biodiversity",
-      "description": "Association de protection de la nature en France spécialisée dans la protection des oiseaux",
-      "focus": [
-        "Protection des oiseaux sauvages",
-        "Préservation de la biodiversité",
-        "Centres de soins pour la faune sauvage",
-        "Éducation à l'environnement"
+      "id": "wwf-species-protection",
+      "associationId": "wwf",
+      "name": "Species Protection Vault",
+      "description": "Vault dédié à la protection des espèces menacées. Rendements liés aux succès des programmes de conservation.",
+      "acceptedTokens": [
+        "XRP"
       ],
-      "location": {
-        "headquarters": "Rochefort, France",
-        "scope": "France"
-      },
-      "branding": {
-        "logo": "https://www.lpo.fr/themes/custom/lpo/logo.svg",
-        "color": "#009640",
-        "secondaryColor": "#78BE20"
-      },
-      "contact": {
-        "website": "https://www.lpo.fr"
-      }
+      "netApy": 6.2,
+      "totalSupply": 120000000,
+      "totalBorrow": 90000000,
+      "utilization": 75.0,
+      "liquidity": 30000000,
+      "riskFactor": "Low",
+      "lockPeriod": "30 days"
     },
     {
-      "id": "les-amis-de-la-terre",
-      "name": "Les Amis de la Terre France",
-      "shortName": "Amis de la Terre",
-      "symbol": "ADT",
-      "category": "Climate Action",
-      "description": "Association écologiste de justice environnementale et sociale",
-      "focus": [
-        "Justice climatique",
-        "Transition énergétique",
-        "Lutte contre les multinationales polluantes",
-        "Agriculture paysanne",
-        "Souveraineté alimentaire"
+      "id": "greenpeace-climate-vault",
+      "associationId": "greenpeace",
+      "name": "Climate Action Vault",
+      "description": "Investissez dans la lutte contre le changement climatique. Fonds utilisés pour les campagnes et actions directes.",
+      "acceptedTokens": [
+        "XRP"
       ],
-      "location": {
-        "headquarters": "Montreuil, France",
-        "scope": "France et International"
-      },
-      "branding": {
-        "logo": "https://www.amisdelaterre.org/wp-content/themes/theme-adt/img/logo.svg",
-        "color": "#00923F",
-        "secondaryColor": "#8CC63F"
-      },
-      "contact": {
-        "website": "https://www.amisdelaterre.org"
-      }
+      "netApy": 5.8,
+      "totalSupply": 320000000,
+      "totalBorrow": 180000000,
+      "utilization": 56.2,
+      "liquidity": 140000000,
+      "riskFactor": "Medium",
+      "lockPeriod": "No lock"
     },
     {
-      "id": "reforest-action",
-      "name": "Reforest'Action",
-      "shortName": "Reforest'Action",
-      "symbol": "RFA",
-      "category": "Conservation",
-      "description": "Entreprise certifiée B Corp spécialisée dans la reforestation",
-      "focus": [
-        "Reforestation",
-        "Restauration de la biodiversité",
-        "Lutte contre le changement climatique",
-        "Développement économique local"
+      "id": "greenpeace-ocean-fund",
+      "associationId": "greenpeace",
+      "name": "Ocean Defense Fund",
+      "description": "Protection des océans et lutte contre la surpêche. Financement des navires et expéditions maritimes.",
+      "acceptedTokens": [
+        "XRP"
       ],
-      "location": {
-        "headquarters": "Paris, France",
-        "scope": "International"
-      },
-      "branding": {
-        "logo": "https://www.reforestaction.com/sites/all/themes/reforestaction/logo.svg",
-        "color": "#5CB85C",
-        "secondaryColor": "#449D44"
-      },
-      "contact": {
-        "website": "https://www.reforestaction.com"
-      }
+      "netApy": 7.2,
+      "rewardsApy": 0.8,
+      "totalSupply": 180000000,
+      "totalBorrow": 150000000,
+      "utilization": 83.3,
+      "liquidity": 30000000,
+      "riskFactor": "Medium",
+      "lockPeriod": "60 days"
     },
     {
-      "id": "reseau-action-climat",
-      "name": "Réseau Action Climat",
-      "shortName": "RAC",
-      "symbol": "RAC",
-      "category": "Climate Action",
-      "description": "Association spécialisée sur le climat et l'énergie",
-      "focus": [
-        "Lutte contre le changement climatique",
-        "Transition énergétique",
-        "Politiques climatiques",
-        "Mobilité durable"
+      "id": "surfrider-beach-cleanup",
+      "associationId": "surfrider",
+      "name": "Beach Cleanup Vault",
+      "description": "Financement des opérations de nettoyage des plages et du littoral en Europe.",
+      "acceptedTokens": [
+        "XRP"
       ],
-      "location": {
-        "headquarters": "Montreuil, France",
-        "scope": "France"
-      },
-      "branding": {
-        "logo": "https://reseauactionclimat.org/wp-content/uploads/2020/01/logo-rac.png",
-        "color": "#E63946",
-        "secondaryColor": "#F77F00"
-      },
-      "contact": {
-        "website": "https://www.reseauactionclimat.org"
-      }
+      "netApy": 4.5,
+      "totalSupply": 80000000,
+      "totalBorrow": 32000000,
+      "utilization": 40.0,
+      "liquidity": 48000000,
+      "riskFactor": "Low",
+      "lockPeriod": "No lock"
+    },
+    {
+      "id": "surfrider-plastic-free",
+      "associationId": "surfrider",
+      "name": "Plastic Free Ocean",
+      "description": "Lutte contre la pollution plastique dans les océans. Projets de sensibilisation et actions de terrain.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 5.2,
+      "rewardsApy": 0.5,
+      "totalSupply": 95000000,
+      "totalBorrow": 68000000,
+      "utilization": 71.5,
+      "liquidity": 27000000,
+      "riskFactor": "Low",
+      "lockPeriod": "14 days"
+    },
+    {
+      "id": "fne-biodiversity",
+      "associationId": "fne",
+      "name": "Biodiversity France",
+      "description": "Protection de la biodiversité en France. Soutien aux 6000 associations locales du réseau FNE.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 7.1,
+      "totalSupply": 120000000,
+      "totalBorrow": 100000000,
+      "utilization": 83.3,
+      "liquidity": 20000000,
+      "riskFactor": "Medium",
+      "lockPeriod": "30 days"
+    },
+    {
+      "id": "zerowaste-circular",
+      "associationId": "zerowaste",
+      "name": "Circular Economy Fund",
+      "description": "Financement de projets d'économie circulaire et de réduction des déchets.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 9.8,
+      "rewardsApy": 2.5,
+      "totalSupply": 60000000,
+      "totalBorrow": 55000000,
+      "utilization": 91.6,
+      "liquidity": 5000000,
+      "riskFactor": "High",
+      "lockPeriod": "No lock"
+    },
+    {
+      "id": "zerowaste-education",
+      "associationId": "zerowaste",
+      "name": "Zero Waste Education",
+      "description": "Programmes éducatifs et sensibilisation au zéro déchet.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 4.2,
+      "totalSupply": 25000000,
+      "totalBorrow": 12000000,
+      "utilization": 48.0,
+      "liquidity": 13000000,
+      "riskFactor": "Low",
+      "lockPeriod": "No lock"
+    },
+    {
+      "id": "sea-shepherd-patrol",
+      "associationId": "sea-shepherd",
+      "name": "Ocean Patrol Fund",
+      "description": "Financement des patrouilles maritimes contre la pêche illégale.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 6.8,
+      "rewardsApy": 1.0,
+      "totalSupply": 200000000,
+      "totalBorrow": 160000000,
+      "utilization": 80.0,
+      "liquidity": 40000000,
+      "riskFactor": "Medium",
+      "lockPeriod": "90 days"
+    },
+    {
+      "id": "sea-shepherd-sanctuary",
+      "associationId": "sea-shepherd",
+      "name": "Marine Sanctuary",
+      "description": "Création et protection de sanctuaires marins pour les espèces menacées.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 5.5,
+      "totalSupply": 85000000,
+      "totalBorrow": 45000000,
+      "utilization": 52.9,
+      "liquidity": 40000000,
+      "riskFactor": "Low",
+      "lockPeriod": "60 days"
     }
   ],
   "categories": {
@@ -338,11 +368,5 @@
       "description": "Réduction des déchets et économie circulaire",
       "color": "#E85D00"
     }
-  },
-  "metadata": {
-    "version": "1.0.0",
-    "lastUpdated": "2025-11-29",
-    "totalAssociations": 10,
-    "source": "Compilation d'associations environnementales françaises et internationales"
   }
 }

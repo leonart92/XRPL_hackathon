@@ -18,33 +18,33 @@ const VaultChart: React.FC<VaultChartProps> = ({ data, color }) => {
               <stop offset="95%" stopColor={color} stopOpacity={0} />
             </linearGradient>
           </defs>
-          <XAxis 
-            dataKey="date" 
-            hide 
+          <XAxis
+            dataKey="date"
+            hide
           />
-          <YAxis 
-            hide 
+          <YAxis
+            hide
             domain={['dataMin - 1', 'dataMax + 1']}
           />
-          <Tooltip 
-            contentStyle={{ 
-              backgroundColor: '#1e293b', 
-              borderColor: '#334155', 
+          <Tooltip
+            contentStyle={{
+              backgroundColor: '#1e293b',
+              borderColor: '#334155',
               color: '#f8fafc',
               borderRadius: '8px',
               fontSize: '12px',
-              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' 
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
             }}
             itemStyle={{ color: color }}
             formatter={(value: number) => [`${value.toFixed(2)}%`, 'APY']}
           />
-          <Area 
-            type="monotone" 
-            dataKey="apy" 
-            stroke={color} 
+          <Area
+            type="monotone"
+            dataKey="apy"
+            stroke={color}
             strokeWidth={2}
-            fillOpacity={1} 
-            fill={`url(#gradient-${color})`} 
+            fillOpacity={1}
+            fill={`url(#gradient-${color})`}
           />
         </AreaChart>
       </ResponsiveContainer>

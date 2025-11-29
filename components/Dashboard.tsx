@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { AreaChart, Area, ResponsiveContainer, XAxis, Tooltip } from 'recharts';
 import { ArrowUpRight, ShieldCheck, Wallet, Activity, TrendingUp } from 'lucide-react';
 import gsap from 'gsap';
-import { MOCK_VAULTS, formatCurrency } from '../constants';
+import { VAULTS, getAssociationById, formatCurrency } from '../constants';
 import { fadeInUp, fadeInLeft, fadeInRight } from '../animations';
 
 const MOCK_PORTFOLIO_HISTORY = Array.from({ length: 30 }, (_, i) => ({
@@ -21,12 +21,10 @@ const Dashboard: React.FC = () => {
   const apyValue = 7.24;
   const healthFactorValue = 2.45;
 
-  // Advanced GSAP animations
   useEffect(() => {
     if (typeof gsap === 'undefined') return;
 
     const ctx = gsap.context(() => {
-      // Title animation
       if (titleRef.current) {
         gsap.from(titleRef.current, {
           opacity: 0,
@@ -36,7 +34,6 @@ const Dashboard: React.FC = () => {
         });
       }
 
-      // Net Worth counter animation
       const netWorthProxy = { value: 0 };
       gsap.to(netWorthProxy, {
         value: netWorthValue,
@@ -50,7 +47,6 @@ const Dashboard: React.FC = () => {
         }
       });
 
-      // APY counter animation
       const apyProxy = { value: 0 };
       gsap.to(apyProxy, {
         value: apyValue,
@@ -64,7 +60,6 @@ const Dashboard: React.FC = () => {
         }
       });
 
-      // Health Factor counter animation
       const healthProxy = { value: 0 };
       gsap.to(healthProxy, {
         value: healthFactorValue,
@@ -84,7 +79,6 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="space-y-8">
-      {/* Hero Section with Advanced Animations */}
       <div className="flex flex-col lg:flex-row gap-8 lg:items-end justify-between mb-12">
         <motion.div
           variants={fadeInLeft}
@@ -93,7 +87,7 @@ const Dashboard: React.FC = () => {
           className="relative"
         >
           <motion.div
-            className="absolute -left-4 top-0 w-1 h-16 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full"
+            className="absolute -left-4 top-0 w-1 h-16 bg-blue-500 rounded-full"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 64, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
@@ -119,7 +113,7 @@ const Dashboard: React.FC = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            Welcome back, 0x12...4F8A. Track your portfolio performance and positions.
+            Track your portfolio performance and positions.
           </motion.p>
         </motion.div>
 
@@ -145,7 +139,6 @@ const Dashboard: React.FC = () => {
         </motion.div>
       </div>
 
-      {/* Stats Cards with Advanced Animations */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -203,7 +196,6 @@ const Dashboard: React.FC = () => {
         </motion.div>
       </div>
 
-      {/* Portfolio Performance Chart */}
       <motion.div
         variants={fadeInUp}
         initial="initial"
@@ -251,7 +243,6 @@ const Dashboard: React.FC = () => {
         </div>
       </motion.div>
 
-      {/* Active Positions */}
       <motion.div
         variants={fadeInUp}
         initial="initial"
@@ -272,66 +263,45 @@ const Dashboard: React.FC = () => {
             <div className="col-span-2 text-right">Type</div>
           </div>
 
-          {[MOCK_VAULTS[0], MOCK_VAULTS[2]].map((vault, i) => (
-            <motion.div
-              key={vault.id}
-              className="grid grid-cols-12 gap-4 px-6 py-4 items-center border-b border-slate-200 hover:bg-slate-50 transition-colors relative z-10"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.6 + i * 0.1 }}
-            >
-              <div className="col-span-5 flex items-center gap-3">
-                <img src={vault.token.logo} alt={vault.token.symbol} className="w-8 h-8 rounded-full" />
-                <div>
-                  <div className="text-sm font-bold text-slate-900">{vault.token.name}</div>
-                  <div className="text-xs text-slate-600">{vault.protocol}</div>
+          {VAULTS.slice(0, 3).map((vault, i) => {
+            const association = getAssociationById(vault.associationId);
+            return (
+              <motion.div
+                key={vault.id}
+                className="grid grid-cols-12 gap-4 px-6 py-4 items-center border-b border-slate-200 hover:bg-slate-50 transition-colors relative z-10"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.6 + i * 0.1 }}
+              >
+                <div className="col-span-5 flex items-center gap-3">
+                  <img
+                    src={association?.branding.logo}
+                    alt={association?.name}
+                    className="w-8 h-8 rounded-full bg-white object-contain p-0.5"
+                  />
+                  <div>
+                    <div className="text-sm font-bold text-slate-900">{vault.name}</div>
+                    <div className="text-xs text-slate-600">{association?.shortName}</div>
+                  </div>
                 </div>
-              </div>
-              <div className="col-span-3 text-right">
-                <div className="text-sm font-bold text-slate-900">${(i === 0 ? 120000 : 11000).toLocaleString()}</div>
-                <div className="text-xs text-slate-600">{i === 0 ? '120,000' : '0.15'} {vault.token.symbol}</div>
-              </div>
-              <div className="col-span-2 text-right">
-                <div className="text-sm font-bold text-green-600">{vault.netApy}%</div>
-              </div>
-              <div className="col-span-2 text-right">
-                <span className="text-[10px] font-bold px-2 py-1 rounded bg-blue-50 text-blue-600 border border-blue-200 uppercase">
-                  Supply
-                </span>
-              </div>
-            </motion.div>
-          ))}
-
-          <motion.div
-            className="grid grid-cols-12 gap-4 px-6 py-4 items-center hover:bg-slate-50 transition-colors relative z-10"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.8 }}
-          >
-            <div className="col-span-5 flex items-center gap-3">
-              <img src={MOCK_VAULTS[1].token.logo} alt="ETH" className="w-8 h-8 rounded-full" />
-              <div>
-                <div className="text-sm font-bold text-slate-900">Wrapped Ethereum</div>
-                <div className="text-xs text-slate-600">Morpho Blue</div>
-              </div>
-            </div>
-            <div className="col-span-3 text-right">
-              <div className="text-sm font-bold text-slate-900">$5,240</div>
-              <div className="text-xs text-slate-600">2.1 ETH</div>
-            </div>
-            <div className="col-span-2 text-right">
-              <div className="text-sm font-bold text-red-600">-3.8%</div>
-            </div>
-            <div className="col-span-2 text-right">
-              <span className="text-[10px] font-bold px-2 py-1 rounded bg-purple-50 text-purple-600 border border-purple-200 uppercase">
-                Borrow
-              </span>
-            </div>
-          </motion.div>
+                <div className="col-span-3 text-right">
+                  <div className="text-sm font-bold text-slate-900">{formatCurrency(vault.totalSupply / 100)}</div>
+                  <div className="text-xs text-slate-600">{(vault.totalSupply / 100000).toFixed(0)} XRP</div>
+                </div>
+                <div className="col-span-2 text-right">
+                  <div className="text-sm font-bold text-green-600">{vault.netApy}%</div>
+                </div>
+                <div className="col-span-2 text-right">
+                  <span className="text-[10px] font-bold px-2 py-1 rounded bg-blue-50 text-blue-600 border border-blue-200 uppercase">
+                    Supply
+                  </span>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </motion.div>
 
-      {/* Floating particles background effect */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
         {[...Array(20)].map((_, i) => (
           <motion.div

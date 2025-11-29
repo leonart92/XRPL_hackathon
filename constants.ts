@@ -1,4 +1,4 @@
-import { Vault } from './types';
+import { Vault, Association } from './types';
 import associationsData from './associations.json';
 
 const generateHistory = (baseApy: number, volatility: number): { date: string; apy: number }[] => {
@@ -16,30 +16,26 @@ const generateHistory = (baseApy: number, volatility: number): { date: string; a
   return data;
 };
 
-// Générer les vaults à partir du fichier associations.json
-export const MOCK_VAULTS: Vault[] = associationsData.associations
-  .filter(assoc => assoc.metrics) // Garder seulement celles qui ont des métriques
-  .map(assoc => ({
-    id: assoc.id,
-    token: {
-      symbol: assoc.symbol,
-      name: assoc.name,
-      logo: assoc.branding.logo,
-      color: assoc.branding.color,
-    },
-    netApy: assoc.metrics!.netApy,
-    rewardsApy: assoc.metrics!.rewardsApy,
-    totalSupply: assoc.metrics!.totalSupply,
-    totalBorrow: assoc.metrics!.totalBorrow,
-    utilization: assoc.metrics!.utilization,
-    liquidity: assoc.metrics!.liquidity,
-    riskFactor: assoc.metrics!.riskFactor as 'Low' | 'Medium' | 'High',
-    protocol: assoc.category as 'Conservation' | 'Climate Action' | 'Ocean Protection' | 'Biodiversity' | 'Waste Reduction',
-    history: generateHistory(assoc.metrics!.netApy, assoc.metrics!.netApy > 5 ? 2 : 1),
-  }));
+export const ASSOCIATIONS: Association[] = associationsData.associations as Association[];
 
-// Exporter aussi les données complètes des associations
-export const ASSOCIATIONS = associationsData.associations;
+export const VAULTS: Vault[] = associationsData.vaults.map(vault => ({
+  ...vault,
+  riskFactor: vault.riskFactor as 'Low' | 'Medium' | 'High',
+  history: generateHistory(vault.netApy, vault.netApy > 5 ? 2 : 1),
+}));
+
+export const getVaultsByAssociation = (associationId: string): Vault[] => {
+  return VAULTS.filter(vault => vault.associationId === associationId);
+};
+
+export const getAssociationById = (id: string): Association | undefined => {
+  return ASSOCIATIONS.find(a => a.id === id);
+};
+
+export const getVaultById = (id: string): Vault | undefined => {
+  return VAULTS.find(v => v.id === id);
+};
+
 export const CATEGORIES = associationsData.categories;
 
 export const formatCurrency = (value: number) => {
@@ -48,3 +44,5 @@ export const formatCurrency = (value: number) => {
   if (value >= 1e3) return `$${(value / 1e3).toFixed(2)}K`;
   return `$${value.toFixed(2)}`;
 };
+
+export const MOCK_VAULTS = VAULTS;

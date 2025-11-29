@@ -1,5 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import { Vault } from '../types';
+import { getAssociationById } from '../constants';
 
 let client: GoogleGenAI | null = null;
 
@@ -21,23 +22,27 @@ const getClient = () => {
 
 export const analyzeVault = async (vault: Vault): Promise<string> => {
   const ai = getClient();
+  const association = getAssociationById(vault.associationId);
+
   const prompt = `
-    You are a senior DeFi risk analyst for the Morpho Protocol.
-    Analyze the following lending vault data concisely for a potential investor.
+    You are a senior impact investment analyst specializing in environmental causes.
+    Analyze the following investment vault data concisely for a potential investor.
     
     Vault Details:
-    - Asset: ${vault.token.name} (${vault.token.symbol})
-    - Protocol: ${vault.protocol}
+    - Vault Name: ${vault.name}
+    - Association: ${association?.name || 'Unknown'}
+    - Category: ${association?.category || 'Environmental'}
     - Current Net APY: ${vault.netApy}%
     - Utilization Rate: ${vault.utilization}%
-    - Total Supply: $${vault.totalSupply.toLocaleString()}
-    - Liquidity Available: $${vault.liquidity.toLocaleString()}
+    - Total Value Locked: $${vault.totalSupply.toLocaleString()}
+    - Available Liquidity: $${vault.liquidity.toLocaleString()}
     - Risk Factor Assessment: ${vault.riskFactor}
+    - Lock Period: ${vault.lockPeriod || 'No lock'}
 
     Please provide:
-    1. A brief explanation of the yield source.
-    2. Key risks associated with this specific setup (e.g., high utilization, smart contract risk).
-    3. A strategic recommendation (e.g., "Good for long term stablecoin yield" or "Monitoring required").
+    1. A brief explanation of how returns are generated for this environmental vault.
+    2. Key risks associated with this investment (e.g., utilization risk, lock period considerations).
+    3. A strategic recommendation for impact-conscious investors.
 
     Keep the tone professional, objective, and concise (max 150 words). Format with clear bullet points.
   `;
