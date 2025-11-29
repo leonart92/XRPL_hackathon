@@ -242,7 +242,7 @@ const Dashboard: React.FC = () => {
           />
 
           <div className="grid grid-cols-12 gap-4 px-6 py-3 text-xs font-semibold text-slate-600 uppercase tracking-wider border-b border-slate-200 bg-slate-50 relative z-10">
-            <div className="col-span-5">Asset</div>
+            <div className="col-span-5">Association</div>
             <div className="col-span-3 text-right">Balance</div>
             <div className="col-span-2 text-right">APY</div>
             <div className="col-span-2 text-right">Type</div>

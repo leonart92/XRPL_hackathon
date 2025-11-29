@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Hexagon, Wallet, Menu, CheckCircle, AlertCircle } from 'lucide-react';
+import { Wallet, Menu, CheckCircle, AlertCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useWallet } from '../contexts/WalletContext';
 
@@ -36,11 +36,7 @@ const Header: React.FC = () => {
       <div className="container mx-auto px-4 h-16">
         <div className="relative flex items-center justify-between h-full">
           <Link to="/dashboard" className="flex items-center gap-2 cursor-pointer flex-shrink-0">
-            <div className="relative flex items-center justify-center">
-              <Hexagon className="w-8 h-8 text-blue-500 fill-blue-500/20" />
-              <span className="absolute text-xs font-bold text-blue-600">M</span>
-            </div>
-            <span className="text-xl font-bold tracking-tight text-slate-900 hidden sm:block">Morpho</span>
+            <img src="/logoYAID.png" alt="YAID Logo" className="h-40 w-auto object-contain" />
           </Link>
 
           <nav className="hidden md:flex items-center gap-0.5 absolute left-1/2 -translate-x-1/2">
