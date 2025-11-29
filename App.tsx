@@ -3,15 +3,16 @@ import Header from './components/Header';
 import Earn from './components/Earn';
 import Dashboard from './components/Dashboard';
 import AIAdvisor from './components/AIAdvisor';
+import ConnectModal from './components/ConnectModal';
 import { Vault } from './types';
 import Lenis from 'lenis';
 import { AnimatePresence, motion } from 'framer-motion';
+import { WalletProvider, useWallet } from './contexts/WalletContext';
 
 const App: React.FC = () => {
   const [selectedVault, setSelectedVault] = useState<Vault | null>(null);
   const [activePage, setActivePage] = useState<string>('Earn');
 
-  // Initialize Lenis Smooth Scroll
   useEffect(() => {
     if (typeof Lenis === 'undefined') return;
 
@@ -39,13 +40,28 @@ const App: React.FC = () => {
   }, []);
 
   return (
+    <WalletProvider>
+      <AppContent selectedVault={selectedVault} setSelectedVault={setSelectedVault} activePage={activePage} setActivePage={setActivePage} />
+    </WalletProvider>
+  );
+};
+
+const AppContent: React.FC<{
+  selectedVault: Vault | null;
+  setSelectedVault: (vault: Vault | null) => void;
+  activePage: string;
+  setActivePage: (page: string) => void;
+}> = ({ selectedVault, setSelectedVault, activePage, setActivePage }) => {
+  const { showModal, setShowModal } = useWallet();
+
+  return (
     <div className="min-h-screen bg-[#020617] text-slate-100 font-sans selection:bg-blue-500/30">
       <Header activePage={activePage} onNavigate={setActivePage} />
-      
+
       <main className="container mx-auto px-4 py-8 pb-20">
         <AnimatePresence mode="wait">
           {activePage === 'Dashboard' && (
-            <motion.div 
+            <motion.div
               key="dashboard"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -57,19 +73,19 @@ const App: React.FC = () => {
           )}
 
           {activePage === 'Earn' && (
-             <motion.div 
-               key="earn"
-               initial={{ opacity: 0, x: 20 }}
-               animate={{ opacity: 1, x: 0 }}
-               exit={{ opacity: 0, x: -20 }}
-               transition={{ duration: 0.3 }}
-             >
-               <Earn onSelectVaultForAI={setSelectedVault} />
-             </motion.div>
+            <motion.div
+              key="earn"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Earn onSelectVaultForAI={setSelectedVault} />
+            </motion.div>
           )}
 
           {activePage !== 'Dashboard' && activePage !== 'Earn' && (
-            <motion.div 
+            <motion.div
               key="empty"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -83,15 +99,16 @@ const App: React.FC = () => {
         </AnimatePresence>
       </main>
 
-      {/* AI Modal */}
       <AnimatePresence>
         {selectedVault && (
-          <AIAdvisor 
-            vault={selectedVault} 
-            onClose={() => setSelectedVault(null)} 
+          <AIAdvisor
+            vault={selectedVault}
+            onClose={() => setSelectedVault(null)}
           />
         )}
       </AnimatePresence>
+
+      <ConnectModal show={showModal} setShow={setShowModal} />
 
     </div>
   );
