@@ -55,6 +55,31 @@ class XRPLService {
 
     this.client = null;
   }
+
+  async getAccountBalance(account: string) {
+    const client = this.getClient();
+
+    const response = await client.request({
+      command: "account_lines",
+      account,
+      ledger_index: "validated",
+    });
+
+    const accountInfo = await client.request({
+      command: "account_info",
+      account,
+      ledger_index: "validated",
+    });
+
+    return {
+      xrp: accountInfo.result.account_data.Balance,
+      tokens: response.result.lines.map((line) => ({
+        currency: line.currency,
+        issuer: line.account,
+        balance: line.balance,
+      })),
+    };
+  }
 }
 
 export const xrplService = new XRPLService();
