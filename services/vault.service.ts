@@ -1,5 +1,6 @@
 import type { Amount, Wallet } from "xrpl";
 import { xrplService } from "./xrpl.service";
+import type { YieldStrategy } from "./strategies/yield-strategy.interface";
 
 interface VaultConfig {
   address: string;
@@ -7,6 +8,7 @@ interface VaultConfig {
   vaultTokenCurrency: string;
   acceptedCurrency: string;
   acceptedCurrencyIssuer: string;
+  strategy: YieldStrategy;
 }
 
 interface UserDeposit {
@@ -69,6 +71,8 @@ class VaultService {
 
     await this.issueVaultTokens(depositor, depositAmount);
 
+    await this.config.strategy.deploy(depositAmount);
+
     const currentDeposit = this.userDeposits.get(depositor) || {
       totalDeposited: "0",
       vTokensIssued: "0",
@@ -126,6 +130,82 @@ class VaultService {
       amount,
       this.config.acceptedCurrencyIssuer,
     );
+  }
+
+  async harvestYields(ngoAddress: string) {
+    const yieldAmount = await this.config.strategy.getYield();
+
+    if (parseFloat(yieldAmount) <= 0) {
+      return;
+    }
+
+    const actualWithdrawn = await this.config.strategy.withdraw(yieldAmount);
+
+    const client = xrplService.getClient();
+    const transferTx = {
+      TransactionType: "Payment" as const,
+      Account: this.config.address,
+      Destination: ngoAddress,
+      Amount: {
+        currency: this.config.acceptedCurrency,
+        issuer: this.config.acceptedCurrencyIssuer,
+        value: actualWithdrawn,
+      },
+    };
+
+    const prepared = await client.autofill(transferTx);
+    const signed = this.config.wallet.sign(prepared);
+    await client.submitAndWait(signed.tx_blob);
+  }
+
+  async prepareUserWithdrawal(userAddress: string, vTokenAmount: string) {
+    const userDeposit = this.userDeposits.get(userAddress);
+    
+    if (!userDeposit) {
+      throw new Error("No deposit found for user");
+    }
+
+    const vTokensHeld = parseFloat(userDeposit.vTokensIssued);
+    const requestedWithdrawal = parseFloat(vTokenAmount);
+
+    if (requestedWithdrawal > vTokensHeld) {
+      throw new Error("Insufficient vToken balance");
+    }
+
+    const capitalToWithdraw = (requestedWithdrawal / vTokensHeld) * parseFloat(userDeposit.totalDeposited);
+
+    await this.config.strategy.withdraw(capitalToWithdraw.toString());
+
+    this.userDeposits.set(userAddress, {
+      totalDeposited: (parseFloat(userDeposit.totalDeposited) - capitalToWithdraw).toString(),
+      vTokensIssued: (vTokensHeld - requestedWithdrawal).toString(),
+    });
+
+    const client = xrplService.getClient();
+
+    const burnTx = await client.autofill({
+      TransactionType: "Payment" as const,
+      Account: userAddress,
+      Destination: this.config.address,
+      Amount: {
+        currency: this.config.vaultTokenCurrency,
+        issuer: this.config.address,
+        value: vTokenAmount,
+      },
+    });
+
+    const paymentTx = await client.autofill({
+      TransactionType: "Payment" as const,
+      Account: this.config.address,
+      Destination: userAddress,
+      Amount: {
+        currency: this.config.acceptedCurrency,
+        issuer: this.config.acceptedCurrencyIssuer,
+        value: capitalToWithdraw.toString(),
+      },
+    });
+
+    return { burnTx, paymentTx };
   }
 
   stopListening() {
