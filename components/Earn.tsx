@@ -189,18 +189,6 @@ const Earn: React.FC<EarnProps> = ({ onSelectAssociation }) => {
             </motion.button>
           )}
         </motion.div>
-
-        <motion.button
-          className="relative flex items-center gap-2 px-5 py-3 bg-white border border-slate-200 rounded-xl text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-colors font-medium overflow-hidden group"
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-        >
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          />
-          <SlidersHorizontal className="w-4 h-4 relative z-10" />
-          <span className="relative z-10">Filters</span>
-        </motion.button>
       </motion.div>
 
       {/* Table with Advanced Entrance Animation */}
