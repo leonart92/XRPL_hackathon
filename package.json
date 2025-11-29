@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@gemwallet/api": "^3.8.0",
     "@google/genai": "^1.30.0",
     "framer-motion": "^12.23.24",
     "gsap": "3.12.5",
@@ -19,7 +20,8 @@
     "react-is": "^19.2.0",
     "recharts": "^3.5.1",
     "xrpl": "^4.4.3",
-    "xrpl-wallet-kit": "^0.1.31"
+    "xrpl-wallet-kit": "^0.1.31",
+    "xumm": "^1.8.0"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",

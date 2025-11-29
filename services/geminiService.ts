@@ -5,8 +5,16 @@ let client: GoogleGenAI | null = null;
 
 const getClient = () => {
   if (!client) {
-    // In a real app, strict error handling would be here if API Key is missing
-    client = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+    const apiKey = (import.meta as any).env?.GEMINI_API_KEY ||
+      (import.meta as any).env?.VITE_GEMINI_API_KEY ||
+      (typeof process !== 'undefined' && (process.env.API_KEY || process.env.GEMINI_API_KEY)) ||
+      '';
+
+    if (!apiKey) {
+      console.warn('GEMINI_API_KEY not found in environment variables');
+    }
+
+    client = new GoogleGenAI({ apiKey });
   }
   return client;
 };

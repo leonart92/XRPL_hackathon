@@ -37,7 +37,13 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
     const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
-        const xrplClient = new Client('wss://xrplcluster.com');
+        const network = (import.meta as any).env?.VITE_XRPL_NETWORK || 'mainnet';
+        const wsUrl = (import.meta as any).env?.VITE_XRPL_WS_URL ||
+            (network === 'testnet'
+                ? 'wss://s.altnet.rippletest.net:51233'
+                : 'wss://xrplcluster.com');
+
+        const xrplClient = new Client(wsUrl);
 
         xrplClient.connect().then(() => {
             setClient(xrplClient);
@@ -138,23 +144,17 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
                 }
             }
 
-            if (win.xrplWalletKit) {
+            if (win.crossmark) {
                 try {
-                    const walletKit = win.xrplWalletKit;
-                    const walletData = await walletKit.connect();
-                    if (walletData && walletData.address) {
-                        if (walletData.secret || walletData.privateKey) {
-                            const xrplWallet = XRPLWallet.fromSeed(walletData.secret || walletData.privateKey);
-                            setWallet(xrplWallet);
-                            localStorage.setItem('xrpl_wallet', walletData.secret || walletData.privateKey);
-                        }
-                        setAddress(walletData.address);
-                        localStorage.setItem('xrpl_address', walletData.address);
+                    const response = await win.crossmark.signInAndWait();
+                    if (response?.response?.data?.address) {
+                        setAddress(response.response.data.address);
+                        localStorage.setItem('xrpl_address', response.response.data.address);
                         setIsLoading(false);
                         return;
                     }
                 } catch (e) {
-                    console.log('xrpl-wallet-kit not available:', e);
+                    console.log('Crossmark connection error:', e);
                 }
             }
 
