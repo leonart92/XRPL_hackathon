@@ -6,6 +6,7 @@ import { useVaultsContext } from '../contexts/VaultsContext';
 import { useWallet } from '../contexts/WalletContext';
 import { useDeposit } from '../hooks/useDeposit';
 import { useTrustline } from '../hooks/useTrustline';
+import { useVaultBalance } from '../hooks/useVaultBalance';
 
 interface VaultDetailProps {
     vaultAddress: string;
@@ -17,22 +18,43 @@ const VaultDetail: React.FC<VaultDetailProps> = ({ vaultAddress, onBack }) => {
     const [isProcessing, setIsProcessing] = useState(false);
     const [currentStep, setCurrentStep] = useState<'idle' | 'trustline' | 'deposit' | 'success'>('idle');
 
-    const { vaults, associations } = useVaultsContext();
+    const { vaults, associations, loading } = useVaultsContext();
     const { wallet, address, isConnected } = useWallet();
+
+    console.log('[VaultDetail] vaultAddress:', vaultAddress);
+    console.log('[VaultDetail] vaults:', vaults);
+    console.log('[VaultDetail] loading:', loading);
 
     const vault = vaults.find(v => v.vaultAddress === vaultAddress);
     const association = vault ? associations.find(a => a.id === vault.associationId) : null;
 
-    const trustlineHook = vault ? useTrustline({
-        vaultAddress: vault.vaultAddress,
-        vaultTokenCurrency: vault.vaultTokenCurrency,
-    }) : null;
+    console.log('[VaultDetail] found vault:', vault);
+    console.log('[VaultDetail] found association:', association);
 
-    const depositHook = vault ? useDeposit({
-        vaultAddress: vault.vaultAddress,
-        acceptedCurrency: vault.acceptedCurrency,
-        acceptedCurrencyIssuer: vault.acceptedCurrencyIssuer,
-    }) : null;
+    const trustlineHook = useTrustline({
+        vaultAddress: vault?.vaultAddress || '',
+        vaultTokenCurrency: vault?.vaultTokenCurrency || '',
+    });
+
+    const depositHook = useDeposit({
+        vaultAddress: vault?.vaultAddress || '',
+        acceptedCurrency: vault?.acceptedCurrency || '',
+        acceptedCurrencyIssuer: vault?.acceptedCurrencyIssuer || '',
+    });
+
+    const { balance: userBalance, loading: balanceLoading, refetch: refetchBalance } = useVaultBalance({
+        vaultAddress: vault?.vaultAddress || '',
+        userAddress: address || '',
+        vaultTokenCurrency: vault?.vaultTokenCurrency || '',
+    });
+
+    if (loading) {
+        return (
+            <div className="flex flex-col items-center justify-center h-[50vh] text-slate-600">
+                <p>Loading vault...</p>
+            </div>
+        );
+    }
 
     if (!vault || !association) {
         return (
@@ -44,7 +66,7 @@ const VaultDetail: React.FC<VaultDetailProps> = ({ vaultAddress, onBack }) => {
     }
 
     const handleInvest = async () => {
-        if (!investAmount || !address || !isConnected || !trustlineHook || !depositHook) {
+        if (!investAmount || !address || !isConnected) {
             if (!isConnected) {
                 alert('Please connect your wallet first');
             }
@@ -61,6 +83,8 @@ const VaultDetail: React.FC<VaultDetailProps> = ({ vaultAddress, onBack }) => {
 
             setCurrentStep('success');
             setInvestAmount('');
+            
+            await refetchBalance();
             
             setTimeout(() => {
                 setCurrentStep('idle');
@@ -121,7 +145,7 @@ const VaultDetail: React.FC<VaultDetailProps> = ({ vaultAddress, onBack }) => {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                     <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border border-green-200">
                         <div className="flex items-center gap-2 text-green-600 mb-2">
                             <TrendingUp size={20} />
@@ -142,6 +166,23 @@ const VaultDetail: React.FC<VaultDetailProps> = ({ vaultAddress, onBack }) => {
                         </div>
                         <div className="text-3xl font-bold text-slate-900">{formatCurrency(vault.totalSupply)}</div>
                         <div className="text-sm text-slate-500 mt-1">{vault.utilization.toFixed(1)}% utilization</div>
+                    </div>
+
+                    <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
+                        <div className="flex items-center gap-2 text-blue-600 mb-2">
+                            <Coins size={20} />
+                            <span className="text-sm font-semibold uppercase tracking-wider">Your Balance</span>
+                        </div>
+                        {balanceLoading ? (
+                            <div className="text-2xl font-bold text-blue-600">Loading...</div>
+                        ) : address ? (
+                            <>
+                                <div className="text-3xl font-bold text-blue-700">{parseFloat(userBalance || '0').toFixed(2)}</div>
+                                <div className="text-sm text-blue-600 mt-1">{vault.vaultTokenCurrency}</div>
+                            </>
+                        ) : (
+                            <div className="text-sm text-slate-500">Connect wallet</div>
+                        )}
                     </div>
 
                     <div className="bg-slate-50 rounded-xl p-6 border border-slate-200">

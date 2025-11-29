@@ -6,6 +6,8 @@ import gsap from 'gsap';
 import { formatCurrency } from '../constants';
 import { fadeInUp, fadeInLeft } from '../animations';
 import { useVaultsContext } from '../contexts/VaultsContext';
+import { useWallet } from '../contexts/WalletContext';
+import { useUserVaultBalances } from '../hooks/useUserVaultBalances';
 
 const MOCK_PORTFOLIO_HISTORY = Array.from({ length: 30 }, (_, i) => ({
   date: new Date(Date.now() - (29 - i) * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
@@ -19,6 +21,11 @@ const Dashboard: React.FC = () => {
   const titleRef = useRef<HTMLHeadingElement>(null);
 
   const { vaults, associations } = useVaultsContext();
+  const { address } = useWallet();
+  const { balances, loading: balancesLoading } = useUserVaultBalances({
+    userAddress: address,
+    vaults,
+  });
 
   const netWorthValue = 131240.50;
   const apyValue = 7.24;
@@ -245,48 +252,68 @@ const Dashboard: React.FC = () => {
           />
 
           <div className="grid grid-cols-12 gap-4 px-6 py-3 text-xs font-semibold text-slate-600 uppercase tracking-wider border-b border-slate-200 bg-slate-50 relative z-10">
-            <div className="col-span-5">Asset</div>
-            <div className="col-span-3 text-right">Balance</div>
+            <div className="col-span-4">Asset</div>
+            <div className="col-span-3 text-right">Your Balance</div>
+            <div className="col-span-2 text-right">TVL</div>
             <div className="col-span-2 text-right">APY</div>
-            <div className="col-span-2 text-right">Type</div>
+            <div className="col-span-1 text-right">Type</div>
           </div>
 
-          {vaults.slice(0, 3).map((vault, i) => {
-            const association = associations.find(a => a.id === vault.associationId);
-            return (
-              <motion.div
-                key={vault.id}
-                className="grid grid-cols-12 gap-4 px-6 py-4 items-center border-b border-slate-200 hover:bg-slate-50 transition-colors relative z-10"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.6 + i * 0.1 }}
-              >
-                <div className="col-span-5 flex items-center gap-3">
-                  <img
-                    src={association?.branding.logo}
-                    alt={association?.name}
-                    className="w-8 h-8 rounded-full bg-white object-contain p-0.5"
-                  />
-                  <div>
-                    <div className="text-sm font-bold text-slate-900">{vault.name}</div>
-                    <div className="text-xs text-slate-600">{association?.shortName}</div>
+          {balancesLoading ? (
+            <div className="px-6 py-8 text-center text-slate-500 relative z-10">
+              Loading positions...
+            </div>
+          ) : balances.length === 0 ? (
+            <div className="px-6 py-8 text-center text-slate-500 relative z-10">
+              <p className="text-sm">No active positions yet</p>
+              <p className="text-xs mt-1">Deposit into a vault to get started</p>
+            </div>
+          ) : (
+            balances.map((userBalance, i) => {
+              const vault = vaults.find(v => v.vaultAddress === userBalance.vaultAddress);
+              if (!vault) return null;
+              
+              const association = associations.find(a => a.id === vault.associationId);
+              const balanceNum = parseFloat(userBalance.balance);
+              
+              return (
+                <motion.div
+                  key={vault.id}
+                  className="grid grid-cols-12 gap-4 px-6 py-4 items-center border-b border-slate-200 hover:bg-slate-50 transition-colors relative z-10"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.6 + i * 0.1 }}
+                >
+                  <div className="col-span-4 flex items-center gap-3">
+                    <img
+                      src={association?.branding.logo}
+                      alt={association?.name}
+                      className="w-8 h-8 rounded-full bg-white object-contain p-0.5"
+                    />
+                    <div>
+                      <div className="text-sm font-bold text-slate-900">{vault.name}</div>
+                      <div className="text-xs text-slate-600">{association?.shortName}</div>
+                    </div>
                   </div>
-                </div>
-                <div className="col-span-3 text-right">
-                  <div className="text-sm font-bold text-slate-900">{formatCurrency(vault.totalSupply / 100)}</div>
-                  <div className="text-xs text-slate-600">{(vault.totalSupply / 100000).toFixed(0)} XRP</div>
-                </div>
-                <div className="col-span-2 text-right">
-                  <div className="text-sm font-bold text-green-600">{vault.netApy}%</div>
-                </div>
-                <div className="col-span-2 text-right">
-                  <span className="text-[10px] font-bold px-2 py-1 rounded bg-blue-50 text-blue-600 border border-blue-200 uppercase">
-                    Supply
-                  </span>
-                </div>
-              </motion.div>
-            );
-          })}
+                  <div className="col-span-3 text-right">
+                    <div className="text-sm font-bold text-blue-600">{balanceNum.toFixed(2)} {vault.vaultTokenCurrency}</div>
+                    <div className="text-xs text-slate-600">≈ {balanceNum.toFixed(2)} {vault.acceptedCurrency}</div>
+                  </div>
+                  <div className="col-span-2 text-right">
+                    <div className="text-sm font-bold text-slate-900">{formatCurrency(vault.totalSupply / 100)}</div>
+                  </div>
+                  <div className="col-span-2 text-right">
+                    <div className="text-sm font-bold text-green-600">{vault.netApy}%</div>
+                  </div>
+                  <div className="col-span-1 text-right">
+                    <span className="text-[10px] font-bold px-2 py-1 rounded bg-blue-50 text-blue-600 border border-blue-200 uppercase">
+                      Long
+                    </span>
+                  </div>
+                </motion.div>
+              );
+            })
+          )}
         </div>
       </motion.div>
 

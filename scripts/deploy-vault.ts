@@ -46,18 +46,22 @@ async function deployVault(config: DeployConfig) {
   await client.fundWallet(vaultWallet);
   console.log(`✅ Vault address: ${vaultWallet.address}\n`);
 
-  console.log("🔗 Setting up vault trustlines...");
-  const trustlineTx = await client.autofill({
-    TransactionType: "TrustSet" as const,
-    Account: vaultWallet.address,
-    LimitAmount: {
-      currency: config.acceptedCurrency,
-      issuer: config.acceptedCurrencyIssuer,
-      value: "1000000000",
-    },
-  });
-  await client.submitAndWait(vaultWallet.sign(trustlineTx).tx_blob);
-  console.log("✅ Trustlines created\n");
+  if (config.acceptedCurrency !== "XRP") {
+    console.log("🔗 Setting up vault trustlines...");
+    const trustlineTx = await client.autofill({
+      TransactionType: "TrustSet" as const,
+      Account: vaultWallet.address,
+      LimitAmount: {
+        currency: config.acceptedCurrency,
+        issuer: config.acceptedCurrencyIssuer,
+        value: "1000000000",
+      },
+    });
+    await client.submitAndWait(vaultWallet.sign(trustlineTx).tx_blob);
+    console.log("✅ Trustlines created\n");
+  } else {
+    console.log("ℹ️  Skipping trustline (XRP is native)\n");
+  }
 
   if (config.createAmmPool && config.ammPoolAmount) {
     console.log("🏊 Creating AMM pool...");

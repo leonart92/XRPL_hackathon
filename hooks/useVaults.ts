@@ -28,7 +28,7 @@ export function useVaults({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
-  const effectiveRegistryAddress = registryAddress || process.env.REGISTRY_ADDRESS;
+  const effectiveRegistryAddress = registryAddress || import.meta.env.VITE_REGISTRY_ADDRESS;
 
   const fetchVaults = async () => {
     try {
