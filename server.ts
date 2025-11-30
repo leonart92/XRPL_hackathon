@@ -1,9 +1,9 @@
+import { existsSync, readFileSync, writeFileSync } from "fs";
+import { join } from "path";
 import { Wallet } from "xrpl";
+import type { VaultMetadata } from "./services/registry.service";
 import { RegistryService } from "./services/registry.service";
 import { xrplService } from "./services/xrpl.service";
-import type { VaultMetadata } from "./services/registry.service";
-import { readFileSync, writeFileSync, existsSync } from "fs";
-import { join } from "path";
 
 const VAULTS_FILE = join(process.cwd(), "vaults.json");
 
@@ -63,7 +63,8 @@ const server = Bun.serve({
         const body = await req.json();
 
         const registryAddress = process.env.VITE_REGISTRY_ADDRESS;
-        const registrySeed = process.env.VITE_REGISTRY_SEED || process.env.REGISTRY_SEED;
+        const registrySeed =
+          process.env.VITE_REGISTRY_SEED || process.env.REGISTRY_SEED;
 
         if (!registryAddress || !registrySeed) {
           return new Response(
@@ -74,7 +75,7 @@ const server = Bun.serve({
                 "Content-Type": "application/json",
                 "Access-Control-Allow-Origin": "*",
               },
-            }
+            },
           );
         }
 
@@ -106,7 +107,11 @@ const server = Bun.serve({
           yieldTokenIssuer: body.yieldTokenIssuer,
         };
 
-        await registry.registerVault(vaultWallet.address, vaultWallet, metadata);
+        await registry.registerVault(
+          vaultWallet.address,
+          vaultWallet,
+          metadata,
+        );
         console.log("✅ Vault registered");
 
         const vaultConfig: VaultConfig = {
@@ -137,7 +142,7 @@ const server = Bun.serve({
               "Content-Type": "application/json",
               "Access-Control-Allow-Origin": "*",
             },
-          }
+          },
         );
       } catch (error: any) {
         console.error("Deployment error:", error);
@@ -150,7 +155,7 @@ const server = Bun.serve({
               "Content-Type": "application/json",
               "Access-Control-Allow-Origin": "*",
             },
-          }
+          },
         );
       }
     }
@@ -169,12 +174,14 @@ const server = Bun.serve({
                 "Content-Type": "application/json",
                 "Access-Control-Allow-Origin": "*",
               },
-            }
+            },
           );
         }
 
-        const registryAddress = process.env.VITE_REGISTRY_ADDRESS || process.env.REGISTRY_ADDRESS;
-        const registrySeed = process.env.VITE_REGISTRY_SEED || process.env.REGISTRY_SEED;
+        const registryAddress =
+          process.env.VITE_REGISTRY_ADDRESS || process.env.REGISTRY_ADDRESS;
+        const registrySeed =
+          process.env.VITE_REGISTRY_SEED || process.env.REGISTRY_SEED;
 
         if (!registryAddress || !registrySeed) {
           return new Response(
@@ -185,7 +192,7 @@ const server = Bun.serve({
                 "Content-Type": "application/json",
                 "Access-Control-Allow-Origin": "*",
               },
-            }
+            },
           );
         }
 
@@ -203,7 +210,9 @@ const server = Bun.serve({
         });
 
         const vaults = await registry.listVaults();
-        const vaultMetadata = vaults.find((v) => v.vaultAddress === vaultAddress);
+        const vaultMetadata = vaults.find(
+          (v) => v.vaultAddress === vaultAddress,
+        );
 
         if (!vaultMetadata) {
           throw new Error("Vault not found in registry");
@@ -232,7 +241,7 @@ const server = Bun.serve({
 
         const lpLine = accountLines.result.lines.find(
           (line) =>
-            line.currency === lpTokenCurrency && line.account === lpTokenIssuer
+            line.currency === lpTokenCurrency && line.account === lpTokenIssuer,
         );
 
         if (!lpLine) {
@@ -247,21 +256,24 @@ const server = Bun.serve({
         console.log("🔄 Withdrawing yield portion from AMM...");
         console.log("   Withdrawing:", yieldWithdrawAmount, "LP tokens");
 
-        const ammWithdrawTx = await client.autofill({
-          TransactionType: "AMMWithdraw" as const,
-          Account: vaultAddress,
-          Asset: { currency: "XRP" },
-          Asset2: {
-            currency: (ammInfo.result.amm.amount2 as any).currency,
-            issuer: (ammInfo.result.amm.amount2 as any).issuer,
+        const ammWithdrawTx = await client.autofill(
+          {
+            TransactionType: "AMMWithdraw" as const,
+            Account: vaultAddress,
+            Asset: { currency: "XRP" },
+            Asset2: {
+              currency: (ammInfo.result.amm.amount2 as any).currency,
+              issuer: (ammInfo.result.amm.amount2 as any).issuer,
+            },
+            LPTokenIn: {
+              currency: lpTokenCurrency,
+              issuer: lpTokenIssuer,
+              value: yieldWithdrawAmount,
+            },
+            Flags: 0x00010000,
           },
-          LPTokenIn: {
-            currency: lpTokenCurrency,
-            issuer: lpTokenIssuer,
-            value: yieldWithdrawAmount,
-          },
-          Flags: 0x00010000,
-        }, 20);
+          20,
+        );
 
         const signed = vaultWallet.sign(ammWithdrawTx);
         const withdrawResult = await client.submitAndWait(signed.tx_blob);
@@ -275,10 +287,15 @@ const server = Bun.serve({
           ledger_index: "validated",
         });
 
-        const vaultXRPBalance = parseInt(accountInfo.result.account_data.Balance);
+        const vaultXRPBalance = parseInt(
+          accountInfo.result.account_data.Balance,
+        );
         const withdrawnXRP = vaultXRPBalance / 1_000_000 - 20;
 
-        console.log("💵 Vault XRP after withdrawal:", vaultXRPBalance / 1_000_000);
+        console.log(
+          "💵 Vault XRP after withdrawal:",
+          vaultXRPBalance / 1_000_000,
+        );
         console.log("   Estimated yield:", withdrawnXRP.toFixed(2), "XRP");
 
         let paymentTxHash = null;
@@ -292,15 +309,20 @@ const server = Bun.serve({
           console.log("   Amount:", amountSent, "XRP");
           console.log("   To:", vaultMetadata.ngoAddress);
 
-          const paymentTx = await client.autofill({
-            TransactionType: "Payment" as const,
-            Account: vaultAddress,
-            Destination: vaultMetadata.ngoAddress,
-            Amount: yieldToSend.toString(),
-          }, 20);
+          const paymentTx = await client.autofill(
+            {
+              TransactionType: "Payment" as const,
+              Account: vaultAddress,
+              Destination: vaultMetadata.ngoAddress,
+              Amount: yieldToSend.toString(),
+            },
+            20,
+          );
 
           const signedPayment = vaultWallet.sign(paymentTx);
-          const paymentResult = await client.submitAndWait(signedPayment.tx_blob);
+          const paymentResult = await client.submitAndWait(
+            signedPayment.tx_blob,
+          );
           paymentTxHash = paymentResult.result.hash;
 
           console.log("   ✅ Payment TX:", paymentTxHash);
@@ -324,7 +346,7 @@ const server = Bun.serve({
               "Content-Type": "application/json",
               "Access-Control-Allow-Origin": "*",
             },
-          }
+          },
         );
       } catch (error: any) {
         console.error("Harvest error:", error);
@@ -337,14 +359,14 @@ const server = Bun.serve({
               "Content-Type": "application/json",
               "Access-Control-Allow-Origin": "*",
             },
-          }
+          },
         );
       }
     }
 
     const filePath = url.pathname === "/" ? "/index.html" : url.pathname;
     const file = Bun.file(join(DIST_DIR, filePath));
-    
+
     if (await file.exists()) {
       return new Response(file);
     }
@@ -357,3 +379,4 @@ const server = Bun.serve({
 console.log(`🚀 Server running on http://localhost:${server.port}`);
 console.log(`   - Frontend: Serving from ${DIST_DIR}`);
 console.log(`   - API: /api/deploy-vault, /api/harvest-yield`);
+console.log(import.meta.env.VITE_REGISTRY_ADDRESS);
