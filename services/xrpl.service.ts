@@ -22,6 +22,7 @@ class XRPLService {
 
     this.client = new Client(url, {
       connectionTimeout: 10000,
+      timeout: 20000,
     });
 
     await this.client.connect();
@@ -119,8 +120,13 @@ class XRPLService {
       },
     };
 
-    const prepared = await client.autofill(transaction);
+    const prepared = await client.autofill(transaction, 20);
     return prepared;
+  }
+
+  async autofillWithBuffer(transaction: any, signerListCount = 0) {
+    const client = this.getClient();
+    return await client.autofill(transaction, 20 + signerListCount);
   }
 
   async subscribeToAccount(account: string, callback: (tx: any) => void) {

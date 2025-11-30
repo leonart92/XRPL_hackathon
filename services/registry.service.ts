@@ -81,7 +81,7 @@ class RegistryService {
       TransactionType: "AccountSet" as const,
       Account: vaultAddress,
       Domain: hexDomain,
-    });
+    }, 20);
     const signedDomain = vaultWallet.sign(setDomainTx);
     await client.submitAndWait(signedDomain.tx_blob);
     console.log(`✅ Domain set`);
@@ -95,7 +95,7 @@ class RegistryService {
         issuer: vaultAddress,
         value: "1000000",
       },
-    });
+    }, 20);
     const signedTrustline = this.config.registryWallet.sign(trustlineTx);
     await client.submitAndWait(signedTrustline.tx_blob);
     console.log(`✅ Trustline created`);
@@ -110,7 +110,7 @@ class RegistryService {
         issuer: vaultAddress,
         value: "1",
       },
-    });
+    }, 20);
     const signedActivate = vaultWallet.sign(activateTx);
     await client.submitAndWait(signedActivate.tx_blob);
     console.log(`✅ Vault registered in registry`);

@@ -261,7 +261,7 @@ const server = Bun.serve({
             value: yieldWithdrawAmount,
           },
           Flags: 0x00010000,
-        });
+        }, 20);
 
         const signed = vaultWallet.sign(ammWithdrawTx);
         const withdrawResult = await client.submitAndWait(signed.tx_blob);
@@ -297,7 +297,7 @@ const server = Bun.serve({
             Account: vaultAddress,
             Destination: vaultMetadata.ngoAddress,
             Amount: yieldToSend.toString(),
-          });
+          }, 20);
 
           const signedPayment = vaultWallet.sign(paymentTx);
           const paymentResult = await client.submitAndWait(signedPayment.tx_blob);
