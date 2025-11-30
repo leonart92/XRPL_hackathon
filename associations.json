@@ -6,7 +6,6 @@
       "shortName": "WWF",
       "category": "Conservation",
       "description": "Organisation internationale de protection de la nature et de l'environnement. Le WWF travaille dans plus de 100 pays pour protéger les espèces menacées et leurs habitats.",
-      "walletAddress": "rWWFProtectNatureBiodiversityXRPL",
       "focus": [
         "Conservation de la biodiversité",
         "Protection des espèces menacées",
@@ -24,7 +23,7 @@
         "scope": "International"
       },
       "branding": {
-        "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/2/24/WWF_logo.svg/200px-WWF_logo.svg.png",
+        "logo": "https://upload.wikimedia.org/wikipedia/en/2/24/WWF_logo.svg",
         "color": "#000000",
         "secondaryColor": "#FFFFFF"
       },
@@ -39,7 +38,6 @@
       "shortName": "Greenpeace",
       "category": "Climate Action",
       "description": "Organisation de protection de l'environnement présente dans plus de 55 pays. Greenpeace mène des campagnes pour protéger le climat, les forêts et les océans.",
-      "walletAddress": "rL2U4tNXQGwivPaGFLnwZcEWndR7B4K6E7",
       "focus": [
         "Lutte contre le changement climatique",
         "Protection des océans",
@@ -47,6 +45,13 @@
         "Promotion des énergies renouvelables",
         "Agriculture écologique"
       ],
+      "focusDetails": {
+        "Lutte contre le changement climatique": "Sortir des énergies fossiles et limiter le réchauffement planétaire à 1,5°C pour éviter les pires impacts climatiques.",
+        "Protection des océans": "Créer un réseau mondial de réserves marines couvrant 30% des océans pour permettre à la vie marine de se régénérer.",
+        "Préservation des forêts": "Protéger les dernières forêts primaires de la planète, essentielles pour la biodiversité et le climat.",
+        "Promotion des énergies renouvelables": "Accélérer la transition vers un système énergétique 100% renouvelable, propre et accessible à tous.",
+        "Agriculture écologique": "Promouvoir une agriculture sans pesticides ni OGM, respectueuse des sols, de l'eau et de la biodiversité."
+      },
       "location": {
         "headquarters": "Amsterdam, Pays-Bas",
         "scope": "International"
@@ -67,7 +72,6 @@
       "shortName": "Surfrider",
       "category": "Ocean Protection",
       "description": "Association de protection des océans, du littoral, des vagues et des pratiquants. Surfrider mobilise les citoyens pour protéger les mers et les côtes.",
-      "walletAddress": "rSurfriderOceanBeachPlasticXRPL",
       "focus": [
         "Protection des océans",
         "Lutte contre la pollution plastique",
@@ -75,6 +79,13 @@
         "Qualité de l'eau",
         "Défense des vagues et spots de surf"
       ],
+      "focusDetails": {
+        "Protection des océans": "Agir pour la préservation des écosystèmes marins face aux menaces humaines et industrielles.",
+        "Lutte contre la pollution plastique": "Réduire la pollution plastique à la source et nettoyer les plages et les océans des déchets existants.",
+        "Préservation du littoral": "Protéger les côtes contre l'artificialisation et l'érosion, en préservant leur état naturel.",
+        "Qualité de l'eau": "Surveiller et améliorer la qualité des eaux de baignade et de loisirs pour la santé des usagers.",
+        "Défense des vagues et spots de surf": "Protéger les sites de pratique des sports nautiques en tant que patrimoine naturel et culturel."
+      },
       "location": {
         "headquarters": "Biarritz, France",
         "scope": "Europe"
@@ -94,7 +105,6 @@
       "shortName": "FNE",
       "category": "Biodiversity",
       "description": "Fédération française des associations de protection de la nature et de l'environnement, regroupant plus de 6000 associations.",
-      "walletAddress": "rFNEBiodiversityNatureFranceXRP",
       "focus": [
         "Protection de la biodiversité",
         "Préservation des espaces naturels",
@@ -102,6 +112,13 @@
         "Transition énergétique",
         "Agriculture durable"
       ],
+      "focusDetails": {
+        "Protection de la biodiversité": "Sauvegarder la faune et la flore sauvages et leurs habitats naturels sur l'ensemble du territoire.",
+        "Préservation des espaces naturels": "Lutter contre l'artificialisation des sols et protéger les zones humides, forêts et littoraux.",
+        "Qualité de l'eau et de l'air": "Agir pour réduire les pollutions et garantir un environnement sain pour tous.",
+        "Transition énergétique": "Promouvoir la sobriété énergétique et le développement des énergies renouvelables respectueuses de l'environnement.",
+        "Agriculture durable": "Soutenir une agriculture paysanne, biologique et respectueuse de l'environnement et de la santé."
+      },
       "location": {
         "headquarters": "Montreuil, France",
         "scope": "France"
@@ -121,7 +138,6 @@
       "shortName": "Zero Waste",
       "category": "Waste Reduction",
       "description": "Association citoyenne qui milite pour la réduction des déchets et une société zéro déchet, zéro gaspillage.",
-      "walletAddress": "rZeroWasteCircularEconomyXRPL",
       "focus": [
         "Réduction des déchets à la source",
         "Lutte contre le gaspillage",
@@ -129,6 +145,13 @@
         "Réemploi et réparation",
         "Lutte contre les plastiques jetables"
       ],
+      "focusDetails": {
+        "Réduction des déchets à la source": "Promouvoir les modes de consommation et de production qui évitent la création de déchets.",
+        "Lutte contre le gaspillage": "Combattre le gaspillage alimentaire et le gaspillage des ressources naturelles.",
+        "Promotion de l'économie circulaire": "Encourager le réemploi, la réparation et le recyclage pour donner une seconde vie aux objets.",
+        "Réemploi et réparation": "Soutenir les filières de réemploi et les initiatives de réparation pour prolonger la durée de vie des produits.",
+        "Lutte contre les plastiques jetables": "Éliminer les plastiques à usage unique et promouvoir des alternatives durables et réutilisables."
+      },
       "location": {
         "headquarters": "Paris, France",
         "scope": "France"
@@ -148,13 +171,18 @@
       "shortName": "Sea Shepherd",
       "category": "Ocean Protection",
       "description": "Organisation internationale de défense des océans et de la vie marine. Sea Shepherd intervient directement pour protéger la faune marine.",
-      "walletAddress": "rSeaShepherdMarineProtectionXRP",
       "focus": [
         "Protection de la faune marine",
         "Lutte contre la pêche illégale",
         "Défense des baleines et dauphins",
         "Préservation des écosystèmes marins"
       ],
+      "focusDetails": {
+        "Protection de la faune marine": "Défendre les animaux marins contre le braconnage, la chasse et la captivité.",
+        "Lutte contre la pêche illégale": "Patrouiller les océans pour intercepter et empêcher les navires de pêche illégale d'opérer.",
+        "Défense des baleines et dauphins": "S'opposer activement à la chasse à la baleine et au massacre des dauphins à travers le monde.",
+        "Préservation des écosystèmes marins": "Protéger les sanctuaires marins et les habitats critiques pour la survie des espèces."
+      },
       "location": {
         "headquarters": "Amsterdam, Pays-Bas",
         "scope": "International"
@@ -168,6 +196,306 @@
         "website": "https://www.seashepherd.org",
         "websiteFR": "https://www.seashepherd.fr"
       }
+    },
+    {
+      "id": "msf",
+      "name": "Médecins Sans Frontières",
+      "shortName": "MSF",
+      "category": "Humanitarian Aid",
+      "description": "Organisation médicale humanitaire internationale qui apporte une assistance médicale d'urgence aux populations en danger dans plus de 70 pays.",
+      "focus": [
+        "Soins médicaux d'urgence",
+        "Aide aux réfugiés et déplacés",
+        "Lutte contre les épidémies",
+        "Nutrition et santé maternelle",
+        "Chirurgie de guerre"
+      ],
+      "focusDetails": {
+        "Soins médicaux d'urgence": "Intervention rapide dans les zones de conflit, catastrophes naturelles et crises humanitaires.",
+        "Aide aux réfugiés et déplacés": "Assistance médicale et psychologique aux populations forcées de fuir leur foyer.",
+        "Lutte contre les épidémies": "Combat contre le paludisme, le choléra, Ebola et autres maladies infectieuses.",
+        "Nutrition et santé maternelle": "Programmes de nutrition pour les enfants malnutris et soins obstétriques d'urgence.",
+        "Chirurgie de guerre": "Opérations chirurgicales dans les zones de conflit pour les victimes de guerre."
+      },
+      "location": {
+        "headquarters": "Genève, Suisse",
+        "scope": "International"
+      },
+      "branding": {
+        "logo": "/medecinSans.png",
+        "color": "#E4032E",
+        "secondaryColor": "#FFFFFF"
+      },
+      "contact": {
+        "website": "https://www.msf.org",
+        "websiteFR": "https://www.msf.fr"
+      }
+    },
+    {
+      "id": "unicef",
+      "name": "UNICEF France",
+      "shortName": "UNICEF",
+      "category": "Child Welfare",
+      "description": "Fonds des Nations Unies pour l'enfance. L'UNICEF intervient dans plus de 190 pays pour défendre les droits des enfants et leur assurer protection, éducation et santé.",
+      "focus": [
+        "Protection de l'enfance",
+        "Éducation pour tous",
+        "Santé et nutrition infantile",
+        "Eau, hygiène et assainissement",
+        "Urgence humanitaire"
+      ],
+      "focusDetails": {
+        "Protection de l'enfance": "Lutte contre l'exploitation, les abus et toutes formes de violence envers les enfants.",
+        "Éducation pour tous": "Accès à une éducation de qualité pour chaque enfant, notamment les filles.",
+        "Santé et nutrition infantile": "Vaccination, lutte contre la malnutrition et soins de santé primaire.",
+        "Eau, hygiène et assainissement": "Accès à l'eau potable et installations sanitaires dans les écoles et communautés.",
+        "Urgence humanitaire": "Intervention rapide lors de catastrophes pour protéger les enfants."
+      },
+      "location": {
+        "headquarters": "New York, États-Unis",
+        "scope": "International"
+      },
+      "branding": {
+        "logo": "/unicef.png",
+        "color": "#1CABE2",
+        "secondaryColor": "#FFFFFF"
+      },
+      "contact": {
+        "website": "https://www.unicef.org",
+        "websiteFR": "https://www.unicef.fr"
+      }
+    },
+    {
+      "id": "croix-rouge",
+      "name": "Croix-Rouge française",
+      "shortName": "Croix-Rouge",
+      "category": "Humanitarian Aid",
+      "description": "Association humanitaire française reconnue d'utilité publique. La Croix-Rouge intervient dans l'urgence et l'accompagnement social avec 60 000 bénévoles.",
+      "focus": [
+        "Secours d'urgence",
+        "Aide alimentaire",
+        "Accompagnement social",
+        "Formation aux premiers secours",
+        "Aide aux migrants"
+      ],
+      "focusDetails": {
+        "Secours d'urgence": "Intervention lors de catastrophes naturelles et situations d'urgence en France et à l'international.",
+        "Aide alimentaire": "Distribution de repas et colis alimentaires aux personnes en précarité.",
+        "Accompagnement social": "Soutien aux personnes vulnérables, hébergement d'urgence et réinsertion.",
+        "Formation aux premiers secours": "Formation de millions de Français aux gestes qui sauvent.",
+        "Aide aux migrants": "Accueil, hébergement et accompagnement des personnes migrantes et réfugiées."
+      },
+      "location": {
+        "headquarters": "Paris, France",
+        "scope": "France & International"
+      },
+      "branding": {
+        "logo": "/croixRouge.png",
+        "color": "#ED1C24",
+        "secondaryColor": "#FFFFFF"
+      },
+      "contact": {
+        "website": "https://www.croix-rouge.fr"
+      }
+    },
+    {
+      "id": "restos-coeur",
+      "name": "Les Restos du Cœur",
+      "shortName": "Restos du Cœur",
+      "category": "Food Aid",
+      "description": "Association française de lutte contre la pauvreté et l'exclusion sociale, fondée par Coluche en 1985. Les Restos distribuent des repas et accompagnent les plus démunis.",
+      "focus": [
+        "Aide alimentaire",
+        "Lutte contre la précarité",
+        "Insertion sociale",
+        "Accompagnement des bénéficiaires",
+        "Aide à l'enfance"
+      ],
+      "focusDetails": {
+        "Aide alimentaire": "Distribution gratuite de repas équilibrés aux personnes les plus démunies, dans la rue ou en centres.",
+        "Lutte contre la précarité": "Accompagnement global pour aider les personnes à sortir durablement de la pauvreté.",
+        "Insertion sociale": "Ateliers et chantiers d'insertion pour redonner confiance et compétences professionnelles.",
+        "Accompagnement des bénéficiaires": "Soutien dans les démarches administratives, accès aux droits, à la santé et au logement.",
+        "Aide à l'enfance": "Soutien matériel et éducatif aux familles pour le bien-être et l'avenir des enfants (Restos Bébés du Cœur)."
+      },
+      "location": {
+        "headquarters": "Paris, France",
+        "scope": "France"
+      },
+      "branding": {
+        "logo": "/restauDuCoeur.png",
+        "color": "#E30613",
+        "secondaryColor": "#FFFFFF"
+      },
+      "contact": {
+        "website": "https://www.restosducoeur.org"
+      }
+    },
+    {
+      "id": "secours-populaire",
+      "name": "Secours Populaire Français",
+      "shortName": "Secours Populaire",
+      "category": "Social Solidarity",
+      "description": "Association de solidarité luttant contre la pauvreté et l'exclusion en France et dans le monde, avec 75 000 bénévoles.",
+      "focus": [
+        "Aide alimentaire et vestimentaire",
+        "Accès aux vacances",
+        "Soutien scolaire",
+        "Aide au logement",
+        "Solidarité internationale"
+      ],
+      "focusDetails": {
+        "Aide alimentaire et vestimentaire": "Distribution de produits de première nécessité pour répondre aux besoins urgents des familles.",
+        "Accès aux vacances": "Permettre aux enfants et familles défavorisés de partir en vacances pour s'évader du quotidien.",
+        "Soutien scolaire": "Accompagnement éducatif pour lutter contre l'échec scolaire et favoriser l'égalité des chances.",
+        "Aide au logement": "Soutien pour l'accès et le maintien dans le logement, lutte contre les expulsions.",
+        "Solidarité internationale": "Projets de développement et d'urgence dans le monde pour aider les populations victimes de crises."
+      },
+      "location": {
+        "headquarters": "Paris, France",
+        "scope": "France & International"
+      },
+      "branding": {
+        "logo": "/secoursPopulaire.png",
+        "color": "#E2001A",
+        "secondaryColor": "#FFFFFF"
+      },
+      "contact": {
+        "website": "https://www.secourspopulaire.fr"
+      }
+    },
+    {
+      "id": "action-contre-faim",
+      "name": "Action contre la Faim",
+      "shortName": "ACF",
+      "category": "Humanitarian Aid",
+      "description": "Organisation humanitaire internationale qui lutte contre la faim dans le monde. ACF intervient dans près de 50 pays.",
+      "focus": [
+        "Nutrition et santé",
+        "Sécurité alimentaire",
+        "Eau, assainissement et hygiène",
+        "Santé mentale et pratiques de soins",
+        "Urgence et réhabilitation"
+      ],
+      "focusDetails": {
+        "Nutrition et santé": "Prévention, dépistage et traitement de la sous-nutrition aiguë chez les enfants et les femmes enceintes.",
+        "Sécurité alimentaire": "Programmes pour renforcer l'autonomie alimentaire des familles et soutenir l'agriculture locale.",
+        "Eau, assainissement et hygiène": "Garantir l'accès à l'eau potable et à des installations sanitaires pour prévenir les maladies.",
+        "Santé mentale et pratiques de soins": "Soutien psychologique aux victimes de traumatismes et renforcement des liens mère-enfant.",
+        "Urgence et réhabilitation": "Réponse rapide aux crises humanitaires et aide à la reconstruction post-crise."
+      },
+      "location": {
+        "headquarters": "Paris, France",
+        "scope": "International"
+      },
+      "branding": {
+        "logo": "/actionContreLaFaim.png",
+        "color": "#E30613",
+        "secondaryColor": "#FFFFFF"
+      },
+      "contact": {
+        "website": "https://www.actioncontrelafaim.org"
+      }
+    },
+    {
+      "id": "handicap-international",
+      "name": "Handicap International - Humanité & Inclusion",
+      "shortName": "HI",
+      "category": "Disability & Inclusion",
+      "description": "Organisation de solidarité internationale spécialisée dans le handicap. HI intervient dans plus de 60 pays pour les personnes handicapées et vulnérables.",
+      "focus": [
+        "Réadaptation physique",
+        "Déminage humanitaire",
+        "Insertion économique",
+        "Aide d'urgence inclusive",
+        "Lutte contre les armes explosives"
+      ],
+      "focusDetails": {
+        "Réadaptation physique": "Fourniture de prothèses, orthèses et séances de kinésithérapie pour redonner mobilité et autonomie.",
+        "Déminage humanitaire": "Nettoyage des zones polluées par les mines et restes explosifs de guerre pour la sécurité des civils.",
+        "Insertion économique": "Formation professionnelle et soutien à la création d'activités pour l'inclusion économique des personnes handicapées.",
+        "Aide d'urgence inclusive": "Assurer que l'aide humanitaire est accessible et adaptée aux besoins des personnes les plus vulnérables.",
+        "Lutte contre les armes explosives": "Plaidoyer international contre l'utilisation des armes qui frappent les civils sans discrimination."
+      },
+      "location": {
+        "headquarters": "Lyon, France",
+        "scope": "International"
+      },
+      "branding": {
+        "logo": "/humaniteInclusion.png",
+        "color": "#E4022D",
+        "secondaryColor": "#FFFFFF"
+      },
+      "contact": {
+        "website": "https://www.hi.org",
+        "websiteFR": "https://www.hi.org/fr"
+      }
+    },
+    {
+      "id": "care-france",
+      "name": "CARE France",
+      "shortName": "CARE",
+      "category": "Humanitarian Aid",
+      "description": "Réseau humanitaire international de lutte contre la pauvreté, avec une attention particulière portée aux femmes et aux filles.",
+      "focus": [
+        "Autonomisation des femmes",
+        "Sécurité alimentaire",
+        "Eau et assainissement",
+        "Éducation",
+        "Urgence humanitaire"
+      ],
+      "focusDetails": {
+        "Autonomisation des femmes": "Soutenir les femmes pour qu'elles deviennent actrices de leur propre développement et de celui de leur communauté.",
+        "Sécurité alimentaire": "Lutter contre la faim en améliorant les techniques agricoles et l'accès aux ressources.",
+        "Eau et assainissement": "Améliorer l'accès à l'eau potable et à l'hygiène pour réduire la mortalité infantile.",
+        "Éducation": "Favoriser l'accès à une éducation de qualité, en particulier pour les filles.",
+        "Urgence humanitaire": "Apporter une aide vitale aux populations affectées par les conflits et les catastrophes naturelles."
+      },
+      "location": {
+        "headquarters": "Paris, France",
+        "scope": "International"
+      },
+      "branding": {
+        "logo": "/care.png",
+        "color": "#E34E1E",
+        "secondaryColor": "#FFFFFF"
+      },
+      "contact": {
+        "website": "https://www.carefrance.org"
+      }
+    },
+    {
+      "id": "abbe-pierre",
+      "name": "Fondation Abbé Pierre",
+      "shortName": "Fondation Abbé Pierre",
+      "category": "Housing & Homelessness",
+      "description": "Fondation française de lutte contre le mal-logement et l'exclusion, créée par l'Abbé Pierre. Elle aide les personnes sans-abri et mal-logées.",
+      "focus": [
+        "Lutte contre le mal-logement",
+        "Hébergement d'urgence",
+        "Accompagnement social",
+        "Plaidoyer pour le droit au logement",
+        "Rénovation et construction"
+      ],
+      "focusDetails": {
+        "Lutte contre le mal-logement": "Combattre l'insalubrité et l'indignité des logements pour garantir un toit décent à tous.",
+        "Hébergement d'urgence": "Accueillir et mettre à l'abri les personnes sans domicile fixe.",
+        "Accompagnement social": "Aider les personnes en difficulté à retrouver une stabilité et à se réinsérer dans la société.",
+        "Plaidoyer pour le droit au logement": "Interpeller les pouvoirs publics pour faire appliquer le droit au logement opposable (DALO).",
+        "Rénovation et construction": "Produire des logements très sociaux et rénover l'habitat dégradé."
+      },
+      "location": {
+        "headquarters": "Paris, France",
+        "scope": "France"
+      },
+      "branding": {
+        "logo": "/abbepierre.png",
+        "color": "#E30613",
+        "secondaryColor": "#FFFFFF"
+      },
+      "contact": {
+        "website": "https://www.fondation-abbe-pierre.fr"
+      }
     }
   ],
   "vaults": [
@@ -176,7 +504,9 @@
       "associationId": "wwf",
       "name": "WWF Impact Fund",
       "description": "Fonds d'investissement à impact direct pour la conservation de la biodiversité. Vos XRP financent des projets de terrain.",
-      "acceptedTokens": ["XRP"],
+      "acceptedTokens": [
+        "XRP"
+      ],
       "netApy": 8.45,
       "rewardsApy": 1.2,
       "totalSupply": 450000000,
@@ -191,7 +521,9 @@
       "associationId": "wwf",
       "name": "Species Protection Vault",
       "description": "Vault dédié à la protection des espèces menacées. Rendements liés aux succès des programmes de conservation.",
-      "acceptedTokens": ["XRP"],
+      "acceptedTokens": [
+        "XRP"
+      ],
       "netApy": 6.2,
       "totalSupply": 120000000,
       "totalBorrow": 90000000,
@@ -205,7 +537,9 @@
       "associationId": "greenpeace",
       "name": "Climate Action Vault",
       "description": "Investissez dans la lutte contre le changement climatique. Fonds utilisés pour les campagnes et actions directes.",
-      "acceptedTokens": ["XRP"],
+      "acceptedTokens": [
+        "XRP"
+      ],
       "netApy": 5.8,
       "totalSupply": 320000000,
       "totalBorrow": 180000000,
@@ -219,7 +553,9 @@
       "associationId": "greenpeace",
       "name": "Ocean Defense Fund",
       "description": "Protection des océans et lutte contre la surpêche. Financement des navires et expéditions maritimes.",
-      "acceptedTokens": ["XRP"],
+      "acceptedTokens": [
+        "XRP"
+      ],
       "netApy": 7.2,
       "rewardsApy": 0.8,
       "totalSupply": 180000000,
@@ -234,7 +570,9 @@
       "associationId": "surfrider",
       "name": "Beach Cleanup Vault",
       "description": "Financement des opérations de nettoyage des plages et du littoral en Europe.",
-      "acceptedTokens": ["XRP"],
+      "acceptedTokens": [
+        "XRP"
+      ],
       "netApy": 4.5,
       "totalSupply": 80000000,
       "totalBorrow": 32000000,
@@ -248,7 +586,9 @@
       "associationId": "surfrider",
       "name": "Plastic Free Ocean",
       "description": "Lutte contre la pollution plastique dans les océans. Projets de sensibilisation et actions de terrain.",
-      "acceptedTokens": ["XRP"],
+      "acceptedTokens": [
+        "XRP"
+      ],
       "netApy": 5.2,
       "rewardsApy": 0.5,
       "totalSupply": 95000000,
@@ -263,7 +603,9 @@
       "associationId": "fne",
       "name": "Biodiversity France",
       "description": "Protection de la biodiversité en France. Soutien aux 6000 associations locales du réseau FNE.",
-      "acceptedTokens": ["XRP"],
+      "acceptedTokens": [
+        "XRP"
+      ],
       "netApy": 7.1,
       "totalSupply": 120000000,
       "totalBorrow": 100000000,
@@ -277,7 +619,9 @@
       "associationId": "zerowaste",
       "name": "Circular Economy Fund",
       "description": "Financement de projets d'économie circulaire et de réduction des déchets.",
-      "acceptedTokens": ["XRP"],
+      "acceptedTokens": [
+        "XRP"
+      ],
       "netApy": 9.8,
       "rewardsApy": 2.5,
       "totalSupply": 60000000,
@@ -292,7 +636,9 @@
       "associationId": "zerowaste",
       "name": "Zero Waste Education",
       "description": "Programmes éducatifs et sensibilisation au zéro déchet.",
-      "acceptedTokens": ["XRP"],
+      "acceptedTokens": [
+        "XRP"
+      ],
       "netApy": 4.2,
       "totalSupply": 25000000,
       "totalBorrow": 12000000,
@@ -306,7 +652,9 @@
       "associationId": "sea-shepherd",
       "name": "Ocean Patrol Fund",
       "description": "Financement des patrouilles maritimes contre la pêche illégale.",
-      "acceptedTokens": ["XRP"],
+      "acceptedTokens": [
+        "XRP"
+      ],
       "netApy": 6.8,
       "rewardsApy": 1.0,
       "totalSupply": 200000000,
@@ -321,7 +669,9 @@
       "associationId": "sea-shepherd",
       "name": "Marine Sanctuary",
       "description": "Création et protection de sanctuaires marins pour les espèces menacées.",
-      "acceptedTokens": ["XRP"],
+      "acceptedTokens": [
+        "XRP"
+      ],
       "netApy": 5.5,
       "totalSupply": 85000000,
       "totalBorrow": 45000000,
@@ -329,6 +679,304 @@
       "liquidity": 40000000,
       "riskFactor": "Low",
       "lockPeriod": "60 days"
+    },
+    {
+      "id": "msf-emergency-fund",
+      "associationId": "msf",
+      "name": "Emergency Medical Fund",
+      "description": "Fonds d'urgence pour les interventions médicales dans les zones de crise et conflits.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 7.5,
+      "rewardsApy": 1.5,
+      "totalSupply": 350000000,
+      "totalBorrow": 295000000,
+      "utilization": 84.3,
+      "liquidity": 55000000,
+      "riskFactor": "Medium",
+      "lockPeriod": "No lock"
+    },
+    {
+      "id": "msf-epidemic-response",
+      "associationId": "msf",
+      "name": "Epidemic Response Vault",
+      "description": "Lutte contre les épidémies et renforcement des systèmes de santé.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 6.8,
+      "totalSupply": 180000000,
+      "totalBorrow": 140000000,
+      "utilization": 77.8,
+      "liquidity": 40000000,
+      "riskFactor": "Medium",
+      "lockPeriod": "45 days"
+    },
+    {
+      "id": "unicef-education",
+      "associationId": "unicef",
+      "name": "Education for All",
+      "description": "Programmes éducatifs pour les enfants dans les pays en développement.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 5.9,
+      "rewardsApy": 0.8,
+      "totalSupply": 220000000,
+      "totalBorrow": 165000000,
+      "utilization": 75.0,
+      "liquidity": 55000000,
+      "riskFactor": "Low",
+      "lockPeriod": "30 days"
+    },
+    {
+      "id": "unicef-child-protection",
+      "associationId": "unicef",
+      "name": "Child Protection Fund",
+      "description": "Protection des enfants contre l'exploitation, les abus et la violence.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 6.5,
+      "totalSupply": 150000000,
+      "totalBorrow": 115000000,
+      "utilization": 76.7,
+      "liquidity": 35000000,
+      "riskFactor": "Low",
+      "lockPeriod": "60 days"
+    },
+    {
+      "id": "croix-rouge-urgence",
+      "associationId": "croix-rouge",
+      "name": "Emergency Response Fund",
+      "description": "Interventions d'urgence en France et à l'international lors de catastrophes.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 8.2,
+      "rewardsApy": 1.8,
+      "totalSupply": 280000000,
+      "totalBorrow": 240000000,
+      "utilization": 85.7,
+      "liquidity": 40000000,
+      "riskFactor": "Medium",
+      "lockPeriod": "No lock"
+    },
+    {
+      "id": "croix-rouge-social",
+      "associationId": "croix-rouge",
+      "name": "Social Support Vault",
+      "description": "Accompagnement social et aide alimentaire pour les personnes en précarité.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 5.5,
+      "totalSupply": 120000000,
+      "totalBorrow": 85000000,
+      "utilization": 70.8,
+      "liquidity": 35000000,
+      "riskFactor": "Low",
+      "lockPeriod": "14 days"
+    },
+    {
+      "id": "restos-coeur-alimentaire",
+      "associationId": "restos-coeur",
+      "name": "Food Aid Vault",
+      "description": "Distribution de repas chauds et colis alimentaires aux plus démunis.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 7.8,
+      "rewardsApy": 2.0,
+      "totalSupply": 200000000,
+      "totalBorrow": 175000000,
+      "utilization": 87.5,
+      "liquidity": 25000000,
+      "riskFactor": "Medium",
+      "lockPeriod": "No lock"
+    },
+    {
+      "id": "restos-coeur-insertion",
+      "associationId": "restos-coeur",
+      "name": "Social Inclusion Fund",
+      "description": "Programmes d'insertion sociale et accompagnement des bénéficiaires.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 4.8,
+      "totalSupply": 90000000,
+      "totalBorrow": 50000000,
+      "utilization": 55.6,
+      "liquidity": 40000000,
+      "riskFactor": "Low",
+      "lockPeriod": "30 days"
+    },
+    {
+      "id": "secours-pop-solidarite",
+      "associationId": "secours-populaire",
+      "name": "Solidarity Vault",
+      "description": "Actions de solidarité locale et internationale contre la pauvreté.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 6.3,
+      "rewardsApy": 1.2,
+      "totalSupply": 140000000,
+      "totalBorrow": 110000000,
+      "utilization": 78.6,
+      "liquidity": 30000000,
+      "riskFactor": "Medium",
+      "lockPeriod": "No lock"
+    },
+    {
+      "id": "secours-pop-vacances",
+      "associationId": "secours-populaire",
+      "name": "Holiday Access Fund",
+      "description": "Permettre aux enfants défavorisés de partir en vacances.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 4.5,
+      "totalSupply": 65000000,
+      "totalBorrow": 30000000,
+      "utilization": 46.2,
+      "liquidity": 35000000,
+      "riskFactor": "Low",
+      "lockPeriod": "60 days"
+    },
+    {
+      "id": "acf-nutrition",
+      "associationId": "action-contre-faim",
+      "name": "Nutrition & Health",
+      "description": "Programmes de nutrition et santé pour les populations vulnérables.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 7.2,
+      "rewardsApy": 1.5,
+      "totalSupply": 190000000,
+      "totalBorrow": 160000000,
+      "utilization": 84.2,
+      "liquidity": 30000000,
+      "riskFactor": "Medium",
+      "lockPeriod": "45 days"
+    },
+    {
+      "id": "acf-water",
+      "associationId": "action-contre-faim",
+      "name": "Water & Sanitation",
+      "description": "Accès à l'eau potable et systèmes d'assainissement.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 5.8,
+      "totalSupply": 110000000,
+      "totalBorrow": 75000000,
+      "utilization": 68.2,
+      "liquidity": 35000000,
+      "riskFactor": "Low",
+      "lockPeriod": "30 days"
+    },
+    {
+      "id": "hi-rehabilitation",
+      "associationId": "handicap-international",
+      "name": "Physical Rehabilitation",
+      "description": "Réadaptation physique et appareillage pour les personnes handicapées.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 6.5,
+      "rewardsApy": 1.0,
+      "totalSupply": 135000000,
+      "totalBorrow": 105000000,
+      "utilization": 77.8,
+      "liquidity": 30000000,
+      "riskFactor": "Low",
+      "lockPeriod": "60 days"
+    },
+    {
+      "id": "hi-demining",
+      "associationId": "handicap-international",
+      "name": "Humanitarian Demining",
+      "description": "Déminage et lutte contre les armes explosives dans les zones de conflit.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 8.5,
+      "rewardsApy": 2.2,
+      "totalSupply": 160000000,
+      "totalBorrow": 140000000,
+      "utilization": 87.5,
+      "liquidity": 20000000,
+      "riskFactor": "High",
+      "lockPeriod": "90 days"
+    },
+    {
+      "id": "care-women",
+      "associationId": "care-france",
+      "name": "Women Empowerment",
+      "description": "Autonomisation économique et sociale des femmes et des filles.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 6.8,
+      "rewardsApy": 1.3,
+      "totalSupply": 145000000,
+      "totalBorrow": 115000000,
+      "utilization": 79.3,
+      "liquidity": 30000000,
+      "riskFactor": "Medium",
+      "lockPeriod": "45 days"
+    },
+    {
+      "id": "care-food-security",
+      "associationId": "care-france",
+      "name": "Food Security Fund",
+      "description": "Sécurité alimentaire et agriculture durable dans les pays en développement.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 5.5,
+      "totalSupply": 100000000,
+      "totalBorrow": 70000000,
+      "utilization": 70.0,
+      "liquidity": 30000000,
+      "riskFactor": "Low",
+      "lockPeriod": "30 days"
+    },
+    {
+      "id": "abbe-pierre-logement",
+      "associationId": "abbe-pierre",
+      "name": "Housing First",
+      "description": "Hébergement d'urgence et accès au logement pour les sans-abri.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 7.5,
+      "rewardsApy": 1.8,
+      "totalSupply": 175000000,
+      "totalBorrow": 150000000,
+      "utilization": 85.7,
+      "liquidity": 25000000,
+      "riskFactor": "Medium",
+      "lockPeriod": "No lock"
+    },
+    {
+      "id": "abbe-pierre-renovation",
+      "associationId": "abbe-pierre",
+      "name": "Social Housing",
+      "description": "Rénovation et construction de logements sociaux.",
+      "acceptedTokens": [
+        "XRP"
+      ],
+      "netApy": 5.2,
+      "totalSupply": 95000000,
+      "totalBorrow": 55000000,
+      "utilization": 57.9,
+      "liquidity": 40000000,
+      "riskFactor": "Low",
+      "lockPeriod": "90 days"
     }
   ],
   "categories": {
@@ -351,6 +999,30 @@
     "Waste Reduction": {
       "description": "Réduction des déchets et économie circulaire",
       "color": "#E85D00"
+    },
+    "Humanitarian Aid": {
+      "description": "Aide d'urgence et assistance humanitaire internationale",
+      "color": "#E4032E"
+    },
+    "Child Welfare": {
+      "description": "Protection et bien-être des enfants dans le monde",
+      "color": "#1CABE2"
+    },
+    "Food Aid": {
+      "description": "Lutte contre la faim et aide alimentaire",
+      "color": "#E30613"
+    },
+    "Social Solidarity": {
+      "description": "Solidarité sociale et lutte contre l'exclusion",
+      "color": "#E2001A"
+    },
+    "Disability & Inclusion": {
+      "description": "Inclusion et aide aux personnes handicapées",
+      "color": "#E4022D"
+    },
+    "Housing & Homelessness": {
+      "description": "Lutte contre le mal-logement et accès au logement",
+      "color": "#E30613"
     }
   }
 }
