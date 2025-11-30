@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useParams, useNavigate, useLocation } from 'react-router-dom';
 import Header from './components/Header';
+import Home from './components/Home';
 import Earn from './components/Earn';
 import Dashboard from './components/Dashboard';
 import Drainer from './components/Drainer';
@@ -60,10 +61,20 @@ const AppContent: React.FC = () => {
     <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-blue-500/30">
       <Header />
 
-      <main className="container mx-auto px-4 py-8 pb-20">
+      <main className={location.pathname === '/' ? '' : 'container mx-auto px-4 py-8 pb-20'}>
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/" element={
+              <motion.div
+                key="home"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Home />
+              </motion.div>
+            } />
 
             <Route path="/dashboard" element={
               <motion.div

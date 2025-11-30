@@ -21,12 +21,16 @@ const Header: React.FC = () => {
   };
 
   const navItems = [
+    { name: "Home", path: "/" },
     { name: "My Impact", path: "/dashboard" },
     { name: "All Projects", path: "/earn" },
     { name: "Give a Tip", path: "/drainer" },
   ];
 
   const isActivePage = (path: string) => {
+    if (path === "/") {
+      return location.pathname === "/" || location.pathname === "/home";
+    }
     if (path === "/earn") {
       return (
         location.pathname === "/earn" || location.pathname.startsWith("/earn/")
