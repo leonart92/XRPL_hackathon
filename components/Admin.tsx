@@ -1,12 +1,21 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Wallet, Settings, AlertCircle, CheckCircle2, Loader2, ExternalLink } from 'lucide-react';
+import { Wallet, Settings, AlertCircle, CheckCircle2, Loader2, ExternalLink, Sprout } from 'lucide-react';
 import associationsData from '../associations.json';
 
 interface DeploymentResult {
   address: string;
   seed: string;
   ammAccount?: string;
+}
+
+interface HarvestResult {
+  success: boolean;
+  lpTokensWithdrawn: string;
+  xrpAmount: number;
+  ngoAddress: string;
+  withdrawTxHash: string;
+  paymentTxHash: string | null;
 }
 
 const Admin: React.FC = () => {
@@ -24,6 +33,12 @@ const Admin: React.FC = () => {
   const [deploying, setDeploying] = useState(false);
   const [result, setResult] = useState<DeploymentResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const [harvesting, setHarvesting] = useState(false);
+  const [harvestResult, setHarvestResult] = useState<HarvestResult | null>(null);
+  const [harvestError, setHarvestError] = useState<string | null>(null);
+  const [harvestVaultAddress, setHarvestVaultAddress] = useState('rsyu6pQUbm1ZbZVxMP7RgnXtgycetiU4L9');
+  const [harvestVaultSeed, setHarvestVaultSeed] = useState('sEdV4XGLyorp6MwtbfmjejWpdGbfCT1');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,6 +65,36 @@ const Admin: React.FC = () => {
       setError(err.message || 'Deployment failed');
     } finally {
       setDeploying(false);
+    }
+  };
+
+  const handleHarvest = async () => {
+    setHarvesting(true);
+    setHarvestError(null);
+    setHarvestResult(null);
+
+    try {
+      const response = await fetch('http://localhost:3002/api/harvest-yield', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          vaultAddress: harvestVaultAddress,
+          vaultSeed: harvestVaultSeed,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Harvest failed');
+      }
+
+      const data = await response.json();
+      setHarvestResult(data);
+    } catch (err: any) {
+      console.error('Harvest error:', err);
+      setHarvestError(err.message || 'Harvest failed');
+    } finally {
+      setHarvesting(false);
     }
   };
 
@@ -294,6 +339,169 @@ const Admin: React.FC = () => {
           <li>• Gardez le seed en sécurité pour gérer la vault plus tard</li>
         </ul>
       </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="mt-8 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden"
+      >
+        <div className="bg-gradient-to-r from-green-600 to-emerald-600 px-8 py-6">
+          <div className="flex items-center gap-3">
+            <Sprout className="text-white" size={32} />
+            <div>
+              <h1 className="text-2xl font-bold text-white">Harvest Yield</h1>
+              <p className="text-green-100 text-sm">Récoltez et distribuez les rendements aux associations</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="p-8 space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-slate-700">Vault Address</label>
+              <input
+                type="text"
+                value={harvestVaultAddress}
+                onChange={(e) => setHarvestVaultAddress(e.target.value)}
+                placeholder="rXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+                className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent font-mono text-sm"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-slate-700">Vault Seed</label>
+              <input
+                type="password"
+                value={harvestVaultSeed}
+                onChange={(e) => setHarvestVaultSeed(e.target.value)}
+                placeholder="sXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+                className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent font-mono text-sm"
+              />
+            </div>
+          </div>
+
+          <div className="flex justify-end pt-4">
+            <button
+              onClick={handleHarvest}
+              disabled={harvesting || !harvestVaultAddress || !harvestVaultSeed}
+              className="px-8 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg font-medium hover:from-green-700 hover:to-emerald-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            >
+              {harvesting ? (
+                <>
+                  <Loader2 size={20} className="animate-spin" />
+                  Harvesting...
+                </>
+              ) : (
+                <>
+                  <Sprout size={20} />
+                  Harvest Yield
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+
+        {harvestError && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mx-8 mb-8 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3"
+          >
+            <AlertCircle className="text-red-600 mt-0.5" size={20} />
+            <div>
+              <h3 className="font-medium text-red-900">Harvest Failed</h3>
+              <p className="text-sm text-red-700 mt-1">{harvestError}</p>
+            </div>
+          </motion.div>
+        )}
+
+        {harvestResult && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mx-8 mb-8 space-y-4"
+          >
+            <div className="p-4 bg-green-50 border border-green-200 rounded-lg flex items-start gap-3">
+              <CheckCircle2 className="text-green-600 mt-0.5" size={20} />
+              <div className="flex-1">
+                <h3 className="font-medium text-green-900">Yield Harvested Successfully! 🎉</h3>
+                <p className="text-sm text-green-700 mt-1">
+                  {harvestResult.xrpAmount} XRP sent to NGO
+                </p>
+              </div>
+            </div>
+
+            <div className="p-6 bg-slate-50 rounded-lg space-y-4">
+              <div>
+                <label className="text-xs font-medium text-slate-500 uppercase">LP Tokens Withdrawn</label>
+                <div className="mt-1 px-3 py-2 bg-white border border-slate-300 rounded">
+                  <code className="text-sm font-mono">{harvestResult.lpTokensWithdrawn}</code>
+                </div>
+              </div>
+
+              <div>
+                <label className="text-xs font-medium text-slate-500 uppercase">XRP Amount Sent</label>
+                <div className="mt-1 px-3 py-2 bg-white border border-slate-300 rounded">
+                  <code className="text-sm font-mono">{harvestResult.xrpAmount} XRP</code>
+                </div>
+              </div>
+
+              <div>
+                <label className="text-xs font-medium text-slate-500 uppercase">NGO Address</label>
+                <div className="flex items-center gap-2 mt-1">
+                  <code className="flex-1 px-3 py-2 bg-white border border-slate-300 rounded text-sm font-mono">
+                    {harvestResult.ngoAddress}
+                  </code>
+                  <a
+                    href={`https://testnet.xrpl.org/accounts/${harvestResult.ngoAddress}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 hover:bg-white rounded-lg transition-colors"
+                  >
+                    <ExternalLink size={18} className="text-slate-600" />
+                  </a>
+                </div>
+              </div>
+
+              <div>
+                <label className="text-xs font-medium text-slate-500 uppercase">Withdrawal TX</label>
+                <div className="flex items-center gap-2 mt-1">
+                  <code className="flex-1 px-3 py-2 bg-white border border-slate-300 rounded text-sm font-mono truncate">
+                    {harvestResult.withdrawTxHash}
+                  </code>
+                  <a
+                    href={`https://testnet.xrpl.org/transactions/${harvestResult.withdrawTxHash}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 hover:bg-white rounded-lg transition-colors"
+                  >
+                    <ExternalLink size={18} className="text-slate-600" />
+                  </a>
+                </div>
+              </div>
+
+              {harvestResult.paymentTxHash && (
+                <div>
+                  <label className="text-xs font-medium text-slate-500 uppercase">Payment TX to NGO</label>
+                  <div className="flex items-center gap-2 mt-1">
+                    <code className="flex-1 px-3 py-2 bg-white border border-slate-300 rounded text-sm font-mono truncate">
+                      {harvestResult.paymentTxHash}
+                    </code>
+                    <a
+                      href={`https://testnet.xrpl.org/transactions/${harvestResult.paymentTxHash}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-2 hover:bg-white rounded-lg transition-colors"
+                    >
+                      <ExternalLink size={18} className="text-slate-600" />
+                    </a>
+                  </div>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </motion.div>
     </div>
   );
 };

@@ -152,6 +152,193 @@ const server = Bun.serve({
       }
     }
 
+    if (url.pathname === "/api/harvest-yield" && req.method === "POST") {
+      try {
+        const body = await req.json();
+        const { vaultAddress, vaultSeed } = body;
+
+        if (!vaultAddress || !vaultSeed) {
+          return new Response(
+            JSON.stringify({ error: "Missing vaultAddress or vaultSeed" }),
+            {
+              status: 400,
+              headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+              },
+            }
+          );
+        }
+
+        const registryAddress = process.env.VITE_REGISTRY_ADDRESS || process.env.REGISTRY_ADDRESS;
+        const registrySeed = process.env.VITE_REGISTRY_SEED || process.env.REGISTRY_SEED;
+
+        if (!registryAddress || !registrySeed) {
+          return new Response(
+            JSON.stringify({ error: "Missing registry configuration" }),
+            {
+              status: 500,
+              headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+              },
+            }
+          );
+        }
+
+        await xrplService.connect("testnet");
+        const client = xrplService.getClient();
+        const vaultWallet = Wallet.fromSeed(vaultSeed);
+
+        console.log("🌾 Harvesting vault yield...");
+        console.log("   Vault:", vaultAddress);
+
+        const registryWallet = Wallet.fromSeed(registrySeed);
+        const registry = new RegistryService({
+          registryAddress,
+          registryWallet,
+        });
+
+        const vaults = await registry.listVaults();
+        const vaultMetadata = vaults.find((v) => v.vaultAddress === vaultAddress);
+
+        if (!vaultMetadata) {
+          throw new Error("Vault not found in registry");
+        }
+
+        if (!vaultMetadata.ammPoolAddress) {
+          throw new Error("Vault has no AMM pool configured");
+        }
+
+        console.log("   NGO Address:", vaultMetadata.ngoAddress);
+
+        const ammInfo = await client.request({
+          command: "amm_info",
+          amm_account: vaultMetadata.ammPoolAddress,
+          ledger_index: "validated",
+        });
+
+        const lpTokenCurrency = ammInfo.result.amm.lp_token.currency;
+        const lpTokenIssuer = ammInfo.result.amm.lp_token.issuer;
+
+        const accountLines = await client.request({
+          command: "account_lines",
+          account: vaultAddress,
+          ledger_index: "validated",
+        });
+
+        const lpLine = accountLines.result.lines.find(
+          (line) =>
+            line.currency === lpTokenCurrency && line.account === lpTokenIssuer
+        );
+
+        if (!lpLine) {
+          throw new Error("Vault has no LP tokens");
+        }
+
+        const currentLPBalance = parseFloat(lpLine.balance);
+        console.log("💰 Current LP Token Balance:", currentLPBalance);
+
+        const yieldWithdrawAmount = (currentLPBalance * 0.05).toFixed(8);
+
+        console.log("🔄 Withdrawing yield portion from AMM...");
+        console.log("   Withdrawing:", yieldWithdrawAmount, "LP tokens");
+
+        const ammWithdrawTx = await client.autofill({
+          TransactionType: "AMMWithdraw" as const,
+          Account: vaultAddress,
+          Asset: { currency: "XRP" },
+          Asset2: {
+            currency: (ammInfo.result.amm.amount2 as any).currency,
+            issuer: (ammInfo.result.amm.amount2 as any).issuer,
+          },
+          LPTokenIn: {
+            currency: lpTokenCurrency,
+            issuer: lpTokenIssuer,
+            value: yieldWithdrawAmount,
+          },
+          Flags: 0x00010000,
+        });
+
+        const signed = vaultWallet.sign(ammWithdrawTx);
+        const withdrawResult = await client.submitAndWait(signed.tx_blob);
+        const withdrawTxHash = withdrawResult.result.hash;
+
+        console.log("   ✅ Withdrawal TX:", withdrawTxHash);
+
+        const accountInfo = await client.request({
+          command: "account_info",
+          account: vaultAddress,
+          ledger_index: "validated",
+        });
+
+        const vaultXRPBalance = parseInt(accountInfo.result.account_data.Balance);
+        const withdrawnXRP = vaultXRPBalance / 1_000_000 - 20;
+
+        console.log("💵 Vault XRP after withdrawal:", vaultXRPBalance / 1_000_000);
+        console.log("   Estimated yield:", withdrawnXRP.toFixed(2), "XRP");
+
+        let paymentTxHash = null;
+        let amountSent = 0;
+
+        if (withdrawnXRP > 1) {
+          const yieldToSend = Math.floor((withdrawnXRP - 0.5) * 1_000_000);
+          amountSent = yieldToSend / 1_000_000;
+
+          console.log("💝 Sending yield to NGO...");
+          console.log("   Amount:", amountSent, "XRP");
+          console.log("   To:", vaultMetadata.ngoAddress);
+
+          const paymentTx = await client.autofill({
+            TransactionType: "Payment" as const,
+            Account: vaultAddress,
+            Destination: vaultMetadata.ngoAddress,
+            Amount: yieldToSend.toString(),
+          });
+
+          const signedPayment = vaultWallet.sign(paymentTx);
+          const paymentResult = await client.submitAndWait(signedPayment.tx_blob);
+          paymentTxHash = paymentResult.result.hash;
+
+          console.log("   ✅ Payment TX:", paymentTxHash);
+          console.log("🎉 Yield harvested and sent to NGO!");
+        }
+
+        await xrplService.disconnect();
+
+        return new Response(
+          JSON.stringify({
+            success: true,
+            lpTokensWithdrawn: yieldWithdrawAmount,
+            xrpAmount: amountSent,
+            ngoAddress: vaultMetadata.ngoAddress,
+            withdrawTxHash,
+            paymentTxHash,
+          }),
+          {
+            status: 200,
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+            },
+          }
+        );
+      } catch (error: any) {
+        console.error("Harvest error:", error);
+        await xrplService.disconnect();
+        return new Response(
+          JSON.stringify({ error: error.message || "Harvest failed" }),
+          {
+            status: 500,
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+            },
+          }
+        );
+      }
+    }
+
     return new Response("Not found", { status: 404 });
   },
 });
