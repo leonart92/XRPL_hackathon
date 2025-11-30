@@ -3,13 +3,13 @@ import { xrplService } from "./xrpl.service";
 
 interface VaultMetadata {
   vaultAddress: string;
+  name: string;
+  description: string;
   vaultTokenCurrency: string;
   acceptedCurrency: string;
   acceptedCurrencyIssuer: string;
   strategyType: "AMM" | "SWAP" | "TOKEN_YIELD";
   ngoAddress: string;
-  name?: string;
-  description?: string;
   createdAt: number;
   totalSupply?: number;
   ammPoolAddress?: string;
@@ -18,13 +18,13 @@ interface VaultMetadata {
 }
 
 interface CompactVaultMetadata {
+  n: string;
+  d: string;
   c: string;
   a: string;
   i: string;
   s: "A" | "S" | "T";
   g: string;
-  n?: string;
-  d?: string;
   t: number;
   p?: string;
   y?: string;
@@ -57,6 +57,8 @@ class RegistryService {
     };
 
     const compactMetadata: CompactVaultMetadata = {
+      n: metadata.name,
+      d: metadata.description,
       c: metadata.vaultTokenCurrency,
       a: metadata.acceptedCurrency,
       i: metadata.acceptedCurrencyIssuer,
@@ -148,13 +150,13 @@ class RegistryService {
 
         const metadata: VaultMetadata = {
           vaultAddress,
+          name: compact.n,
+          description: compact.d,
           vaultTokenCurrency: compact.c,
           acceptedCurrency: compact.a,
           acceptedCurrencyIssuer: compact.i,
           strategyType: compact.s === "A" ? "AMM" : compact.s === "S" ? "SWAP" : "TOKEN_YIELD",
           ngoAddress: compact.g,
-          name: compact.n || `Vault ${line.currency}`,
-          description: compact.d || "",
           createdAt: compact.t,
           ammPoolAddress: compact.p,
           yieldTokenCurrency: compact.y,
@@ -195,13 +197,13 @@ class RegistryService {
 
       const metadata: VaultMetadata = {
         vaultAddress,
+        name: compact.n,
+        description: compact.d,
         vaultTokenCurrency: compact.c,
         acceptedCurrency: compact.a,
         acceptedCurrencyIssuer: compact.i,
         strategyType: compact.s === "A" ? "AMM" : compact.s === "S" ? "SWAP" : "TOKEN_YIELD",
         ngoAddress: compact.g,
-        name: compact.n || `Vault ${compact.c}`,
-        description: compact.d || "",
         createdAt: compact.t,
         ammPoolAddress: compact.p,
         yieldTokenCurrency: compact.y,
