@@ -35,6 +35,13 @@ export function useVaults({
       setLoading(true);
       setError(null);
 
+      console.log('[useVaults] ALL ENV VARS:', {
+        VITE_REGISTRY_ADDRESS: import.meta.env.VITE_REGISTRY_ADDRESS,
+        VITE_REGISTRY_SEED: import.meta.env.VITE_REGISTRY_SEED ? '***hidden***' : undefined,
+        MODE: import.meta.env.MODE,
+        DEV: import.meta.env.DEV,
+        PROD: import.meta.env.PROD,
+      });
       console.log('[useVaults] effectiveRegistryAddress:', effectiveRegistryAddress);
 
       if (!effectiveRegistryAddress) {
