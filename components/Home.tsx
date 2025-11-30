@@ -82,14 +82,6 @@ const Home: React.FC = () => {
                             Start Yielding
                             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                         </Link>
-                        <Link
-                            to="/drainer"
-                            className="group px-8 py-4 bg-white border-2 border-slate-200 text-slate-900 font-semibold rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-all flex items-center gap-2"
-                        >
-                            <Trash2 className="w-5 h-5" />
-                            Clean Wallets
-                            <ArrowRight className="w-5 h-5" />
-                        </Link>
                     </div>
                 </div>
             </section>
