@@ -152,17 +152,27 @@ const Dashboard: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="relative bg-gradient-to-br from-blue-50 to-blue-100/50 p-6 rounded-2xl border border-blue-200 backdrop-blur-sm overflow-hidden group"
+          className="relative bg-gradient-to-br from-green-50 to-green-100/50 p-6 rounded-2xl border border-green-200 backdrop-blur-sm overflow-hidden group"
         >
           <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-            <Activity size={48} className="text-blue-500" />
+            <TrendingUp size={48} className="text-green-500" />
           </div>
-          <div className="text-blue-700 text-sm font-medium uppercase tracking-wider mb-2 relative z-10">Annual Return</div>
+          <div className="text-green-700 text-sm font-medium uppercase tracking-wider mb-2 relative z-10">Total Impact Donated</div>
           <div className="flex items-center gap-2 relative z-10">
-            <span ref={apyRef} className="text-3xl font-bold text-blue-600 tracking-tight">0.00%</span>
+            <span className="text-3xl font-bold text-green-600 tracking-tight">
+              ${balances.reduce((total, userBalance) => {
+                const vault = vaults.find(v => v.vaultAddress === userBalance.vaultAddress);
+                if (!vault) return total;
+                const balanceNum = parseFloat(userBalance.balance);
+                const XRP_TO_USD = 2.5;
+                const estimatedYieldsDonated = balanceNum * (vault.netApy || 0) / 100 * 0.5;
+                const donationUSD = estimatedYieldsDonated * XRP_TO_USD;
+                return total + donationUSD;
+              }, 0).toFixed(2)}
+            </span>
             <ArrowUpRight className="w-5 h-5 text-green-600" />
           </div>
-          <p className="text-xs text-slate-600 mt-2 relative z-10">Average return across your investments</p>
+          <p className="text-xs text-slate-600 mt-2 relative z-10">Supporting environmental causes</p>
 
         </motion.div>
 
@@ -243,6 +253,13 @@ const Dashboard: React.FC = () => {
               const association = associations.find(a => a.id === vault.associationId);
               const balanceNum = parseFloat(userBalance.balance);
               
+              // Calculate approximate donation to NGO (using APY to estimate yields generated)
+              // Assumption: yields are periodically sent to NGO
+              // For POC: estimate ~5% of investment has been donated as yield over time
+              const XRP_TO_USD = 2.5; // Approximate XRP price
+              const estimatedYieldsDonated = balanceNum * (vault.netApy || 0) / 100 * 0.5; // 50% of 1 year yield as approximation
+              const donationUSD = estimatedYieldsDonated * XRP_TO_USD;
+              
               return (
                 <motion.div
                   key={vault.id}
@@ -269,7 +286,7 @@ const Dashboard: React.FC = () => {
                   </div>
                   <div className="col-span-2 text-right">
                     <div className="text-sm font-bold text-slate-900">
-                      {formatCurrency(vault.totalSupply ? vault.totalSupply / 100 : undefined)}
+                      {formatCurrency(vault.totalSupply)}
                     </div>
                   </div>
                   <div className="col-span-2 text-right">
@@ -278,9 +295,9 @@ const Dashboard: React.FC = () => {
                     </div>
                   </div>
                   <div className="col-span-1 text-right">
-                    <span className="text-[10px] font-bold px-2 py-1 rounded bg-blue-50 text-blue-600 border border-blue-200 uppercase">
-                      Long
-                    </span>
+                    <div className="text-sm font-bold text-green-600">
+                      ${donationUSD.toFixed(2)}
+                    </div>
                   </div>
                 </motion.div>
               );

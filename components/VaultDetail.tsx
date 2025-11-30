@@ -253,20 +253,24 @@ const VaultDetail: React.FC<VaultDetailProps> = ({ vaultAddress, onBack }) => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                    {vault.netApy !== undefined && (
-                        <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border border-green-200">
-                            <div className="flex items-center gap-2 text-green-600 mb-2">
-                                <TrendingUp size={20} />
-                                <span className="text-sm font-semibold uppercase tracking-wider">Annual Return</span>
-                            </div>
-                            <div className="flex items-baseline gap-2">
-                                <span className="text-4xl font-bold text-green-700">{vault.netApy}%</span>
-                                {vault.rewardsApy && (
-                                    <span className="text-lg text-green-600">+{vault.rewardsApy}%</span>
-                                )}
-                            </div>
+                    <div className="bg-green-50 rounded-xl p-6 border border-green-200">
+                        <div className="flex items-center gap-2 text-green-600 mb-2">
+                            <TrendingUp size={20} />
+                            <span className="text-sm font-semibold uppercase tracking-wider">Impact Generated</span>
                         </div>
-                    )}
+                        {balanceLoading ? (
+                            <div className="text-2xl font-bold text-green-600">Loading...</div>
+                        ) : address && userBalance ? (
+                            <>
+                                <div className="text-3xl font-bold text-green-700">
+                                    ${((parseFloat(userBalance) * (vault.netApy || 0) / 100 * 0.5) * 2.5).toFixed(2)}
+                                </div>
+                                <div className="text-sm text-green-600 mt-1">Donated to {association.shortName}</div>
+                            </>
+                        ) : (
+                            <div className="text-sm text-slate-500">No impact yet</div>
+                        )}
+                    </div>
 
                     {vaultData && (
                         <div className="bg-slate-50 rounded-xl p-6 border border-slate-200">
@@ -296,18 +300,18 @@ const VaultDetail: React.FC<VaultDetailProps> = ({ vaultAddress, onBack }) => {
                         )}
                     </div>
 
-                    {vault.lockPeriod && (
-                        <div className="bg-slate-50 rounded-xl p-6 border border-slate-200">
-                            <div className="flex items-center gap-2 text-slate-600 mb-2">
-                                <Clock size={20} />
-                                <span className="text-sm font-semibold uppercase tracking-wider">Lock Period</span>
+                    {vault.netApy !== undefined && (
+                        <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border border-green-200">
+                            <div className="flex items-center gap-2 text-green-600 mb-2">
+                                <TrendingUp size={20} />
+                                <span className="text-sm font-semibold uppercase tracking-wider">Annual Return</span>
                             </div>
-                            <div className="text-2xl font-bold text-slate-900 mb-2">{vault.lockPeriod}</div>
-                            {vault.riskFactor && (
-                                <span className={`inline-flex px-3 py-1 rounded-full text-sm font-semibold border ${getRiskColor(vault.riskFactor)}`}>
-                                    {vault.riskFactor} Risk
-                                </span>
-                            )}
+                            <div className="flex items-baseline gap-2">
+                                <span className="text-4xl font-bold text-green-700">{vault.netApy}%</span>
+                                {vault.rewardsApy && (
+                                    <span className="text-lg text-green-600">+{vault.rewardsApy}%</span>
+                                )}
+                            </div>
                         </div>
                     )}
                 </div>
