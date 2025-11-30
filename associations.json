@@ -6,6 +6,7 @@
       "shortName": "WWF",
       "category": "Conservation",
       "description": "Organisation internationale de protection de la nature et de l'environnement. Le WWF travaille dans plus de 100 pays pour protéger les espèces menacées et leurs habitats.",
+      "walletAddress": "rpDGpVBWg1FZyPUspqc1NWp5LfueEEwBFe",
       "focus": [
         "Conservation de la biodiversité",
         "Protection des espèces menacées",
@@ -38,6 +39,7 @@
       "shortName": "Greenpeace",
       "category": "Climate Action",
       "description": "Organisation de protection de l'environnement présente dans plus de 55 pays. Greenpeace mène des campagnes pour protéger le climat, les forêts et les océans.",
+      "walletAddress": "rpHSWC6Sqi1ED94Y6322q6tMVUE5mfhGCY",
       "focus": [
         "Lutte contre le changement climatique",
         "Protection des océans",
@@ -553,9 +555,7 @@
       "associationId": "greenpeace",
       "name": "Ocean Defense Fund",
       "description": "Protection des océans et lutte contre la surpêche. Financement des navires et expéditions maritimes.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 7.2,
       "rewardsApy": 0.8,
       "totalSupply": 180000000,
@@ -570,9 +570,7 @@
       "associationId": "surfrider",
       "name": "Beach Cleanup Vault",
       "description": "Financement des opérations de nettoyage des plages et du littoral en Europe.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 4.5,
       "totalSupply": 80000000,
       "totalBorrow": 32000000,
@@ -586,9 +584,7 @@
       "associationId": "surfrider",
       "name": "Plastic Free Ocean",
       "description": "Lutte contre la pollution plastique dans les océans. Projets de sensibilisation et actions de terrain.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 5.2,
       "rewardsApy": 0.5,
       "totalSupply": 95000000,
@@ -603,9 +599,7 @@
       "associationId": "fne",
       "name": "Biodiversity France",
       "description": "Protection de la biodiversité en France. Soutien aux 6000 associations locales du réseau FNE.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 7.1,
       "totalSupply": 120000000,
       "totalBorrow": 100000000,
@@ -619,9 +613,7 @@
       "associationId": "zerowaste",
       "name": "Circular Economy Fund",
       "description": "Financement de projets d'économie circulaire et de réduction des déchets.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 9.8,
       "rewardsApy": 2.5,
       "totalSupply": 60000000,
@@ -636,9 +628,7 @@
       "associationId": "zerowaste",
       "name": "Zero Waste Education",
       "description": "Programmes éducatifs et sensibilisation au zéro déchet.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 4.2,
       "totalSupply": 25000000,
       "totalBorrow": 12000000,
@@ -652,9 +642,7 @@
       "associationId": "sea-shepherd",
       "name": "Ocean Patrol Fund",
       "description": "Financement des patrouilles maritimes contre la pêche illégale.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 6.8,
       "rewardsApy": 1.0,
       "totalSupply": 200000000,
@@ -669,9 +657,7 @@
       "associationId": "sea-shepherd",
       "name": "Marine Sanctuary",
       "description": "Création et protection de sanctuaires marins pour les espèces menacées.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 5.5,
       "totalSupply": 85000000,
       "totalBorrow": 45000000,
@@ -685,9 +671,7 @@
       "associationId": "msf",
       "name": "Emergency Medical Fund",
       "description": "Fonds d'urgence pour les interventions médicales dans les zones de crise et conflits.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 7.5,
       "rewardsApy": 1.5,
       "totalSupply": 350000000,
@@ -702,9 +686,7 @@
       "associationId": "msf",
       "name": "Epidemic Response Vault",
       "description": "Lutte contre les épidémies et renforcement des systèmes de santé.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 6.8,
       "totalSupply": 180000000,
       "totalBorrow": 140000000,
@@ -718,9 +700,7 @@
       "associationId": "unicef",
       "name": "Education for All",
       "description": "Programmes éducatifs pour les enfants dans les pays en développement.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 5.9,
       "rewardsApy": 0.8,
       "totalSupply": 220000000,
@@ -735,9 +715,7 @@
       "associationId": "unicef",
       "name": "Child Protection Fund",
       "description": "Protection des enfants contre l'exploitation, les abus et la violence.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 6.5,
       "totalSupply": 150000000,
       "totalBorrow": 115000000,
@@ -751,9 +729,7 @@
       "associationId": "croix-rouge",
       "name": "Emergency Response Fund",
       "description": "Interventions d'urgence en France et à l'international lors de catastrophes.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 8.2,
       "rewardsApy": 1.8,
       "totalSupply": 280000000,
@@ -768,9 +744,7 @@
       "associationId": "croix-rouge",
       "name": "Social Support Vault",
       "description": "Accompagnement social et aide alimentaire pour les personnes en précarité.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 5.5,
       "totalSupply": 120000000,
       "totalBorrow": 85000000,
@@ -784,9 +758,7 @@
       "associationId": "restos-coeur",
       "name": "Food Aid Vault",
       "description": "Distribution de repas chauds et colis alimentaires aux plus démunis.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 7.8,
       "rewardsApy": 2.0,
       "totalSupply": 200000000,
@@ -801,9 +773,7 @@
       "associationId": "restos-coeur",
       "name": "Social Inclusion Fund",
       "description": "Programmes d'insertion sociale et accompagnement des bénéficiaires.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 4.8,
       "totalSupply": 90000000,
       "totalBorrow": 50000000,
@@ -817,9 +787,7 @@
       "associationId": "secours-populaire",
       "name": "Solidarity Vault",
       "description": "Actions de solidarité locale et internationale contre la pauvreté.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 6.3,
       "rewardsApy": 1.2,
       "totalSupply": 140000000,
@@ -834,9 +802,7 @@
       "associationId": "secours-populaire",
       "name": "Holiday Access Fund",
       "description": "Permettre aux enfants défavorisés de partir en vacances.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 4.5,
       "totalSupply": 65000000,
       "totalBorrow": 30000000,
@@ -850,9 +816,7 @@
       "associationId": "action-contre-faim",
       "name": "Nutrition & Health",
       "description": "Programmes de nutrition et santé pour les populations vulnérables.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 7.2,
       "rewardsApy": 1.5,
       "totalSupply": 190000000,
@@ -867,9 +831,7 @@
       "associationId": "action-contre-faim",
       "name": "Water & Sanitation",
       "description": "Accès à l'eau potable et systèmes d'assainissement.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 5.8,
       "totalSupply": 110000000,
       "totalBorrow": 75000000,
@@ -883,9 +845,7 @@
       "associationId": "handicap-international",
       "name": "Physical Rehabilitation",
       "description": "Réadaptation physique et appareillage pour les personnes handicapées.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 6.5,
       "rewardsApy": 1.0,
       "totalSupply": 135000000,
@@ -900,9 +860,7 @@
       "associationId": "handicap-international",
       "name": "Humanitarian Demining",
       "description": "Déminage et lutte contre les armes explosives dans les zones de conflit.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 8.5,
       "rewardsApy": 2.2,
       "totalSupply": 160000000,
@@ -917,9 +875,7 @@
       "associationId": "care-france",
       "name": "Women Empowerment",
       "description": "Autonomisation économique et sociale des femmes et des filles.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 6.8,
       "rewardsApy": 1.3,
       "totalSupply": 145000000,
@@ -934,9 +890,7 @@
       "associationId": "care-france",
       "name": "Food Security Fund",
       "description": "Sécurité alimentaire et agriculture durable dans les pays en développement.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 5.5,
       "totalSupply": 100000000,
       "totalBorrow": 70000000,
@@ -950,9 +904,7 @@
       "associationId": "abbe-pierre",
       "name": "Housing First",
       "description": "Hébergement d'urgence et accès au logement pour les sans-abri.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 7.5,
       "rewardsApy": 1.8,
       "totalSupply": 175000000,
@@ -967,9 +919,7 @@
       "associationId": "abbe-pierre",
       "name": "Social Housing",
       "description": "Rénovation et construction de logements sociaux.",
-      "acceptedTokens": [
-        "XRP"
-      ],
+      "acceptedTokens": ["XRP"],
       "netApy": 5.2,
       "totalSupply": 95000000,
       "totalBorrow": 55000000,
