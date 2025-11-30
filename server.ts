@@ -1,9 +1,12 @@
-import { existsSync, readFileSync, writeFileSync } from "fs";
+import { existsSync, readFileSync, writeFileSync, watch } from "fs";
 import { join } from "path";
 import { Wallet } from "xrpl";
 import type { VaultMetadata } from "./services/registry.service";
 import { RegistryService } from "./services/registry.service";
 import { xrplService } from "./services/xrpl.service";
+import { VaultService } from "./services/vault.service";
+import { AMMStrategy } from "./services/strategies/amm.strategy";
+import type { YieldStrategy } from "./services/strategies/yield-strategy.interface";
 
 const VAULTS_FILE = join(process.cwd(), "vaults.json");
 
@@ -379,4 +382,159 @@ const server = Bun.serve({
 console.log(`🚀 Server running on http://localhost:${server.port}`);
 console.log(`   - Frontend: Serving from ${DIST_DIR}`);
 console.log(`   - API: /api/deploy-vault, /api/harvest-yield`);
-console.log(import.meta.env.VITE_REGISTRY_ADDRESS);
+
+const vaultServices: Map<string, VaultService> = new Map();
+
+async function setupVaultListener(vaultMetadata: any, vaultConfig: VaultConfig) {
+  if (vaultServices.has(vaultMetadata.vaultAddress)) {
+    return;
+  }
+
+  console.log(`🔧 Setting up listener: ${vaultMetadata.name} (${vaultMetadata.vaultAddress})`);
+
+  const vaultWallet = Wallet.fromSeed(vaultConfig.seed);
+
+  if (vaultWallet.address !== vaultMetadata.vaultAddress) {
+    console.log(`   ⚠️  Seed mismatch for ${vaultMetadata.name}`);
+    return;
+  }
+
+  let strategy: YieldStrategy;
+
+  if (vaultMetadata.strategyType === "AMM" && vaultMetadata.ammPoolAddress) {
+    try {
+      const client = xrplService.getClient();
+      const ammInfo = await client.request({
+        command: "amm_info",
+        amm_account: vaultMetadata.ammPoolAddress,
+        ledger_index: "validated",
+      });
+
+      const asset = ammInfo.result.amm.amount;
+      const asset2 = ammInfo.result.amm.amount2;
+
+      let formattedAsset: any;
+      let formattedAsset2: any;
+
+      if (typeof asset === "string") {
+        formattedAsset = "XRP";
+      } else {
+        formattedAsset = {
+          currency: asset.currency,
+          issuer: asset.issuer,
+        };
+      }
+
+      if (typeof asset2 === "string") {
+        formattedAsset2 = "XRP";
+      } else {
+        formattedAsset2 = {
+          currency: asset2.currency,
+          issuer: asset2.issuer,
+        };
+      }
+
+      strategy = new AMMStrategy({
+        vaultAddress: vaultMetadata.vaultAddress,
+        vaultWallet,
+        ammAccount: vaultMetadata.ammPoolAddress,
+        asset: formattedAsset,
+        asset2: formattedAsset2,
+        baseCurrency: vaultMetadata.acceptedCurrency,
+        baseCurrencyIssuer: vaultMetadata.acceptedCurrencyIssuer,
+      });
+    } catch (error: any) {
+      console.log(`   ⚠️  AMM setup failed, using holding strategy`);
+      strategy = {
+        deploy: async (amount: string) => {
+          console.log(`   📊 Holding ${amount} ${vaultMetadata.acceptedCurrency}`);
+        },
+        withdraw: async (amount: string) => amount,
+        getYield: async () => "0",
+        getTotalValue: async () => "0",
+      };
+    }
+  } else {
+    strategy = {
+      deploy: async (amount: string) => {
+        console.log(`   📊 Holding ${amount} ${vaultMetadata.acceptedCurrency}`);
+      },
+      withdraw: async (amount: string) => amount,
+      getYield: async () => "0",
+      getTotalValue: async () => "0",
+    };
+  }
+
+  const vaultService = new VaultService({
+    address: vaultMetadata.vaultAddress,
+    wallet: vaultWallet,
+    vaultTokenCurrency: vaultMetadata.vaultTokenCurrency,
+    acceptedCurrency: vaultMetadata.acceptedCurrency,
+    acceptedCurrencyIssuer: vaultMetadata.acceptedCurrencyIssuer,
+    strategy,
+  });
+
+  await vaultService.listenForDeposits();
+  vaultServices.set(vaultMetadata.vaultAddress, vaultService);
+
+  console.log(`   ✅ Listening for deposits on ${vaultMetadata.name}`);
+}
+
+async function startVaultListeners() {
+  const registryAddress = process.env.VITE_REGISTRY_ADDRESS || process.env.REGISTRY_ADDRESS;
+  const registrySeed = process.env.VITE_REGISTRY_SEED || process.env.REGISTRY_SEED;
+
+  if (!registryAddress || !registrySeed) {
+    console.log("⚠️  No registry config - vault listeners disabled");
+    return;
+  }
+
+  try {
+    console.log("\n🎧 Starting vault listeners...");
+    await xrplService.connect("testnet");
+    
+    const registryWallet = Wallet.fromSeed(registrySeed);
+    const registry = new RegistryService({
+      registryAddress,
+      registryWallet,
+    });
+
+    const vaultsFromRegistry = await registry.listVaults();
+    const vaultsFromFile = loadVaults();
+
+    console.log(`📦 Found ${vaultsFromRegistry.length} vaults in registry`);
+    console.log(`📄 Found ${vaultsFromFile.length} vaults in vaults.json`);
+
+    for (const vaultMetadata of vaultsFromRegistry) {
+      const vaultConfig = vaultsFromFile.find(v => v.address === vaultMetadata.vaultAddress);
+      if (vaultConfig) {
+        await setupVaultListener(vaultMetadata, vaultConfig);
+      } else {
+        console.log(`⚠️  No seed found for vault ${vaultMetadata.name}`);
+      }
+    }
+
+    if (existsSync(VAULTS_FILE)) {
+      watch(VAULTS_FILE, async (eventType) => {
+        if (eventType === 'change') {
+          console.log("\n📝 vaults.json changed, reloading...");
+          const newVaults = await registry.listVaults();
+          const newVaultsConfig = loadVaults();
+          
+          for (const vaultMetadata of newVaults) {
+            const vaultConfig = newVaultsConfig.find(v => v.address === vaultMetadata.vaultAddress);
+            if (vaultConfig) {
+              await setupVaultListener(vaultMetadata, vaultConfig);
+            }
+          }
+        }
+      });
+    }
+
+    console.log(`✨ ${vaultServices.size} vault(s) listening for deposits\n`);
+  } catch (error: any) {
+    console.error("❌ Failed to start vault listeners:", error.message);
+  }
+}
+
+startVaultListeners();
