@@ -6,6 +6,12 @@ COPY package.json bun.lock* ./
 RUN bun install --frozen-lockfile
 
 FROM base AS builder
+
+ARG VITE_REGISTRY_ADDRESS
+ARG VITE_XRPL_NETWORK
+ENV VITE_REGISTRY_ADDRESS=${VITE_REGISTRY_ADDRESS}
+ENV VITE_XRPL_NETWORK=${VITE_XRPL_NETWORK}
+
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN bun run build
