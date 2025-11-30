@@ -5,6 +5,7 @@ import { ArrowLeft, ExternalLink, MapPin, Globe, TrendingUp, Clock, Coins, Chevr
 import { Vault } from '../types';
 import { formatCurrency } from '../constants';
 import { useVaultsContext } from '../contexts/VaultsContext';
+import Tooltip from './Tooltip';
 
 interface AssociationDetailProps {
     associationId: string;
@@ -87,8 +88,17 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
         }
     };
 
+    const getConfidenceLevel = (risk: string) => {
+        switch (risk) {
+            case 'Low': return 'Established';
+            case 'Medium': return 'Growing';
+            case 'High': return 'New';
+            default: return risk;
+        }
+    };
+
     return (
-        <div className="min-h-screen bg-white">
+        <main role="main" className="min-h-screen bg-white">
             {/* Back Button */}
             <div className="mb-6">
                 <button
@@ -165,9 +175,9 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
             >
                 <h2 className="text-2xl font-bold text-slate-900 mb-4 flex items-center gap-2">
                     <Coins size={24} className="text-blue-500" />
-                    Investment Vaults
+                    Ways to Support This Cause
                     <span className="text-sm font-normal text-slate-500 ml-2">
-                                 ({associationVaults.length} available)
+                                 ({associationVaults.length} projects available)
                     </span>
                 </h2>
 
@@ -192,7 +202,11 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
                             <div className="grid grid-cols-3 gap-4 mt-4">
                                 {vault.netApy !== undefined && (
                                     <div>
-                                        <div className="text-xs text-slate-500 uppercase tracking-wider mb-1">APY</div>
+                                        <div className="text-xs text-slate-500 uppercase tracking-wider mb-1">
+                                            <Tooltip term="Annual Growth" explanation="How much your contribution grows each year.">
+                                                Growth Rate
+                                            </Tooltip>
+                                        </div>
                                         <div className="flex items-center gap-1">
                                             <span className="text-xl font-bold text-green-600">{vault.netApy}%</span>
                                             {vault.rewardsApy && (
@@ -203,15 +217,23 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
                                 )}
                                 {vault.riskFactor && (
                                     <div>
-                                        <div className="text-xs text-slate-500 uppercase tracking-wider mb-1">Risk</div>
+                                        <div className="text-xs text-slate-500 uppercase tracking-wider mb-1">
+                                            <Tooltip term="Confidence Level" explanation="How established this project is. Established = proven track record, Growing = expanding impact, New = recently launched.">
+                                                Confidence
+                                            </Tooltip>
+                                        </div>
                                         <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-semibold border ${getRiskColor(vault.riskFactor)}`}>
-                                            {vault.riskFactor}
+                                            {getConfidenceLevel(vault.riskFactor)}
                                         </span>
                                     </div>
                                 )}
                                 {vault.lockPeriod && (
                                     <div>
-                                        <div className="text-xs text-slate-500 uppercase tracking-wider mb-1">Lock</div>
+                                        <div className="text-xs text-slate-500 uppercase tracking-wider mb-1">
+                                            <Tooltip term="Commitment Time" explanation="How long your support stays with this project before you can withdraw.">
+                                                Duration
+                                            </Tooltip>
+                                        </div>
                                         <div className="flex items-center gap-1 text-sm text-slate-700">
                                             <Clock size={12} />
                                             {vault.lockPeriod}
@@ -224,12 +246,12 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
                                 <div className="flex items-center justify-between mt-4 pt-4 border-t border-slate-100">
                                     {vault.totalSupply !== undefined && (
                                         <div className="text-sm text-slate-500">
-                                            <span className="font-medium text-slate-700">{formatCurrency(vault.totalSupply)}</span> TVL
+                                            <span className="font-medium text-slate-700">{formatCurrency(vault.totalSupply)}</span> funded
                                         </div>
                                     )}
                                     {vault.utilization !== undefined && (
                                         <div className="text-sm text-slate-500">
-                                            <span className="font-medium text-slate-700">{vault.utilization.toFixed(1)}%</span> Utilization
+                                            <span className="font-medium text-slate-700">{vault.utilization.toFixed(1)}%</span> in active use
                                         </div>
                                     )}
                                 </div>
@@ -318,7 +340,7 @@ const AssociationDetail: React.FC<AssociationDetailProps> = ({
                     </motion.div>
                 )}
             </AnimatePresence>
-        </div>
+        </main>
     );
 };
 

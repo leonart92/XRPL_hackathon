@@ -5,6 +5,7 @@ import gsap from 'gsap';
 import VaultTable from './VaultTable';
 import { fadeInUp, fadeInLeft, fadeInRight } from '../animations';
 import { useVaultsContext } from '../contexts/VaultsContext';
+import Tooltip from './Tooltip';
 
 interface EarnProps {
   onSelectAssociation: (id: string) => void;
@@ -75,7 +76,7 @@ const Earn: React.FC<EarnProps> = ({ onSelectAssociation }) => {
   }, [totalDeposit, avgApy]);
 
   return (
-    <div className="space-y-8">
+    <main role="main" className="space-y-8">
       {loading && (
         <div className="flex justify-center items-center py-12">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
@@ -140,7 +141,12 @@ const Earn: React.FC<EarnProps> = ({ onSelectAssociation }) => {
           <div className="relative flex flex-col bg-blue-50 p-4 rounded-2xl border border-blue-100 backdrop-blur-sm overflow-hidden">
             <span className="text-sm font-medium text-slate-600 uppercase tracking-wider mb-2 flex items-center gap-2 relative z-10">
               <TrendingUp className="w-4 h-4" />
-              Total Impact Funding
+              <Tooltip
+                term="Community Funding"
+                explanation="The total amount all people have contributed to support environmental causes on this platform."
+              >
+                Community Funding
+              </Tooltip>
             </span>
             <span ref={depositRef} className="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight relative z-10">
               {totalDeposit.toFixed(0)} XRP
@@ -151,7 +157,12 @@ const Earn: React.FC<EarnProps> = ({ onSelectAssociation }) => {
 
           <div className="relative flex flex-col bg-green-50 p-4 rounded-2xl border border-green-100 backdrop-blur-sm overflow-hidden">
             <span className="text-sm font-medium text-green-700 uppercase tracking-wider mb-2 relative z-10">
-              Avg. Return
+              <Tooltip
+                term="Average Growth Rate"
+                explanation="How much contributions grow on average each year across all projects. Higher rates mean more funds for environmental work."
+              >
+                Avg. Growth Rate
+              </Tooltip>
             </span>
             <div className="flex items-center gap-2 relative z-10">
               <span ref={apyRef} className="text-2xl md:text-3xl font-bold text-green-600 tracking-tight">
@@ -181,7 +192,8 @@ const Earn: React.FC<EarnProps> = ({ onSelectAssociation }) => {
             onChange={(e) => setSearchValue(e.target.value)}
             onFocus={() => setSearchFocused(true)}
             onBlur={() => setSearchFocused(false)}
-            placeholder="Search projects by organization, cause, or impact area..."
+            placeholder="Search by organization, cause (ocean, forest, climate), or location..."
+            aria-label="Search environmental projects"
             className="w-full bg-white border border-slate-200 text-slate-900 pl-12 pr-10 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all placeholder:text-slate-400 hover:bg-slate-50"
           />
 
@@ -253,7 +265,7 @@ const Earn: React.FC<EarnProps> = ({ onSelectAssociation }) => {
       </div>
         </>
       )}
-    </div>
+    </main>
   );
 };
 
