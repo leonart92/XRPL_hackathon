@@ -3,6 +3,7 @@ import { formatCurrency } from '../constants';
 import { ChevronRight, MapPin, Coins, TrendingUp } from 'lucide-react';
 import { useVaultsContext } from '../contexts/VaultsContext';
 import type { Association } from '../types';
+import Tooltip from './Tooltip';
 
 interface VaultTableProps {
   onSelectAssociation: (id: string) => void;
@@ -55,10 +56,18 @@ const VaultTable: React.FC<VaultTableProps> = ({ onSelectAssociation, searchQuer
     <div className="w-full">
       {/* Header */}
       <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-3 text-xs font-semibold text-slate-600 uppercase tracking-wider border-b border-slate-200/50">
-        <div className="col-span-5">Association</div>
-        <div className="col-span-2 text-right">Best APY</div>
-        <div className="col-span-2 text-right">Total TVL</div>
-        <div className="col-span-2 text-right">Vaults</div>
+        <div className="col-span-5">Organization</div>
+        <div className="col-span-2 text-right">
+          <Tooltip term="Best Growth Rate" explanation="The highest annual growth rate available for this organization's projects.">
+            Best Growth
+          </Tooltip>
+        </div>
+        <div className="col-span-2 text-right">
+          <Tooltip term="Community Support" explanation="Total funding this organization has received from all supporters.">
+            Community Support
+          </Tooltip>
+        </div>
+        <div className="col-span-2 text-right">Active Projects</div>
         <div className="col-span-1"></div>
       </div>
 
@@ -119,7 +128,7 @@ const VaultTable: React.FC<VaultTableProps> = ({ onSelectAssociation, searchQuer
                           </span>
                         </div>
                         <span className="text-[10px] md:text-xs font-medium text-slate-500">
-                          Best APY
+                          Best Growth
                         </span>
                       </>
                     ) : (
@@ -136,7 +145,7 @@ const VaultTable: React.FC<VaultTableProps> = ({ onSelectAssociation, searchQuer
 
                   <div className="hidden md:flex col-span-2 flex-col items-end justify-center">
                     <span className="text-sm font-semibold text-slate-700">{formatCurrency(stats.totalTVL)}</span>
-                    <span className="text-xs text-slate-500">Total Locked</span>
+                    <span className="text-xs text-slate-500">Total Support</span>
                   </div>
 
                   <div className="hidden md:flex col-span-2 flex-col items-end justify-center">
@@ -144,7 +153,7 @@ const VaultTable: React.FC<VaultTableProps> = ({ onSelectAssociation, searchQuer
                       <Coins className="w-4 h-4 text-blue-500" />
                       <span className="text-sm font-semibold text-slate-700">{stats.vaultCount}</span>
                     </div>
-                    <span className="text-xs text-slate-500">Vaults</span>
+                    <span className="text-xs text-slate-500">Projects</span>
                   </div>
 
                   <div className="hidden md:flex col-span-1 justify-end">

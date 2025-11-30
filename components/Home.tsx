@@ -57,9 +57,9 @@ const Home: React.FC = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-white" role="main">
             {/* Hero Section */}
-            <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+            <section aria-label="Welcome to Yaid" className="relative min-h-screen flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0 bg-slate-50" />
 
                 <div className="relative z-10 container mx-auto px-4 py-20 text-center">
@@ -94,7 +94,7 @@ const Home: React.FC = () => {
                 </div>
             </section>
 
-            <section className="py-24 bg-white">
+            <section aria-label="Our Four Pillars of Impact" className="py-24 bg-white">
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-16">
                         <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
@@ -129,7 +129,7 @@ const Home: React.FC = () => {
                 </div>
             </section>
 
-            <section className="py-24 bg-slate-50">
+            <section aria-label="Our Solutions" className="py-24 bg-slate-50">
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-16">
                         <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
@@ -182,7 +182,7 @@ const Home: React.FC = () => {
                 </div>
             </section>
 
-            <section className="py-24 bg-blue-600 text-white relative overflow-hidden">
+            <section aria-label="Call to Action" className="py-24 bg-blue-600 text-white relative overflow-hidden">
                 <div className="container mx-auto px-4 relative z-10 text-center">
                     <div>
                         <Sparkles className="w-16 h-16 mx-auto mb-6" />

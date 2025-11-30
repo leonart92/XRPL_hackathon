@@ -23,8 +23,8 @@ const Header: React.FC = () => {
   const navItems = [
     { name: "Home", path: "/" },
     { name: "My Impact", path: "/dashboard" },
-    { name: "All Projects", path: "/earn" },
-    { name: "Give a Tip", path: "/drainer" },
+    { name: "Browse Causes", path: "/earn" },
+    { name: "Donate Spare Funds", path: "/drainer" },
   ];
 
   const isActivePage = (path: string) => {
@@ -41,6 +41,7 @@ const Header: React.FC = () => {
 
   return (
     <motion.header
+      role="banner"
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5, ease: "circOut" }}
@@ -63,7 +64,7 @@ const Header: React.FC = () => {
             </span>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-0.5 absolute left-1/2 -translate-x-1/2">
+          <nav role="navigation" aria-label="Main navigation" className="hidden md:flex items-center gap-0.5 absolute left-1/2 -translate-x-1/2">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -106,11 +107,12 @@ const Header: React.FC = () => {
           </nav>
 
           <div className="flex items-center gap-3 flex-shrink-0">
-            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200">
+            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200" role="status" aria-live="polite">
               <div
                 className={`w-2 h-2 rounded-full ${isConnected ? "bg-green-500 animate-pulse" : "bg-slate-400"}`}
+                aria-label={isConnected ? "Connected to XRP network" : "Not connected to XRP network"}
               ></div>
-              <span className="text-xs font-medium text-slate-700">XRP</span>
+              <span className="text-xs font-medium text-slate-700">XRP Network</span>
             </div>
 
             {isConnected ? (

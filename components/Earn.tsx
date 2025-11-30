@@ -5,6 +5,7 @@ import gsap from 'gsap';
 import VaultTable from './VaultTable';
 import { fadeInUp, fadeInLeft, fadeInRight } from '../animations';
 import { useVaultsContext } from '../contexts/VaultsContext';
+import Tooltip from './Tooltip';
 
 interface EarnProps {
   onSelectAssociation: (id: string) => void;
@@ -74,7 +75,7 @@ const Earn: React.FC<EarnProps> = ({ onSelectAssociation }) => {
   }, [totalDeposit, avgApy]);
 
   return (
-    <div className="space-y-8">
+    <main role="main" className="space-y-8">
       {loading && (
         <div className="flex justify-center items-center py-12">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
@@ -249,7 +250,7 @@ const Earn: React.FC<EarnProps> = ({ onSelectAssociation }) => {
           </div>
         </>
       )}
-    </div>
+    </main>
   );
 };
 
