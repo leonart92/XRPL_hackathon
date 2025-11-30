@@ -47,7 +47,7 @@ const Admin: React.FC = () => {
     setResult(null);
 
     try {
-      const response = await fetch('http://localhost:3002/api/deploy-vault', {
+      const response = await fetch('/api/deploy-vault', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -74,7 +74,7 @@ const Admin: React.FC = () => {
     setHarvestResult(null);
 
     try {
-      const response = await fetch('http://localhost:3002/api/harvest-yield', {
+      const response = await fetch('/api/harvest-yield', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
