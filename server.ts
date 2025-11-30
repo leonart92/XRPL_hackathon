@@ -506,11 +506,34 @@ async function startVaultListeners() {
     console.log(`📄 Found ${vaultsFromFile.length} vaults in vaults.json`);
 
     for (const vaultMetadata of vaultsFromRegistry) {
-      const vaultConfig = vaultsFromFile.find(v => v.address === vaultMetadata.vaultAddress);
+      let vaultConfig = vaultsFromFile.find(v => v.address === vaultMetadata.vaultAddress);
+      
+      if (!vaultConfig) {
+        const envVarName = `VAULT_${vaultMetadata.vaultAddress}_SEED`;
+        const seedFromEnv = process.env[envVarName];
+        
+        if (seedFromEnv) {
+          console.log(`✅ Using seed from env var: ${envVarName}`);
+          vaultConfig = {
+            name: vaultMetadata.name || "Unknown",
+            address: vaultMetadata.vaultAddress,
+            seed: seedFromEnv,
+            tokenCurrency: vaultMetadata.vaultTokenCurrency,
+            strategy: vaultMetadata.strategyType,
+            ngoAddress: vaultMetadata.ngoAddress,
+            createdAt: (vaultMetadata.createdAt || new Date().toISOString()).toString(),
+            ammPoolAddress: vaultMetadata.ammPoolAddress,
+            yieldTokenCurrency: vaultMetadata.yieldTokenCurrency,
+            yieldTokenIssuer: vaultMetadata.yieldTokenIssuer,
+          };
+        }
+      }
+      
       if (vaultConfig) {
         await setupVaultListener(vaultMetadata, vaultConfig);
       } else {
-        console.log(`⚠️  No seed found for vault ${vaultMetadata.name}`);
+        console.log(`⚠️  No seed found for vault ${vaultMetadata.name} (${vaultMetadata.vaultAddress})`);
+        console.log(`   💡 Add VAULT_${vaultMetadata.vaultAddress}_SEED to env vars`);
       }
     }
 
