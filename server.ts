@@ -83,7 +83,11 @@ const server = Bun.serve({
         }
 
         const registryWallet = Wallet.fromSeed(registrySeed);
-        await xrplService.connect("testnet");
+        
+        if (!xrplService.isConnected()) {
+          await xrplService.connect("testnet");
+        }
+        
         const client = xrplService.getClient();
 
         console.log("💰 Creating vault wallet...");
@@ -155,8 +159,6 @@ const server = Bun.serve({
           console.error("⚠️  Failed to setup listener:", listenerError.message);
         }
 
-        await xrplService.disconnect();
-
         return new Response(
           JSON.stringify({
             address: vaultWallet.address,
@@ -172,7 +174,6 @@ const server = Bun.serve({
         );
       } catch (error: any) {
         console.error("Deployment error:", error);
-        await xrplService.disconnect();
         return new Response(
           JSON.stringify({ error: error.message || "Deployment failed" }),
           {
@@ -222,7 +223,9 @@ const server = Bun.serve({
           );
         }
 
-        await xrplService.connect("testnet");
+        if (!xrplService.isConnected()) {
+          await xrplService.connect("testnet");
+        }
         const client = xrplService.getClient();
         const vaultWallet = Wallet.fromSeed(vaultSeed);
 
@@ -355,8 +358,6 @@ const server = Bun.serve({
           console.log("🎉 Yield harvested and sent to NGO!");
         }
 
-        await xrplService.disconnect();
-
         return new Response(
           JSON.stringify({
             success: true,
@@ -376,7 +377,6 @@ const server = Bun.serve({
         );
       } catch (error: any) {
         console.error("Harvest error:", error);
-        await xrplService.disconnect();
         return new Response(
           JSON.stringify({ error: error.message || "Harvest failed" }),
           {
