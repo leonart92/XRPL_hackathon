@@ -7,7 +7,8 @@
     "dev": "vite",
     "api": "bun api-server.ts",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "bun server.ts"
   },
   "dependencies": {
     "@gemwallet/api": "^3.8.0",
