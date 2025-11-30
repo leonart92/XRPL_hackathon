@@ -162,4 +162,4 @@ class tokenYieldStrategy implements YieldStrategy {
   }
 }
 
-export { SwapStrategy, type SwapStrategyConfig };
+export { tokenYieldStrategy, type tokenYieldStrategyConfig };

@@ -39,3 +39,6 @@ dist
 .env
 .env.local
 .env.*.local
+
+# Vault seeds (sensitive)
+vaults.json

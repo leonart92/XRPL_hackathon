@@ -24,16 +24,26 @@ class AMMStrategy implements YieldStrategy {
   async deploy(amount: string): Promise<void> {
     const client = xrplService.getClient();
 
-    const depositTx = {
-      TransactionType: "AMMDeposit" as const,
-      Account: this.config.vaultAddress,
-      Asset: this.config.asset as any,
-      Asset2: this.config.asset2,
-      Amount: {
+    let depositAmount: any;
+    if (this.config.baseCurrency === "XRP") {
+      depositAmount = (parseFloat(amount) * 1_000_000).toString();
+    } else {
+      depositAmount = {
         currency: this.config.baseCurrency,
         issuer: this.config.baseCurrencyIssuer,
         value: amount,
-      },
+      };
+    }
+
+    const asset = typeof this.config.asset === "string" ? { currency: "XRP" } : this.config.asset;
+    const asset2 = typeof this.config.asset2 === "string" ? { currency: "XRP" } : this.config.asset2;
+
+    const depositTx = {
+      TransactionType: "AMMDeposit" as const,
+      Account: this.config.vaultAddress,
+      Asset: asset as any,
+      Asset2: asset2 as any,
+      Amount: depositAmount,
       Flags: 524288,
     };
 
@@ -65,16 +75,26 @@ class AMMStrategy implements YieldStrategy {
   async withdraw(amount: string): Promise<string> {
     const client = xrplService.getClient();
 
-    const withdrawTx = {
-      TransactionType: "AMMWithdraw" as const,
-      Account: this.config.vaultAddress,
-      Asset: this.config.asset as any,
-      Asset2: this.config.asset2,
-      Amount: {
+    let withdrawAmount: any;
+    if (this.config.baseCurrency === "XRP") {
+      withdrawAmount = (parseFloat(amount) * 1_000_000).toString();
+    } else {
+      withdrawAmount = {
         currency: this.config.baseCurrency,
         issuer: this.config.baseCurrencyIssuer,
         value: amount,
-      },
+      };
+    }
+
+    const asset = typeof this.config.asset === "string" ? { currency: "XRP" } : this.config.asset;
+    const asset2 = typeof this.config.asset2 === "string" ? { currency: "XRP" } : this.config.asset2;
+
+    const withdrawTx = {
+      TransactionType: "AMMWithdraw" as const,
+      Account: this.config.vaultAddress,
+      Asset: asset as any,
+      Asset2: asset2 as any,
+      Amount: withdrawAmount,
       Flags: 524288,
     };
 

@@ -4,6 +4,7 @@ import Header from './components/Header';
 import Earn from './components/Earn';
 import Dashboard from './components/Dashboard';
 import Drainer from './components/Drainer';
+import Admin from './components/Admin';
 import ConnectModal from './components/ConnectModal';
 import DisconnectModal from './components/DisconnectModal';
 import AssociationDetail from './components/AssociationDetail';
@@ -121,6 +122,18 @@ const AppContent: React.FC = () => {
                 transition={{ duration: 0.3 }}
               >
                 <Drainer />
+              </motion.div>
+            } />
+
+            <Route path="/admin" element={
+              <motion.div
+                key="admin"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Admin />
               </motion.div>
             } />
 

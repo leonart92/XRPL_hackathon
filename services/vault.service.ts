@@ -105,22 +105,32 @@ class VaultService {
       console.log(`   From: ${depositor}`);
       console.log(`   Amount: ${xrpAmount} XRP`);
 
-      await this.issueVaultTokens(depositor, xrpAmount);
-      await this.config.strategy.deploy(xrpAmount);
+      try {
+        await this.issueVaultTokens(depositor, xrpAmount);
+        console.log(`   ✅ Issued ${xrpAmount} ${this.config.vaultTokenCurrency} to ${depositor}`);
+        
+        await this.config.strategy.deploy(xrpAmount);
+        console.log(`   ✅ Deployed ${xrpAmount} XRP to strategy`);
 
-      const currentDeposit = this.userDeposits.get(depositor) || {
-        totalDeposited: "0",
-        vTokensIssued: "0",
-      };
+        const currentDeposit = this.userDeposits.get(depositor) || {
+          totalDeposited: "0",
+          vTokensIssued: "0",
+        };
 
-      this.userDeposits.set(depositor, {
-        totalDeposited: (
-          parseFloat(currentDeposit.totalDeposited) + parseFloat(xrpAmount)
-        ).toString(),
-        vTokensIssued: (
-          parseFloat(currentDeposit.vTokensIssued) + parseFloat(xrpAmount)
-        ).toString(),
-      });
+        this.userDeposits.set(depositor, {
+          totalDeposited: (
+            parseFloat(currentDeposit.totalDeposited) + parseFloat(xrpAmount)
+          ).toString(),
+          vTokensIssued: (
+            parseFloat(currentDeposit.vTokensIssued) + parseFloat(xrpAmount)
+          ).toString(),
+        });
+        
+        console.log(`   🎉 Deposit processed successfully!`);
+      } catch (error: any) {
+        console.error(`   ❌ Error processing deposit: ${error.message}`);
+        console.error(error);
+      }
     }
   }
 

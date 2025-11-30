@@ -12,6 +12,9 @@ interface VaultMetadata {
   description?: string;
   createdAt: number;
   totalSupply?: number;
+  ammPoolAddress?: string;
+  yieldTokenCurrency?: string;
+  yieldTokenIssuer?: string;
 }
 
 interface CompactVaultMetadata {
@@ -23,6 +26,9 @@ interface CompactVaultMetadata {
   n?: string;
   d?: string;
   t: number;
+  p?: string;
+  y?: string;
+  yi?: string;
 }
 
 interface RegistryConfig {
@@ -59,6 +65,9 @@ class RegistryService {
       n: metadata.name,
       d: metadata.description,
       t: fullMetadata.createdAt,
+      p: metadata.ammPoolAddress,
+      y: metadata.yieldTokenCurrency,
+      yi: metadata.yieldTokenIssuer,
     };
 
     const metadataJson = JSON.stringify(compactMetadata);
@@ -149,6 +158,9 @@ class RegistryService {
           name: compact.n,
           description: compact.d,
           createdAt: compact.t,
+          ammPoolAddress: compact.p,
+          yieldTokenCurrency: compact.y,
+          yieldTokenIssuer: compact.yi,
         };
 
         vaults.push(metadata);
@@ -193,6 +205,9 @@ class RegistryService {
         name: compact.n,
         description: compact.d,
         createdAt: compact.t,
+        ammPoolAddress: compact.p,
+        yieldTokenCurrency: compact.y,
+        yieldTokenIssuer: compact.yi,
       };
 
       return metadata;
