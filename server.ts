@@ -132,6 +132,29 @@ const server = Bun.serve({
 
         saveVault(vaultConfig);
 
+        const fullMetadata: VaultMetadata = {
+          vaultAddress: vaultWallet.address,
+          vaultTokenCurrency: body.vaultTokenCurrency,
+          acceptedCurrency: "XRP",
+          acceptedCurrencyIssuer: vaultWallet.address,
+          strategyType: body.strategyType,
+          ngoAddress: body.ngoAddress,
+          name: body.vaultName,
+          description: body.vaultDescription,
+          createdAt: Date.now(),
+          ammPoolAddress: body.ammPoolAddress,
+          yieldTokenCurrency: body.yieldTokenCurrency,
+          yieldTokenIssuer: body.yieldTokenIssuer,
+        };
+
+        console.log("🎧 Setting up listener for new vault...");
+        try {
+          await setupVaultListener(fullMetadata, vaultConfig);
+          console.log("✅ Listener active for new vault");
+        } catch (listenerError: any) {
+          console.error("⚠️  Failed to setup listener:", listenerError.message);
+        }
+
         await xrplService.disconnect();
 
         return new Response(
@@ -521,7 +544,7 @@ async function startVaultListeners() {
             tokenCurrency: vaultMetadata.vaultTokenCurrency,
             strategy: vaultMetadata.strategyType,
             ngoAddress: vaultMetadata.ngoAddress,
-            createdAt: (vaultMetadata.createdAt || new Date().toISOString()).toString(),
+            createdAt: new Date(vaultMetadata.createdAt).toISOString(),
             ammPoolAddress: vaultMetadata.ammPoolAddress,
             yieldTokenCurrency: vaultMetadata.yieldTokenCurrency,
             yieldTokenIssuer: vaultMetadata.yieldTokenIssuer,
